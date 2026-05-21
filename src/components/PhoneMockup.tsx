@@ -98,7 +98,7 @@ export default function PhoneMockup({ screen = 'feed', className = '' }: PhoneMo
 
       {/* Status bar */}
       <div className="flex items-center justify-between px-6 pt-3 pb-1" style={{ paddingTop: '14px' }}>
-        <span className="text-[11px] font-semibold text-ps-text font-mono">12:04</span>
+        <span className="text-[11px] font-semibold text-ps-text font-mono">12:00</span>
         <div className="flex items-center gap-1 text-ps-text">
           <WifiHigh size={11} weight="fill" />
           <BatteryFull size={13} weight="fill" />
