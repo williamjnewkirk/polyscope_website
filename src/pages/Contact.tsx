@@ -1,14 +1,48 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { PaperPlaneTilt, CheckCircle, WarningCircle } from '@phosphor-icons/react'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mqejqvpj'
+const RATE_LIMIT_KEY = 'ps_contact_submissions'
+const MAX_SUBMISSIONS = 3
+const WINDOW_MS = 60 * 60 * 1000 // 1 hour
 
-type Status = 'idle' | 'submitting' | 'success' | 'error'
+function getSubmissions(): number[] {
+  try {
+    return JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) ?? '[]')
+  } catch {
+    return []
+  }
+}
+
+function recordSubmission() {
+  const now = Date.now()
+  const recent = getSubmissions().filter(t => now - t < WINDOW_MS)
+  localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify([...recent, now]))
+}
+
+function getRateLimitState(): { blocked: boolean; remainingMs: number; remaining: number } {
+  const now = Date.now()
+  const recent = getSubmissions().filter(t => now - t < WINDOW_MS)
+  if (recent.length < MAX_SUBMISSIONS) return { blocked: false, remainingMs: 0, remaining: MAX_SUBMISSIONS - recent.length }
+  const oldestInWindow = Math.min(...recent)
+  return { blocked: true, remainingMs: WINDOW_MS - (now - oldestInWindow), remaining: 0 }
+}
+
+type Status = 'idle' | 'submitting' | 'success' | 'error' | 'ratelimited'
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>('idle')
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [cooldownMins, setCooldownMins] = useState(0)
+
+  useEffect(() => {
+    const { blocked, remainingMs } = getRateLimitState()
+    if (blocked) {
+      setStatus('ratelimited')
+      setCooldownMins(Math.ceil(remainingMs / 60000))
+    }
+  }, [])
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -16,6 +50,12 @@ export default function Contact() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const { blocked, remainingMs } = getRateLimitState()
+    if (blocked) {
+      setStatus('ratelimited')
+      setCooldownMins(Math.ceil(remainingMs / 60000))
+      return
+    }
     setStatus('submitting')
     try {
       const res = await fetch(FORMSPREE_ENDPOINT, {
@@ -24,6 +64,7 @@ export default function Contact() {
         body: JSON.stringify(form),
       })
       if (res.ok) {
+        recordSubmission()
         setStatus('success')
         setForm({ name: '', email: '', subject: '', message: '' })
       } else {
@@ -70,6 +111,16 @@ export default function Contact() {
               >
                 Send another message
               </button>
+            </div>
+          ) : status === 'ratelimited' ? (
+            <div className="flex flex-col items-center text-center py-8 gap-4">
+              <div>
+                <p className="text-base font-semibold text-ps-text mb-1">Too many messages</p>
+                <p className="text-sm text-ps-muted">
+                  You've reached the limit of {MAX_SUBMISSIONS} messages per hour.
+                  Please try again in {cooldownMins} minute{cooldownMins !== 1 ? 's' : ''}, or email us directly.
+                </p>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
