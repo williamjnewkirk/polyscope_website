@@ -14,18 +14,21 @@
   </head>
   <body>
     <script>
-      // GitHub Pages SPA redirect handler — restores path from query param set by 404.html
-      (function(l) {
-        if (l.search[1] === '/') {
-          var decoded = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&');
-          });
-          window.history.replaceState(
-            null, null,
-            decoded[0] + (decoded[1] ? '?' + decoded[1] : '') + l.hash
-          );
+      // GitHub Pages SPA redirect handler — restores path from encoded `p` param set by 404.html
+      (function() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var p = params.get('p');
+          if (p) {
+            var decoded = decodeURIComponent(p);
+            if (decoded && decoded.charAt(0) === '/') {
+              window.history.replaceState(null, null, decoded + window.location.hash);
+            }
+          }
+        } catch (e) {
+          // ignore malformed input
         }
-      }(window.location));
+      })();
     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
