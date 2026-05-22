@@ -1,11 +1,7 @@
 import { Link } from 'react-router-dom'
+import TermlyEmbed from '../components/TermlyEmbed'
 
-// Paste the full HTML + <style> block from Termly between the backticks below.
-const EULA_HTML = `
-
-  PASTE YOUR TERMLY EULA HTML HERE
-
-`
+const EULA_POLICY_ID = '4eec582a-2c0c-43b0-b39b-725667c8d538'
 
 export default function Eula() {
   return (
@@ -17,7 +13,16 @@ export default function Eula() {
           </Link>
         </div>
         <div className="bg-white rounded-2xl p-8 sm:p-12">
-          <div dangerouslySetInnerHTML={{ __html: EULA_HTML }} />
+          <h1 className="text-3xl font-semibold text-ps-black">End User License Agreement</h1>
+          <p className="mt-4 text-base text-ps-muted">
+            Our EULA is embedded here using Termly.
+          </p>
+          <div className="mt-8">
+            <TermlyEmbed policyId={EULA_POLICY_ID} />
+          </div>
+          <p className="mt-6 text-sm text-ps-muted">
+            If the EULA does not load, <a href="https://app.termly.io/policy-viewer/policy.html?policyUUID=4eec582a-2c0c-43b0-b39b-725667c8d538" target="_blank" rel="noreferrer" className="text-ps-green hover:text-ps-green-dim">open it on Termly</a>.
+          </p>
         </div>
       </div>
     </main>
