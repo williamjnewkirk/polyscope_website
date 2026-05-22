@@ -1,4 +1,5 @@
 import { WifiHigh, BatteryFull, MagnifyingGlass, Funnel, Rss, Wallet, Lightning, Robot, User } from '@phosphor-icons/react'
+import logoIcon from '../assets/logo-icon.png'
 
 interface TradeCardData {
   alias: string
@@ -108,12 +109,8 @@ export default function PhoneMockup({ screen = 'feed', className = '' }: PhoneMo
       {/* App header */}
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-ps-black border border-ps-green/30 flex items-center justify-center">
-            <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4">
-              <circle cx="8" cy="8" r="6.5" stroke="#18B974" strokeWidth="1" />
-              <path d="M3.5 9 C3.5 6.5 5.5 5 8 5.5 C10.5 5 12.5 6.5 12.5 9 L11.5 10.5 Q8 12 4.5 10.5 Z" fill="#18B974" opacity="0.9" />
-              <circle cx="8" cy="5.5" r="0.8" fill="#D4612E" />
-            </svg>
+          <div className="w-7 h-7 rounded-full bg-ps-black border border-ps-green/30 flex items-center justify-center overflow-hidden">
+            <img src={logoIcon} alt="Polyscope logo" className="w-5 h-5 object-contain" />
           </div>
           <div>
             <p className="text-[11px] font-bold tracking-wide text-ps-text leading-none">POLYSCOPE</p>

@@ -1,17 +1,5 @@
-function ScopeIcon() {
-  return (
-    <svg viewBox="0 0 32 32" fill="none" className="w-6 h-6" aria-hidden="true">
-      <circle cx="16" cy="16" r="13.5" stroke="#18B974" strokeWidth="1.6" />
-      <circle cx="16" cy="16" r="6.5" stroke="#18B974" strokeWidth="1" opacity="0.4" />
-      <line x1="16" y1="2.5" x2="16" y2="6.5" stroke="#18B974" strokeWidth="1.6" strokeLinecap="round" />
-      <line x1="16" y1="25.5" x2="16" y2="29.5" stroke="#18B974" strokeWidth="1.6" strokeLinecap="round" />
-      <line x1="2.5" y1="16" x2="6.5" y2="16" stroke="#18B974" strokeWidth="1.6" strokeLinecap="round" />
-      <line x1="25.5" y1="16" x2="29.5" y2="16" stroke="#18B974" strokeWidth="1.6" strokeLinecap="round" />
-      <path d="M8 17.5 C8 13.5 11.5 10.5 16 11.5 C20.5 10.5 24 13.5 24 17.5 L22 20 Q16 23 10 20 Z" fill="#18B974" opacity="0.85" />
-      <circle cx="16" cy="11" r="1.4" fill="#D4612E" />
-    </svg>
-  )
-}
+import { Link } from 'react-router-dom'
+import logoIcon from '../assets/logo-icon.png'
 
 const footerLinks = {
   Product: [
@@ -21,11 +9,12 @@ const footerLinks = {
   ],
   Company: [
     { label: 'Join Waitlist', href: '#download' },
+    { label: 'Contact', href: '/contact', isRoute: true },
   ],
   Legal: [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Service', href: '#' },
-    { label: 'Disclaimer', href: '#' },
+    { label: 'Privacy Policy', href: '/privacy', isRoute: true },
+    { label: 'Terms of Service', href: '/terms', isRoute: true },
+    { label: 'EULA', href: '/eula', isRoute: true },
   ],
 }
 
@@ -46,7 +35,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-3 max-w-xs">
             <a href="#" className="flex items-center gap-2.5">
-              <ScopeIcon />
+              <img src={logoIcon} alt="Polyscope logo" className="w-6 h-6" />
               <span className="font-bold text-base tracking-tight text-ps-text">POLYSCOPE</span>
             </a>
             <p className="text-xs text-ps-muted leading-relaxed">
@@ -67,18 +56,21 @@ export default function Footer() {
 
           {/* Nav columns */}
           <div className="grid grid-cols-3 gap-8 md:pl-16">
-            {(Object.entries(footerLinks) as [string, { label: string; href: string }[]][]).map(([group, links]) => (
+            {(Object.entries(footerLinks) as [string, { label: string; href: string; isRoute?: boolean }[]][]).map(([group, links]) => (
               <div key={group}>
                 <p className="text-[11px] font-bold uppercase tracking-widest text-ps-muted mb-3">{group}</p>
                 <ul className="space-y-2">
                   {links.map((link) => (
                     <li key={link.label}>
-                      <a
-                        href={link.href}
-                        className="text-xs text-ps-muted hover:text-ps-text transition-colors"
-                      >
-                        {link.label}
-                      </a>
+                      {link.isRoute ? (
+                        <Link to={link.href} className="text-xs text-ps-muted hover:text-ps-text transition-colors">
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <a href={link.href} className="text-xs text-ps-muted hover:text-ps-text transition-colors">
+                          {link.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>

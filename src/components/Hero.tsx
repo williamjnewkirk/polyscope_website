@@ -182,7 +182,7 @@ export default function Hero() {
               {/* Floating stat chip (top-right) */}
               <FloatingCard className="animate-float" top="8%" right="-20%" animDelay="0.6s">
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] text-ps-muted whitespace-nowrap">39 whales</span>
+                  <span className="text-[9px] text-ps-muted whitespace-nowrap">Tracking 50 whales</span>
                   <span className="text-[9px] font-mono text-ps-green">LIVE</span>
                 </div>
               </FloatingCard>
