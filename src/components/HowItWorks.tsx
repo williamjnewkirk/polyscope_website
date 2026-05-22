@@ -8,7 +8,7 @@ const steps = [
     Icon: UserPlus,
     title: 'Follow the whales.',
     description:
-      'Choose from our curated leaderboard of the top 39 Polymarket wallets by monthly P&L, or paste any wallet address directly. Track as many as your tier allows.',
+      'Choose from our up to date leaderboard of the top Polymarket wallets, or paste any wallet address directly. Track as many as your tier allows.',
   },
   {
     number: '02',
