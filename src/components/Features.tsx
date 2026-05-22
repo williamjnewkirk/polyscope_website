@@ -121,8 +121,7 @@ function WalletCard() {
         Follow the top performers.
       </h3>
       <p className="text-sm text-ps-muted leading-relaxed mb-6">
-        Curated leaderboard of the top 39 Polymarket wallets by monthly P&L.
-        One tap to follow, instant alerts from there.
+        Polymarket's up to date leaderboard, right at your fingertips. See who's making the biggest moves, and track their activity with one tap to get instant alerts on all their trades. 
       </p>
       {/* Mini leaderboard */}
       <div className="space-y-2">
