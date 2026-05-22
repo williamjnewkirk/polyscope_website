@@ -129,7 +129,7 @@ export default function Hero() {
               className="flex flex-wrap items-center gap-x-6 gap-y-2"
             >
               {[
-                { value: '39', label: 'whale wallets monitored' },
+                { value: '50+', label: 'whale wallets monitored' },
                 { value: 'Live', label: 'Polygon blockchain data' },
                 { value: 'AI', label: 'Claude-powered signals' },
               ].map(({ value, label }) => (

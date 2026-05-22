@@ -102,7 +102,7 @@ export default function HowItWorks() {
         >
           {[
             { value: '15s',   label: 'Blockchain poll interval' },
-            { value: '39',    label: 'Whale wallets tracked' },
+            { value: '50+',    label: 'Whale wallets tracked' },
             { value: '$500+', label: 'Minimum trade threshold' },
             { value: '24/7',  label: 'AWS Python service uptime' },
           ].map(({ value, label }) => (
