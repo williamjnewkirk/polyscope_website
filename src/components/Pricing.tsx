@@ -13,7 +13,7 @@ const FEATURES: TierFeature[] = [
   { label: 'Wallets tracked',           free: '3',          pro: '20',       premium: 'Unlimited' },
   { label: 'Daily push notifications',  free: '20/day',     pro: '50/day',   premium: 'Unlimited' },
   { label: 'Insider / signal alerts',   free: false,        pro: '10/day',   premium: 'Unlimited' },
-  { label: 'Suggested whale list',      free: false,        pro: 'Monthly',  premium: 'Full library' },
+  { label: 'Suggested whale list',      free: false,        pro: 'Top 10 in each Category',  premium: 'Full library' },
   { label: 'Ad-free experience',        free: false,        pro: true,       premium: true },
   { label: 'AI Trade Advisor',          free: false,        pro: false,      premium: true },
 ]
