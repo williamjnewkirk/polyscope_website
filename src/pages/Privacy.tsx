@@ -1,9 +1,14 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import TermlyEmbed from '../components/TermlyEmbed'
 
 const PRIVACY_POLICY_ID = '54b77e5f-a2e9-4081-b384-c9a63d9369aa'
 
 export default function Privacy() {
+  useEffect(() => {
+    document.title = 'Privacy Policy | Polyscope'
+  }, [])
+
   return (
     <main className="min-h-screen bg-ps-black pt-24 pb-20">
       <div className="max-w-4xl mx-auto px-5 sm:px-8">

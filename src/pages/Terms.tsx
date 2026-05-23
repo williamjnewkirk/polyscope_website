@@ -1,9 +1,14 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import TermlyEmbed from '../components/TermlyEmbed'
 
 const TERMS_POLICY_ID = '5b91fac3-cdcd-4768-b806-b0a09d8a03b6'
 
 export default function Terms() {
+  useEffect(() => {
+    document.title = 'Terms of Service | Polyscope'
+  }, [])
+
   return (
     <main className="min-h-screen bg-ps-black pt-24 pb-20">
       <div className="max-w-4xl mx-auto px-5 sm:px-8">

@@ -32,6 +32,10 @@ function getRateLimitState(): { blocked: boolean; remainingMs: number; remaining
 type Status = 'idle' | 'submitting' | 'success' | 'error' | 'ratelimited'
 
 export default function Contact() {
+  useEffect(() => {
+    document.title = 'Contact Us | Polyscope'
+  }, [])
+
   const [status, setStatus] = useState<Status>('idle')
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [cooldownMins, setCooldownMins] = useState(0)
@@ -184,8 +188,8 @@ export default function Contact() {
                 <div className="flex items-center gap-2 text-red-400 text-xs">
                   <WarningCircle size={14} weight="fill" />
                   Something went wrong. Please try again or email us directly at{' '}
-                  <a href="mailto:newkirk@polyscopeapp.com" className="underline">
-                    newkirk@polyscopeapp.com
+                  <a href="mailto:contact@polyscopeapp.com" className="underline">
+                    contact@polyscopeapp.com
                   </a>
                 </div>
               )}
@@ -204,8 +208,8 @@ export default function Contact() {
 
         <p className="text-center text-xs text-ps-muted mt-6">
           Or email us directly at{' '}
-          <a href="mailto:newkirk@polyscopeapp.com" className="text-ps-text hover:text-ps-green transition-colors">
-            newkirk@polyscopeapp.com
+          <a href="mailto:contact@polyscopeapp.com" className="text-ps-text hover:text-ps-green transition-colors">
+            contact@polyscopeapp.com
           </a>
         </p>
       </div>

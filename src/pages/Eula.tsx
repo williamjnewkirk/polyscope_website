@@ -1,9 +1,14 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import TermlyEmbed from '../components/TermlyEmbed'
 
 const EULA_POLICY_ID = '4eec582a-2c0c-43b0-b39b-725667c8d538'
 
 export default function Eula() {
+  useEffect(() => {
+    document.title = 'End User License Agreement | Polyscope'
+  }, [])
+
   return (
     <main className="min-h-screen bg-ps-black pt-24 pb-20">
       <div className="max-w-4xl mx-auto px-5 sm:px-8">
