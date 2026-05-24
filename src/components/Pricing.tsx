@@ -24,6 +24,7 @@ const TIERS = [
     name: 'Free',
     monthlyPrice: '0',
     yearlyPrice:  '0',
+    yearlyTotal:  null,
     description: 'Follow up to 3 wallets and see what the whales are doing.',
     cta: 'Get Started',
     highlight: false,
@@ -34,6 +35,7 @@ const TIERS = [
     name: 'Pro',
     monthlyPrice: '19.99',
     yearlyPrice:  '13',
+    yearlyTotal:  '156.00',
     description: 'Expanded tracking, insider alerts, whale suggestions, and no ads.',
     cta: 'Start 7-Day Trial',
     highlight: true,
@@ -43,7 +45,8 @@ const TIERS = [
     id: 'premium',
     name: 'Premium',
     monthlyPrice: '59.99',
-    yearlyPrice:  '39',
+    yearlyPrice:  '38.75',
+    yearlyTotal:  '464.99',
     description: 'Unlimited everything plus Claude-powered AI trade analysis.',
     cta: 'Start 3-Day Trial',
     highlight: false,
@@ -145,6 +148,9 @@ export default function Pricing() {
                   </AnimatePresence>
                   <span className="text-sm text-ps-muted mb-1.5">/mo</span>
                 </div>
+                {yearly && tier.yearlyTotal && (
+                  <p className="text-xs text-ps-muted -mt-1 mb-1">billed ${tier.yearlyTotal}/yr</p>
+                )}
                 {tier.trialLabel && (
                   <p className="text-xs text-ps-green font-medium mb-1">{tier.trialLabel}</p>
                 )}
