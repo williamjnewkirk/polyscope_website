@@ -27,15 +27,37 @@ function AppStoreBadge({ store, className }: { store: 'apple' | 'google'; classN
   )
 }
 
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mqejqvpj'
+
+type Status = 'idle' | 'submitting' | 'success' | 'error'
+
 export default function DownloadCTA() {
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<Status>('idle')
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email.trim()) return
-    setSubmitted(true)
-    setEmail('')
+    setStatus('submitting')
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          email,
+          message: 'I have joined the waitlist.',
+          _subject: 'New Waitlist Signup',
+        }),
+      })
+      if (res.ok) {
+        setStatus('success')
+        setEmail('')
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -70,7 +92,8 @@ export default function DownloadCTA() {
           </p>
 
           {/* Email form */}
-          {submitted ? (
+          <div className="mb-8">
+          {status === 'success' ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -80,24 +103,34 @@ export default function DownloadCTA() {
               You're on the list — we'll be in touch.
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                required
-                className="flex-1 px-5 py-3 rounded-full bg-ps-card border border-white/[0.09] text-ps-text text-sm placeholder:text-ps-muted focus:outline-none focus:border-ps-green/50 transition-colors"
-              />
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-ps-green text-ps-black text-sm font-bold hover:bg-opacity-90 active:scale-[0.97] transition-all duration-200 flex-shrink-0"
-              >
-                Notify Me
-                <ArrowRight size={15} weight="bold" />
-              </button>
-            </form>
+            <>
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-3">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  required
+                  className="flex-1 px-5 py-3 rounded-full bg-ps-card border border-white/[0.09] text-ps-text text-sm placeholder:text-ps-muted focus:outline-none focus:border-ps-green/50 transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={status === 'submitting'}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-ps-green text-ps-black text-sm font-bold hover:bg-opacity-90 active:scale-[0.97] transition-all duration-200 flex-shrink-0 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {status === 'submitting' ? 'Joining…' : 'Notify Me'}
+                  {status !== 'submitting' && <ArrowRight size={15} weight="bold" />}
+                </button>
+              </form>
+              {status === 'error' && (
+                <p className="text-xs text-red-400 mb-5">
+                  Something went wrong. Please try again or email{' '}
+                  <a href="mailto:newkirk@polyscopeapp.com" className="underline">newkirk@polyscopeapp.com</a>.
+                </p>
+              )}
+            </>
           )}
+          </div>
 
           {/* App store badges */}
           <div className="flex flex-wrap items-center justify-center gap-3">
