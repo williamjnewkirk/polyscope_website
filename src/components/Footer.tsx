@@ -43,7 +43,7 @@ export default function Footer() {
               from Polygon blockchain via Polymarket CTF Exchange V2.
             </p>
             <a
-              href="https://twitter.com"
+              href="https://x.com/PolyscopeApp"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-ps-muted hover:text-ps-text transition-colors w-fit mt-1"
