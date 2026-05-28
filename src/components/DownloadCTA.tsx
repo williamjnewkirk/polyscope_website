@@ -125,7 +125,7 @@ export default function DownloadCTA() {
               {status === 'error' && (
                 <p className="text-xs text-red-400 mb-5">
                   Something went wrong. Please try again or email{' '}
-                  <a href="mailto:newkirk@polyscopeapp.com" className="underline">newkirk@polyscopeapp.com</a>.
+                  <a href="mailto:support@polyscopeapp.com" className="underline">support@polyscopeapp.com</a>.
                 </p>
               )}
             </>

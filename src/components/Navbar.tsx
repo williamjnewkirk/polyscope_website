@@ -54,10 +54,10 @@ export default function Navbar() {
               </a>
             ))}
             <Link
-              to="/contact"
+              to="/support"
               className="text-sm font-medium text-ps-muted hover:text-ps-text transition-colors duration-200"
             >
-              Contact
+              Support
             </Link>
           </nav>
 
@@ -100,11 +100,11 @@ export default function Navbar() {
             </a>
           ))}
           <Link
-            to="/contact"
+            to="/support"
             className="text-sm font-medium text-ps-muted hover:text-ps-text transition-colors py-1"
             onClick={() => setMobileOpen(false)}
           >
-            Contact
+            Support
           </Link>
           <a
             href={sectionHref('download')}

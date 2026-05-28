@@ -9,7 +9,7 @@ const footerLinks = {
   ],
   Company: [
     { label: 'Join Waitlist', href: '#download' },
-    { label: 'Contact', href: '/contact', isRoute: true },
+    { label: 'Support', href: '/support', isRoute: true },
   ],
   Legal: [
     { label: 'Privacy Policy', href: '/privacy', isRoute: true },
