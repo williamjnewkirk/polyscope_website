@@ -36,7 +36,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <img src={logoIcon} alt="Polyscope logo" className="w-8 h-8 transition-transform duration-300 group-hover:scale-105" />
+            <img src={logoIcon} alt="Polyscope logo" className="w-16 h-16 transition-transform duration-300 group-hover:scale-105" />
             <span className="font-bold text-lg tracking-tight text-ps-text">
               POLYSCOPE
             </span>
