@@ -61,7 +61,7 @@ function FeatureValue({ value }: { value: string | boolean }) {
 }
 
 export default function Pricing() {
-  const [yearly, setYearly] = useState(false)
+  const [yearly, setYearly] = useState(true)
 
   return (
     <section id="pricing" className="py-24 bg-ps-black">
