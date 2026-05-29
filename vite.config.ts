@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { copyFileSync, mkdirSync } from 'fs'
 import { resolve } from 'path'
 
-const SPA_ROUTES = ['privacy', 'terms', 'eula', 'support']
+const SPA_ROUTES = ['privacy', 'terms', 'eula', 'support', 'contact']
 
 export default defineConfig({
   plugins: [
