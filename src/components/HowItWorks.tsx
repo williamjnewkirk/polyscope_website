@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { motion } from 'framer-motion'
 import { UserPlus, BellRinging, Star } from '@phosphor-icons/react'
+import { isPrerendering } from '../lib/prerender'
 
 const steps = [
   {
@@ -32,7 +33,7 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={isPrerendering ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
@@ -49,7 +50,7 @@ export default function HowItWorks() {
           {steps.map((step, i) => (
             <Fragment key={step.number}>
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={isPrerendering ? false : { opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: i * 0.14, ease: [0.16, 1, 0.3, 1] }}
                 viewport={{ once: true }}
@@ -94,7 +95,7 @@ export default function HowItWorks() {
 
         {/* Bottom stats bar */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={isPrerendering ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}

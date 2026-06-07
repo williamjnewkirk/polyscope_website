@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { ChartLine, Lightning, Wallet, Brain } from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
+import { isPrerendering } from '../lib/prerender'
 
 const sectionVariants = {
   hidden: {},
@@ -216,7 +217,7 @@ export default function Features() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={isPrerendering ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
@@ -235,7 +236,7 @@ export default function Features() {
         {/* Bento grid */}
         <motion.div
           variants={sectionVariants}
-          initial="hidden"
+          initial={isPrerendering ? 'visible' : 'hidden'}
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-4"

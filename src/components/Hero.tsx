@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
+import { isPrerendering } from '../lib/prerender'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -56,7 +57,7 @@ export default function Hero() {
             <motion.div
               custom={0}
               variants={fadeUp}
-              initial="hidden"
+              initial={isPrerendering ? 'visible' : 'hidden'}
               animate="visible"
               className="flex items-center gap-2 mb-7"
             >
@@ -73,7 +74,7 @@ export default function Hero() {
             <motion.h1
               custom={0.08}
               variants={fadeUp}
-              initial="hidden"
+              initial={isPrerendering ? 'visible' : 'hidden'}
               animate="visible"
               className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-ps-text mb-6"
             >
@@ -88,7 +89,7 @@ export default function Hero() {
             <motion.p
               custom={0.18}
               variants={fadeUp}
-              initial="hidden"
+              initial={isPrerendering ? 'visible' : 'hidden'}
               animate="visible"
               className="text-base sm:text-lg text-ps-muted leading-relaxed max-w-[52ch] mb-8"
             >
@@ -101,7 +102,7 @@ export default function Hero() {
             <motion.div
               custom={0.26}
               variants={fadeUp}
-              initial="hidden"
+              initial={isPrerendering ? 'visible' : 'hidden'}
               animate="visible"
               className="flex flex-wrap items-center gap-4 mb-10"
             >
@@ -125,7 +126,7 @@ export default function Hero() {
             <motion.div
               custom={0.34}
               variants={fadeUp}
-              initial="hidden"
+              initial={isPrerendering ? 'visible' : 'hidden'}
               animate="visible"
               className="flex flex-wrap items-center gap-x-6 gap-y-2"
             >
@@ -144,7 +145,7 @@ export default function Hero() {
 
           {/* ── Right: phone mockup ── */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={isPrerendering ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="relative flex justify-center lg:justify-end"

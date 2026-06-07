@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, Minus } from '@phosphor-icons/react'
+import { isPrerendering } from '../lib/prerender'
 
 interface TierFeature {
   label: string
@@ -68,7 +69,7 @@ export default function Pricing() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={isPrerendering ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
@@ -109,7 +110,7 @@ export default function Pricing() {
 
         {/* Pricing cards */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={isPrerendering ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
@@ -137,7 +138,7 @@ export default function Pricing() {
                   <AnimatePresence mode="wait">
                     <motion.span
                       key={yearly ? 'yearly' : 'monthly'}
-                      initial={{ opacity: 0, y: -6 }}
+                      initial={isPrerendering ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 6 }}
                       transition={{ duration: 0.2 }}
@@ -173,7 +174,7 @@ export default function Pricing() {
 
         {/* Feature comparison table */}
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={isPrerendering ? false : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           viewport={{ once: true }}

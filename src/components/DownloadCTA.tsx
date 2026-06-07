@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from '@phosphor-icons/react'
+import { isPrerendering } from '../lib/prerender'
 
 function AppStoreBadge({ store, className }: { store: 'apple' | 'google'; className?: string }) {
   const isApple = store === 'apple'
@@ -72,7 +73,7 @@ export default function DownloadCTA() {
 
       <div className="relative max-w-3xl mx-auto px-5 sm:px-8 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={isPrerendering ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
