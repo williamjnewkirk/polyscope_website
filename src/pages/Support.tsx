@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { PaperPlaneTilt, CheckCircle, WarningCircle, CaretDown } from '@phosphor-icons/react'
@@ -85,11 +86,17 @@ function FaqItem({ question, answer, link }: { question: string; answer: string;
 
 type Status = 'idle' | 'submitting' | 'success' | 'error' | 'ratelimited'
 
-export default function Support() {
-  useEffect(() => {
-    document.title = 'Support & Contact | Polyscope'
-  }, [])
+const FAQ_SCHEMA = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer },
+  })),
+})
 
+export default function Support() {
   const [status, setStatus] = useState<Status>('idle')
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [cooldownMins, setCooldownMins] = useState(0)
@@ -134,6 +141,13 @@ export default function Support() {
   }
 
   return (
+    <>
+    <Helmet>
+      <title>Support &amp; Contact | Polyscope</title>
+      <meta name="description" content="Get help with Polyscope. Find answers to common questions or send us a message and we'll get back to you." />
+      <link rel="canonical" href="https://polyscopeapp.com/support" />
+      <script type="application/ld+json">{FAQ_SCHEMA}</script>
+    </Helmet>
     <main className="min-h-screen bg-ps-black pt-28 pb-20 px-5 sm:px-8">
       <div className="max-w-2xl mx-auto">
 
@@ -291,5 +305,6 @@ export default function Support() {
         </p>
       </div>
     </main>
+    </>
   )
 }

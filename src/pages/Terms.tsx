@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 
 const STYLE = `
@@ -229,11 +229,13 @@ contact@polyscopeapp.com</p>
 `
 
 export default function Terms() {
-  useEffect(() => {
-    document.title = 'Terms of Service | Polyscope'
-  }, [])
-
   return (
+    <>
+    <Helmet>
+      <title>Terms of Service | Polyscope</title>
+      <meta name="description" content="Read the Polyscope Terms of Service. Learn the rules and conditions for using the Polyscope app and website." />
+      <link rel="canonical" href="https://polyscopeapp.com/terms" />
+    </Helmet>
     <main className="min-h-screen bg-ps-black pt-24 pb-20">
       <style>{STYLE}</style>
       <div className="max-w-4xl mx-auto px-5 sm:px-8">
@@ -247,5 +249,6 @@ export default function Terms() {
         </div>
       </div>
     </main>
+    </>
   )
 }

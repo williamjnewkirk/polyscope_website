@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 
 const STYLE = `
@@ -164,11 +164,13 @@ contact@polyscopeapp.com</p>
 `
 
 export default function Eula() {
-  useEffect(() => {
-    document.title = 'End User License Agreement | Polyscope'
-  }, [])
-
   return (
+    <>
+    <Helmet>
+      <title>End User License Agreement | Polyscope</title>
+      <meta name="description" content="Read the Polyscope End User License Agreement (EULA) from Newkirk Technologies LLC." />
+      <link rel="canonical" href="https://polyscopeapp.com/eula" />
+    </Helmet>
     <main className="min-h-screen bg-ps-black pt-24 pb-20">
       <style>{STYLE}</style>
       <div className="max-w-4xl mx-auto px-5 sm:px-8">
@@ -182,5 +184,6 @@ export default function Eula() {
         </div>
       </div>
     </main>
+    </>
   )
 }

@@ -78,9 +78,10 @@ export default function Hero() {
               className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-ps-text mb-6"
             >
               Track the{' '}
-              <span className="text-ps-green">smart</span>
+              <span className="text-ps-green">smart</span>{' '}
+              money
               <br />
-              money.
+              on Polymarket.
             </motion.h1>
 
             {/* Description */}

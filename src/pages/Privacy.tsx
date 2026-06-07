@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 
 const STYLE = `
@@ -284,11 +284,13 @@ United States</p>
 `
 
 export default function Privacy() {
-  useEffect(() => {
-    document.title = 'Privacy Policy | Polyscope'
-  }, [])
-
   return (
+    <>
+    <Helmet>
+      <title>Privacy Policy | Polyscope</title>
+      <meta name="description" content="Read the Polyscope Privacy Policy. Learn how Newkirk Technologies LLC collects, uses, and protects your personal data." />
+      <link rel="canonical" href="https://polyscopeapp.com/privacy" />
+    </Helmet>
     <main className="min-h-screen bg-ps-black pt-24 pb-20">
       <style>{STYLE}</style>
       <div className="max-w-4xl mx-auto px-5 sm:px-8">
@@ -302,5 +304,6 @@ export default function Privacy() {
         </div>
       </div>
     </main>
+    </>
   )
 }
