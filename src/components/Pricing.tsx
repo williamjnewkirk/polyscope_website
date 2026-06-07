@@ -12,8 +12,8 @@ interface TierFeature {
 const FEATURES: TierFeature[] = [
   { label: 'Wallets tracked',           free: '3',          pro: '20',       premium: 'Unlimited' },
   { label: 'Daily push notifications',  free: '20/day',     pro: '50/day',   premium: 'Unlimited' },
-  { label: 'Insider / signal alerts',   free: false,        pro: '10/day',   premium: 'Unlimited' },
-  { label: 'Suggested whale list',      free: false,        pro: 'Top 10 in each Category',  premium: 'Full library' },
+  { label: 'Signals (High Conviction)',  free: false,        pro: '10/day',   premium: 'Unlimited' },
+  { label: 'Suggested whale wallets',   free: false,        pro: '10',       premium: '50 (full library)' },
   { label: 'Ad-free experience',        free: false,        pro: true,       premium: true },
   { label: 'AI Trade Advisor',          free: false,        pro: false,      premium: true },
 ]
@@ -35,7 +35,7 @@ const TIERS = [
     name: 'Pro',
     monthlyPrice: '19.99',
     yearlyPrice:  '13',
-    yearlyTotal:  '156.00',
+    yearlyTotal:  '155.99',
     description: 'Expanded tracking, insider alerts, whale suggestions, and no ads.',
     cta: 'Start 7-Day Trial',
     highlight: true,

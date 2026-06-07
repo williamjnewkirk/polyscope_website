@@ -130,7 +130,7 @@ export default function Hero() {
             >
               {[
                 { value: '50+', label: 'whale wallets monitored' },
-                { value: 'Live', label: 'Polygon blockchain data' },
+                { value: 'Live', label: 'Polymarket API data' },
                 { value: 'AI', label: 'Claude-powered signals' },
               ].map(({ value, label }) => (
                 <div key={label} className="flex items-center gap-2">

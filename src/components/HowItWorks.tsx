@@ -22,7 +22,7 @@ const steps = [
     Icon: Star,
     title: 'Act on AI signals.',
     description:
-      'Claude continuously synthesizes whale patterns, conviction clustering, and probability shifts into plain-English recommendations. Premium users ask questions and get answers.',
+      'Premium users get a Claude-powered AI advisor — ask it anything about Polymarket activity, specific markets, or whale patterns and get instant, plain-English answers.',
   },
 ]
 
@@ -40,7 +40,7 @@ export default function HowItWorks() {
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-ps-green mb-3">How it works</p>
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ps-text max-w-lg leading-tight">
-            From blockchain to insight in seconds.
+            From Polymarket to your pocket in seconds.
           </h2>
         </motion.div>
 
@@ -101,10 +101,10 @@ export default function HowItWorks() {
           className="mt-20 pt-8 border-t border-white/[0.06] grid grid-cols-2 md:grid-cols-4 gap-8"
         >
           {[
-            { value: '15s',   label: 'Blockchain poll interval' },
+            { value: '~5s',    label: 'Polymarket poll interval' },
             { value: '50+',    label: 'Whale wallets tracked' },
-            { value: '$500+', label: 'Minimum trade threshold' },
-            { value: '24/7',  label: 'AWS Python service uptime' },
+            { value: '$100k+', label: 'High Conviction threshold' },
+            { value: '24/7',   label: 'Fly.io worker uptime' },
           ].map(({ value, label }) => (
             <div key={label} className="flex flex-col gap-1">
               <span className="text-3xl font-extrabold font-mono text-ps-text tracking-tight">{value}</span>

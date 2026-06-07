@@ -39,8 +39,8 @@ export default function Footer() {
               <span className="font-bold text-base tracking-tight text-ps-text">POLYSCOPE</span>
             </a>
             <p className="text-xs text-ps-muted leading-relaxed">
-              Real-time Polymarket whale intelligence on iOS &amp; Android. Data sourced
-              from Polygon blockchain via Polymarket CTF Exchange V2.
+              Real-time Polymarket whale intelligence on iOS. Data sourced
+              from Polymarket's public APIs · Not affiliated with Polymarket.
             </p>
             <a
               href="https://x.com/PolyscopeApp"
@@ -95,7 +95,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Polyscope. All rights reserved.
           </p>
           <p className="text-[11px] text-ps-muted/50">
-            Trade data from Polygon blockchain · Not affiliated with Polymarket
+            Data sourced from Polymarket's public APIs · Not affiliated with Polymarket
           </p>
         </div>
       </div>

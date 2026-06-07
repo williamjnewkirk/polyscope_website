@@ -132,13 +132,12 @@ export default function DownloadCTA() {
           )}
           </div>
 
-          {/* App store badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          {/* App store badge */}
+          <div className="flex items-center justify-center">
             <AppStoreBadge store="apple" />
-            <AppStoreBadge store="google" />
           </div>
           <p className="mt-4 text-[11px] text-ps-muted/50">
-            iOS & Android · Free to download · Pro and Premium tiers available
+            iOS · Free to download · Pro and Premium tiers available
           </p>
         </motion.div>
       </div>
