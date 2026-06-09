@@ -275,8 +275,9 @@ const CONTENT = `
 <h2 id="sec-18">18. How Can You Contact Us About This Notice?</h2>
 <p>If you have questions or comments about this notice, you may email us at support@polyscopeapp.com or contact us by post at:</p>
 <p>Newkirk Technologies LLC<br>
-6515 Wydown Blvd. MSC 96891<br>
-St. Louis, MO 63105<br>
+3472 Research Pkwy<br>
+Ste 104-8243<br>
+Colorado Springs, CO 80920<br>
 United States</p>
 
 <h2 id="sec-19">19. How Can You Review, Update, or Delete the Data We Collect From You?</h2>

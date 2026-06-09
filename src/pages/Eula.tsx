@@ -26,7 +26,7 @@ const CONTENT = `
 <h1>End User License Agreement</h1>
 <p class="updated">Last updated June 05, 2026</p>
 
-<p>Polyscope is licensed to You (End-User) by <strong>Newkirk Technologies LLC</strong>, located and registered at 6515 Wydown Blvd. MSC 96891, St. Louis, Missouri 63105, United States ("Licensor"), for use only under the terms of this License Agreement.</p>
+<p>Polyscope is licensed to You (End-User) by <strong>Newkirk Technologies LLC</strong>, located and registered at 3472 Research Pkwy, Ste 104-8243, Colorado Springs, CO 80920, United States ("Licensor"), for use only under the terms of this License Agreement.</p>
 <p>By downloading the Licensed Application from Apple's software distribution platform ("App Store") and Google's software distribution platform ("Play Store"), and any update thereto (as permitted by this License Agreement), You indicate that You agree to be bound by all of the terms and conditions of this License Agreement, and that You accept this License Agreement. App Store and Play Store are referred to in this License Agreement as "Services."</p>
 <p>The parties of this License Agreement acknowledge that the Services are not a Party to this License Agreement and are not bound by any provisions or obligations with regard to the Licensed Application, such as warranty, liability, maintenance and support thereof. Newkirk Technologies LLC, not the Services, is solely responsible for the Licensed Application and the content thereof.</p>
 <p>This License Agreement may not provide for usage rules for the Licensed Application that are in conflict with the latest Apple Media Services Terms and Conditions and Google Play Terms of Service ("Usage Rules"). Newkirk Technologies LLC acknowledges that it had the opportunity to review the Usage Rules and this License Agreement is not conflicting with them.</p>
@@ -140,8 +140,9 @@ const CONTENT = `
 <h2 id="sec-12">12. Contact Information</h2>
 <p>For general inquiries, complaints, questions or claims concerning the Licensed Application, please contact:</p>
 <p>Newkirk Technologies LLC<br>
-6515 Wydown Blvd. MSC 96891<br>
-St. Louis, MO 63105<br>
+3472 Research Pkwy<br>
+Ste 104-8243<br>
+Colorado Springs, CO 80920<br>
 United States<br>
 contact@polyscopeapp.com</p>
 

@@ -25,10 +25,10 @@ const CONTENT = `
 <p class="updated">Last updated June 05, 2026</p>
 
 <h2 id="agreement">Agreement to Our Legal Terms</h2>
-<p>We are <strong>Newkirk Technologies LLC</strong>, doing business as Polyscope ("Company," "we," "us," "our"), a company registered in Missouri, United States at 6515 Wydown Blvd. MSC 96891, St. Louis, MO 63105.</p>
+<p>We are <strong>Newkirk Technologies LLC</strong>, doing business as Polyscope ("Company," "we," "us," "our"), a company registered in Colorado, United States at 3472 Research Pkwy, Ste 104-8243, Colorado Springs, CO 80920.</p>
 <p>We operate the mobile application Polyscope (the "App"), as well as any other related products and services that refer or link to these legal terms (the "Legal Terms") (collectively, the "Services").</p>
 <p>Polyscope is a mobile application available on iOS and Android that provides real-time Polymarket prediction market intelligence to retail traders. The app monitors publicly available on-chain trading activity on the Polygon blockchain and surfaces whale wallet activity, high-conviction trade signals, and AI-powered trade analysis through a subscription-based mobile experience. Polyscope allows users to track specific Polymarket wallet addresses of their choosing and receive push notifications when those wallets execute trades. The app also surfaces high-volume trades exceeding $100,000 USDC across the Polymarket platform, flagged as high-conviction signals. Premium subscribers have access to an AI-powered trade advisor that synthesizes recent whale activity and market data to provide informational trade insights. The app operates three subscription tiers: a free tier with limited wallet tracking and notifications, a Pro tier ($19.99/month, $155.99/year) with expanded tracking and insider signal alerts, and a Premium tier ($59.99/month, $464.99/year) with unlimited access and AI advisory features. Subscriptions are managed through Apple In-App Purchase (iOS) and Google Play Billing (Android). A free trial (3-days for Premium, 7-days for Pro) is available for new subscribers. Polyscope is a data aggregation and intelligence tool. It does not facilitate the placement of trades, hold user funds, or provide licensed financial advice. All market data displayed is sourced from publicly available blockchain records and the Polymarket Gamma API.</p>
-<p>You can contact us by email at contact@polyscopeapp.com, or by mail to 6515 Wydown Blvd. MSC 96891, St. Louis, MO 63105, United States.</p>
+<p>You can contact us by email at contact@polyscopeapp.com, or by mail to 3472 Research Pkwy, Ste 104-8243, Colorado Springs, CO 80920, United States.</p>
 <p>These Legal Terms constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you"), and Newkirk Technologies LLC, concerning your access to and use of the Services. You agree that by accessing the Services, you have read, understood, and agreed to be bound by all of these Legal Terms. IF YOU DO NOT AGREE WITH ALL OF THESE LEGAL TERMS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SERVICES AND YOU MUST DISCONTINUE USE IMMEDIATELY.</p>
 <p>We will provide you with prior notice of any scheduled changes to the Services you are using. Changes to these Legal Terms will become effective thirty (30) days after the notice is given, except if the changes apply to new functionality, security updates, bug fixes, a court order, and changes required to comply with applicable law or regulatory requirements, in which case the changes will be effective immediately. By continuing to use the Services after the effective date of any changes, you agree to be bound by the modified terms. If you disagree with such changes, you may terminate Services as per the section "Term and Termination."</p>
 <p>The Services are intended for users who are at least 18 years old. Persons under the age of 18 are not permitted to use or register for the Services.</p>
@@ -222,8 +222,9 @@ const CONTENT = `
 <h2 id="sec-28">28. Contact Us</h2>
 <p>In order to resolve a complaint regarding the Services or to receive further information regarding use of the Services, please contact us at:</p>
 <p>Newkirk Technologies LLC<br>
-6515 Wydown Blvd. MSC 96891<br>
-St. Louis, MO 63105<br>
+3472 Research Pkwy<br>
+Ste 104-8243<br>
+Colorado Springs, CO 80920<br>
 United States<br>
 contact@polyscopeapp.com</p>
 `
