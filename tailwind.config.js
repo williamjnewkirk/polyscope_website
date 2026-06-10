@@ -27,6 +27,8 @@ export default {
         'scroll-up':    'scroll-up 22s linear infinite',
         'pulse-dot':    'pulse-dot 2s ease-in-out infinite',
         'fade-in-up':   'fade-in-up 0.6s cubic-bezier(0.16,1,0.3,1) forwards',
+        sonar:          'sonar 3.6s cubic-bezier(0.2,0.6,0.4,1) infinite',
+        shimmer:        'shimmer 2.8s linear infinite',
       },
       keyframes: {
         marquee: {
@@ -48,6 +50,15 @@ export default {
         'fade-in-up': {
           '0%':   { opacity: '0', transform: 'translateY(16px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        sonar: {
+          '0%':   { transform: 'scale(0.3)', opacity: '0.55' },
+          '70%':  { opacity: '0.12' },
+          '100%': { transform: 'scale(1.45)', opacity: '0' },
+        },
+        shimmer: {
+          '0%':   { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
       },
     },

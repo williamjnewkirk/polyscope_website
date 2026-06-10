@@ -39,8 +39,8 @@ export default function Footer() {
               <span className="font-bold text-base tracking-tight text-ps-text">POLYSCOPE</span>
             </a>
             <p className="text-xs text-ps-muted leading-relaxed">
-              Real-time Polymarket whale intelligence on iOS. Data sourced
-              from Polymarket's public APIs · Not affiliated with Polymarket.
+              Real-time Polymarket whale intelligence on iOS. Independently
+              built by one developer who watches the whales so you don't have to.
             </p>
             <a
               href="https://x.com/PolyscopeApp"

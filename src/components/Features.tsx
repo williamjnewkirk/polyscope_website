@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { ChartLine, Lightning, Wallet, Brain } from '@phosphor-icons/react'
+import { ChartLine, Lightning, Wallet, Brain, ArrowUp } from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
+import SpotlightCard from './fx/SpotlightCard'
 import { isPrerendering } from '../lib/prerender'
 
 const sectionVariants = {
@@ -23,10 +24,9 @@ function FeatureTag({ children }: { children: ReactNode }) {
 
 function LiveFeedCard() {
   return (
-    <motion.div
+    <SpotlightCard
       variants={itemVariants}
-      className="relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
-      style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
+      className="card-lift relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 h-full">
         {/* Copy */}
@@ -48,21 +48,20 @@ function LiveFeedCard() {
           <PhoneMockup screen="feed" className="scale-[0.72] origin-bottom" />
         </div>
       </div>
-    </motion.div>
+    </SpotlightCard>
   )
 }
 
 function SignalsCard() {
   const signals = [
-    { address: '0x6fec...3be3', market: 'Will Trump say "Hormuz" with Xi?', outcome: 'No', size: '$143,782', price: '100¢' },
-    { address: '0x90ca...1a4b', market: 'Iran-US Nuclear Deal by Aug 31?', outcome: 'No', size: '$98,450', price: '88¢' },
+    { address: '0x3dfb...abaf', market: 'Colorado Rockies vs. Los Angeles Angels', outcome: 'Colorado Rockies', size: '$158,918', price: '100¢', action: 'SELL' },
+    { address: '0xfaf9...f4c4', market: 'Putin out as President of Russia by Dec 31, 2026?', outcome: 'No', size: '$179,504', price: '91¢', action: 'BUY' },
   ]
 
   return (
-    <motion.div
+    <SpotlightCard
       variants={itemVariants}
-      className="relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
-      style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
     >
       <FeatureTag>
         <Lightning size={14} weight="bold" />
@@ -89,30 +88,31 @@ function SignalsCard() {
             </div>
             <p className="text-[11px] font-medium text-ps-text line-clamp-1 mb-1">{s.market}</p>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-ps-orange/15 text-ps-orange">{s.outcome}</span>
-              <span className="text-[9px] font-mono text-ps-muted">@ {s.price} · BUY · {s.address}</span>
+              <span className={`text-[10px] px-2 py-0.5 rounded-full ${s.action === 'SELL' ? 'bg-red-500/15 text-red-400' : 'bg-ps-green/15 text-ps-green'}`}>
+                {s.outcome}
+              </span>
+              <span className="text-[9px] font-mono text-ps-muted">@ {s.price} · {s.action} · {s.address}</span>
             </div>
           </div>
         ))}
       </div>
-    </motion.div>
+    </SpotlightCard>
   )
 }
 
 function WalletCard() {
   const whales = [
-    { rank: 1, name: 'bossoskil1',       pnl: '+$3.09M', tracked: false },
-    { rank: 2, name: 'surfandturf',       pnl: '+$2.52M', tracked: true  },
-    { rank: 3, name: 'LaBradfordSmit...', pnl: '+$2.37M', tracked: true  },
-    { rank: 4, name: '0x4924...B586',    pnl: '+$1.77M', tracked: false },
-    { rank: 5, name: 'Pestle',           pnl: '+$1.76M', tracked: false },
+    { rank: 1, name: '0x4f2',                pnl: '+$98,029', tracked: true  },
+    { rank: 2, name: 'ferrariChampions2...', pnl: '+$95,677', tracked: true  },
+    { rank: 3, name: 'afghj2421',            pnl: '+$82,991', tracked: false },
+    { rank: 4, name: 'Vatrer',               pnl: '+$71,426', tracked: false },
+    { rank: 5, name: 'TrevorPlovdivBul...',  pnl: '+$61,452', tracked: false },
   ]
 
   return (
-    <motion.div
+    <SpotlightCard
       variants={itemVariants}
-      className="relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
-      style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
     >
       <FeatureTag>
         <Wallet size={14} weight="bold" />
@@ -122,7 +122,8 @@ function WalletCard() {
         Follow the top performers.
       </h3>
       <p className="text-sm text-ps-muted leading-relaxed mb-6">
-        Polymarket's up to date leaderboard, right at your fingertips. See who's making the biggest moves, and track their activity with one tap to get instant alerts on all their trades. 
+        Polymarket's up-to-date leaderboard, right at your fingertips. See who's making
+        the biggest moves and track them with one tap for instant alerts on every trade.
       </p>
       {/* Mini leaderboard */}
       <div className="space-y-2">
@@ -143,21 +144,20 @@ function WalletCard() {
           </div>
         ))}
       </div>
-    </motion.div>
+    </SpotlightCard>
   )
 }
 
 function AICard() {
   const messages = [
     { role: 'user',      text: 'What are the whales buying this week?' },
-    { role: 'assistant', text: '3 whales have accumulated $312k on the Iran diplomatic talks market over 48h, pushing implied probability from 41% to 54%. Possible insider conviction on near-term resolution. Whales also loaded up $189k on No side of the Xi summit language markets.' },
+    { role: 'assistant', text: '3 whales have accumulated $312k on the Iran diplomatic talks market over 48h, pushing implied probability from 41% to 54%. Possible insider conviction on near-term resolution. Whales also loaded up $189k on the No side of the Xi summit language markets.' },
   ]
 
   return (
-    <motion.div
+    <SpotlightCard
       variants={itemVariants}
-      className="relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
-      style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
+      className="card-lift relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 h-full">
         {/* Copy */}
@@ -199,15 +199,13 @@ function AICard() {
             <div className="flex items-center gap-2 bg-white/[0.04] rounded-xl px-3 py-2 border border-white/[0.06] mt-2">
               <span className="text-[10px] text-ps-muted flex-1">Ask about whale activity...</span>
               <div className="w-5 h-5 rounded-full bg-ps-green flex items-center justify-center flex-shrink-0">
-                <svg viewBox="0 0 12 12" fill="none" className="w-3 h-3">
-                  <path d="M6 9.5V2.5M6 2.5L3 5.5M6 2.5L9 5.5" stroke="#0A0A0C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <ArrowUp size={11} weight="bold" className="text-ps-black" />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </motion.div>
+    </SpotlightCard>
   )
 }
 
@@ -228,8 +226,9 @@ export default function Features() {
             Built for traders who act fast.
           </h2>
           <p className="mt-4 text-ps-muted text-base leading-relaxed max-w-[52ch]">
-            Every tool you need to stay ahead of the market — real-time data, instant
-            alerts, and AI synthesis — in one mobile app.
+            Polyscope surfaces the trades that matter — from wallets that consistently
+            win — with push alerts, high-conviction signals, and an AI advisor that
+            synthesizes it all in plain English.
           </p>
         </motion.div>
 

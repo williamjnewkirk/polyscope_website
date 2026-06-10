@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Polyscope** — marketing website for a Polymarket whale-intelligence mobile app (iOS & Android).
 - GitHub repo: `williamjnewkirk/polyscope_website`
-- Deployed at: `https://williamjnewkirk.github.io/polyscope_website/`
+- Deployed at: `https://polyscopeapp.com` (custom domain via `public/CNAME`; GitHub Pages serves at the domain root)
 
 ## Commands
 
@@ -19,7 +19,9 @@ npm run preview  # preview the production build locally
 ## Stack
 
 - **React 18** + **TypeScript** — component framework
-- **Vite 6** — build tool; `base: '/polyscope_website/'` in `vite.config.ts` for GitHub Pages
+- **Vite 6** — build tool; `base: '/'` in `vite.config.ts` (custom domain at root). Local URLs are `http://localhost:5173/` (dev) and `http://localhost:4173/` (preview) — no subpath.
+- **react-router-dom 7** — `/`, `/support`, `/privacy`, `/terms`, `/eula` routes (pages in `src/pages/`)
+- **react-snap** — postbuild prerender of all routes to static HTML; `src/lib/prerender.ts` exposes `isPrerendering`, and `main.tsx` stubs `IntersectionObserver` during prerender so animated content is captured visible
 - **Tailwind CSS v3** — utility styling; custom `ps-*` color tokens in `tailwind.config.js`
 - **Framer Motion** — scroll-reveal animations (`whileInView`) and pricing toggle
 - **@phosphor-icons/react** — all icons (no emojis in code per SKILL.md rules)
@@ -31,16 +33,19 @@ All code lives in `src/`. The entry point is `src/main.tsx` → `src/App.tsx`, w
 
 | Component | Section |
 |---|---|
-| `Navbar` | Fixed glass header with scroll-aware background |
-| `Hero` | Asymmetric split: copy (left) + animated CSS phone mockup (right) |
-| `MarqueeTicker` | Infinite-scroll market-name ticker |
-| `Features` | Bento grid — LiveFeed, Signals, WalletTracker, AI Advisor |
-| `HowItWorks` | 3-step staggered layout |
-| `Pricing` | Monthly/yearly toggle + tier cards + feature comparison table |
+| `Navbar` | Fixed glass header with scroll-spy active-section underline |
+| `Hero` | Asymmetric split: word-blur headline + 3D-tilt phone, sonar rings, push-notification simulator |
+| `MarqueeTicker` | Infinite-scroll market ticker (pauses on hover, pinned "Live markets" label) |
+| `Features` | Bento grid of mouse-spotlight cards — LiveFeed, Signals, WalletTracker, AI Advisor |
+| `HowItWorks` | 3-step staggered layout with scroll-drawn SVG path + CountUp stats |
+| `AppShowcase` | Auto-advancing interactive tabs (feed/signals/wallets/ai) driving the phone mockup |
+| `Pricing` | Monthly/yearly toggle + tier cards (Pro card has animated conic border) + comparison table |
 | `DownloadCTA` | Waitlist email form + coming-soon App Store badges |
 | `Footer` | Brand, nav columns, legal |
 
-`PhoneMockup` is a shared sub-component rendered inside `Hero` and `Features`. It accepts a `screen` prop (`'feed'` | `'signals'`) and renders a fully CSS-simulated phone UI with a scrolling trade-card feed driven by `animate-scroll-up` (defined in `tailwind.config.js`).
+`PhoneMockup` is a shared sub-component (Hero, Features, AppShowcase). Its `screen` prop is `'feed' | 'signals' | 'wallets' | 'ai'` and it renders a CSS-simulated phone UI mirroring the real app screens, with animated screen transitions and a scrolling trade feed (`animate-scroll-up`). Demo data mirrors real app screenshots — keep it realistic when editing.
+
+`src/components/fx/` holds reusable interaction primitives: `Magnetic` (cursor-attracted buttons), `Tilt` (pointer-tracked 3D tilt + glare), `CountUp` (in-view counters), `SpotlightCard` (mouse-tracked border glow via CSS vars), `TypeText` (typewriter). All of them render their final state during react-snap prerendering via `isPrerendering`.
 
 ## Custom Tailwind tokens
 

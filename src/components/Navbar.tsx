@@ -2,16 +2,19 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { List, X } from '@phosphor-icons/react'
 import logoIcon from '../assets/logo-icon.png'
+import { isPrerendering } from '../lib/prerender'
 
 const NAV_SECTIONS = [
   { label: 'Features', anchor: 'features' },
   { label: 'How It Works', anchor: 'how-it-works' },
+  { label: 'App', anchor: 'app' },
   { label: 'Pricing', anchor: 'pricing' },
 ]
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState<string | null>(null)
   const location = useLocation()
   const isHome = location.pathname === '/'
 
@@ -20,6 +23,31 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Highlight the nav link for the section currently in view (home page only).
+  // Skipped during prerendering, where IntersectionObserver is stubbed to fire
+  // immediately for every element and would mark the last section active.
+  useEffect(() => {
+    if (!isHome || isPrerendering) {
+      setActiveSection(null)
+      return
+    }
+    const sections = NAV_SECTIONS
+      .map(({ anchor }) => document.getElementById(anchor))
+      .filter((el): el is HTMLElement => el !== null)
+    if (sections.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActiveSection(entry.target.id)
+        }
+      },
+      { rootMargin: '-30% 0px -60% 0px' }
+    )
+    sections.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [isHome])
 
   // Section links scroll on home; navigate home+anchor from other pages
   function sectionHref(anchor: string) {
@@ -36,7 +64,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <img src={logoIcon} alt="Polyscope logo" className="w-16 h-16 transition-transform duration-300 group-hover:scale-105" />
+            <img src={logoIcon} alt="Polyscope logo" className="w-8 h-8 transition-transform duration-300 group-hover:scale-105" />
             <span className="font-bold text-lg tracking-tight text-ps-text">
               POLYSCOPE
             </span>
@@ -48,9 +76,16 @@ export default function Navbar() {
               <a
                 key={label}
                 href={sectionHref(anchor)}
-                className="text-sm font-medium text-ps-muted hover:text-ps-text transition-colors duration-200"
+                className={`relative text-sm font-medium transition-colors duration-200 ${
+                  activeSection === anchor ? 'text-ps-text' : 'text-ps-muted hover:text-ps-text'
+                }`}
               >
                 {label}
+                <span
+                  className={`absolute -bottom-1.5 left-0 right-0 h-px bg-ps-green transition-opacity duration-300 ${
+                    activeSection === anchor ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
               </a>
             ))}
             <Link
@@ -65,7 +100,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             <a
               href={sectionHref('download')}
-              className="px-5 py-2 rounded-full bg-ps-green text-ps-black text-sm font-semibold hover:bg-opacity-90 active:scale-[0.97] transition-all duration-200"
+              className="btn-primary px-5 py-2 rounded-full bg-ps-green text-ps-black text-sm font-semibold active:scale-[0.97]"
             >
               Join Waitlist
             </a>

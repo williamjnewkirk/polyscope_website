@@ -119,12 +119,11 @@ export default function Pricing() {
           {TIERS.map((tier) => (
             <div
               key={tier.id}
-              className={`relative rounded-2xl border p-7 flex flex-col transition-all duration-300 ${
+              className={`relative rounded-2xl p-7 flex flex-col ${
                 tier.highlight
-                  ? 'bg-ps-card border-ps-green/35 glow-green scale-[1.02]'
-                  : 'bg-ps-card border-white/[0.07]'
+                  ? 'conic-border glow-green md:scale-[1.02]'
+                  : 'card-lift bg-ps-card border border-white/[0.07]'
               }`}
-              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
             >
               {tier.highlight && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-ps-green text-ps-black">
@@ -162,7 +161,7 @@ export default function Pricing() {
                 href="#download"
                 className={`w-full py-3 rounded-full text-sm font-bold text-center transition-all duration-200 active:scale-[0.97] ${
                   tier.highlight
-                    ? 'bg-ps-green text-ps-black hover:bg-opacity-90'
+                    ? 'btn-primary bg-ps-green text-ps-black'
                     : 'bg-white/[0.07] text-ps-text hover:bg-white/[0.11] border border-white/[0.09]'
                 }`}
               >
@@ -182,7 +181,7 @@ export default function Pricing() {
           style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
         >
           {/* Table header */}
-          <div className="grid grid-cols-4 border-b border-white/[0.07] px-6 py-4">
+          <div className="grid grid-cols-[1.4fr_1fr_1fr_1fr] border-b border-white/[0.07] px-4 sm:px-6 py-4">
             <span className="text-xs font-semibold text-ps-muted">Feature</span>
             {TIERS.map((t) => (
               <span key={t.id} className={`text-xs font-bold text-center ${t.highlight ? 'text-ps-green' : 'text-ps-text'}`}>
@@ -194,7 +193,7 @@ export default function Pricing() {
           {FEATURES.map((feat, i) => (
             <div
               key={feat.label}
-              className={`grid grid-cols-4 px-6 py-3.5 items-center ${i < FEATURES.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
+              className={`grid grid-cols-[1.4fr_1fr_1fr_1fr] px-4 sm:px-6 py-3.5 items-center ${i < FEATURES.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
             >
               <span className="text-xs text-ps-muted pr-4">{feat.label}</span>
               <div className="text-center"><FeatureValue value={feat.free} /></div>

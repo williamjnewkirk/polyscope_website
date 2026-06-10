@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from '@phosphor-icons/react'
+import Magnetic from './fx/Magnetic'
 import { isPrerendering } from '../lib/prerender'
 
 function AppStoreBadge({ store, className }: { store: 'apple' | 'google'; className?: string }) {
@@ -112,16 +113,18 @@ export default function DownloadCTA() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
-                  className="flex-1 px-5 py-3 rounded-full bg-ps-card border border-white/[0.09] text-ps-text text-sm placeholder:text-ps-muted focus:outline-none focus:border-ps-green/50 transition-colors"
+                  className="flex-1 px-5 py-3 rounded-full bg-ps-card border border-white/[0.09] text-ps-text text-sm placeholder:text-ps-muted focus:outline-none focus:border-ps-green/50 focus:shadow-[0_0_0_3px_rgba(24,185,116,0.12)] transition-all"
                 />
-                <button
-                  type="submit"
-                  disabled={status === 'submitting'}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-ps-green text-ps-black text-sm font-bold hover:bg-opacity-90 active:scale-[0.97] transition-all duration-200 flex-shrink-0 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {status === 'submitting' ? 'Joining…' : 'Notify Me'}
-                  {status !== 'submitting' && <ArrowRight size={15} weight="bold" />}
-                </button>
+                <Magnetic strength={0.25} className="flex-shrink-0">
+                  <button
+                    type="submit"
+                    disabled={status === 'submitting'}
+                    className="btn-primary w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-ps-green text-ps-black text-sm font-bold active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {status === 'submitting' ? 'Joining…' : 'Notify Me'}
+                    {status !== 'submitting' && <ArrowRight size={15} weight="bold" />}
+                  </button>
+                </Magnetic>
               </form>
               {status === 'error' && (
                 <p className="text-xs text-red-400 mb-5">

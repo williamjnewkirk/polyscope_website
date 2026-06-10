@@ -1,6 +1,7 @@
-import { Fragment } from 'react'
-import { motion } from 'framer-motion'
+import { Fragment, useRef } from 'react'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import { UserPlus, BellRinging, Star } from '@phosphor-icons/react'
+import CountUp from './fx/CountUp'
 import { isPrerendering } from '../lib/prerender'
 
 const steps = [
@@ -27,7 +28,21 @@ const steps = [
   },
 ]
 
+const stats = [
+  { prefix: '~', to: 5, suffix: 's', label: 'Trade detection speed' },
+  { prefix: '', to: 50, suffix: '+', label: 'Whale wallets tracked' },
+  { prefix: '$', to: 100, suffix: 'k+', label: 'High Conviction threshold' },
+  { prefix: '', to: 24, suffix: '/7', label: 'Always-on monitoring' },
+]
+
 export default function HowItWorks() {
+  const stepsRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: stepsRef,
+    offset: ['start 0.85', 'end 0.45'],
+  })
+  const pathProgress = useSpring(scrollYProgress, { stiffness: 90, damping: 22 })
+
   return (
     <section id="how-it-works" className="py-24 bg-ps-surface">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
@@ -45,55 +60,70 @@ export default function HowItWorks() {
           </h2>
         </motion.div>
 
-        {/* Steps — asymmetric layout for DESIGN_VARIANCE 8 */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2px_1fr_2px_1fr] gap-8 lg:gap-0 items-start">
-          {steps.map((step, i) => (
-            <Fragment key={step.number}>
-              <motion.div
-                initial={isPrerendering ? false : { opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: i * 0.14, ease: [0.16, 1, 0.3, 1] }}
-                viewport={{ once: true }}
-                className={`flex flex-col gap-5 px-0 lg:px-8 ${i === 1 ? 'lg:mt-10' : ''} ${i === 2 ? 'lg:mt-20' : ''}`}
-              >
-                {/* Step number + icon */}
-                <div className="flex items-center gap-4">
-                  <span className="text-5xl font-extrabold font-mono text-white/[0.07] leading-none select-none">
-                    {step.number}
-                  </span>
-                  <div className="w-10 h-10 rounded-xl bg-ps-card border border-white/[0.08] flex items-center justify-center flex-shrink-0">
-                    <step.Icon size={20} weight="duotone" className="text-ps-green" />
+        {/* Steps — staggered three-column layout with a scroll-drawn path */}
+        <div ref={stepsRef} className="relative">
+          {/* The connecting path draws in as the section scrolls into view */}
+          <svg
+            viewBox="0 0 100 60"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none"
+          >
+            <motion.path
+              d="M 7 14 C 24 14, 28 26, 44 28 S 70 38, 88 46"
+              fill="none"
+              stroke="rgba(24,185,116,0.30)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeDasharray="0.5 2.5"
+              vectorEffect="non-scaling-stroke"
+              style={{ pathLength: isPrerendering ? 1 : pathProgress }}
+            />
+          </svg>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2px_1fr_2px_1fr] gap-8 lg:gap-0 items-start">
+            {steps.map((step, i) => (
+              <Fragment key={step.number}>
+                <motion.div
+                  initial={isPrerendering ? false : { opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.14, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true }}
+                  className={`relative flex flex-col gap-5 px-0 lg:px-8 ${i === 1 ? 'lg:mt-10' : ''} ${i === 2 ? 'lg:mt-20' : ''}`}
+                >
+                  {/* Step number + icon */}
+                  <div className="flex items-center gap-4">
+                    <span className="text-5xl font-extrabold font-mono text-white/[0.07] leading-none select-none">
+                      {step.number}
+                    </span>
+                    <div className="w-10 h-10 rounded-xl bg-ps-card border border-white/[0.08] flex items-center justify-center flex-shrink-0">
+                      <step.Icon size={20} weight="duotone" className="text-ps-green" />
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm text-ps-muted leading-relaxed max-w-[34ch]">
-                    {step.description}
-                  </p>
-                </div>
+                  <div>
+                    <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm text-ps-muted leading-relaxed max-w-[34ch]">
+                      {step.description}
+                    </p>
+                  </div>
+                </motion.div>
 
-                {/* Step indicator dot */}
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="w-2 h-2 rounded-full bg-ps-green" />
-                  <span className="text-xs text-ps-green font-medium">Step {i + 1} of 3</span>
-                </div>
-              </motion.div>
-
-              {/* Vertical divider between steps */}
-              {i < 2 && (
-                <div
-                  className="hidden lg:block self-stretch w-px"
-                  style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 70%, transparent)' }}
-                />
-              )}
-            </Fragment>
-          ))}
+                {/* Vertical divider between steps */}
+                {i < 2 && (
+                  <div
+                    className="hidden lg:block self-stretch w-px"
+                    style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 70%, transparent)' }}
+                  />
+                )}
+              </Fragment>
+            ))}
+          </div>
         </div>
 
-        {/* Bottom stats bar */}
+        {/* Bottom stats bar with animated counters */}
         <motion.div
           initial={isPrerendering ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -101,14 +131,14 @@ export default function HowItWorks() {
           viewport={{ once: true }}
           className="mt-20 pt-8 border-t border-white/[0.06] grid grid-cols-2 md:grid-cols-4 gap-8"
         >
-          {[
-            { value: '~5s',    label: 'Polymarket poll interval' },
-            { value: '50+',    label: 'Whale wallets tracked' },
-            { value: '$100k+', label: 'High Conviction threshold' },
-            { value: '24/7',   label: 'Fly.io worker uptime' },
-          ].map(({ value, label }) => (
+          {stats.map(({ prefix, to, suffix, label }) => (
             <div key={label} className="flex flex-col gap-1">
-              <span className="text-3xl font-extrabold font-mono text-ps-text tracking-tight">{value}</span>
+              <CountUp
+                to={to}
+                prefix={prefix}
+                suffix={suffix}
+                className="text-3xl font-extrabold font-mono text-ps-text tracking-tight"
+              />
               <span className="text-xs text-ps-muted">{label}</span>
             </div>
           ))}
