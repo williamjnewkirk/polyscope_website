@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight } from '@phosphor-icons/react'
+import { ArrowRight, AppleLogo } from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
 import Magnetic from './fx/Magnetic'
 import Tilt from './fx/Tilt'
 import logoIcon from '../assets/logo-icon.png'
 import { isPrerendering } from '../lib/prerender'
+import { APP_STORE_URL } from '../lib/links'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -207,11 +208,13 @@ export default function Hero() {
             >
               <Magnetic strength={0.3}>
                 <a
-                  href="#download"
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn-primary group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-ps-green text-ps-black text-sm font-bold active:scale-[0.97]"
                 >
-                  Join the Waitlist
-                  <ArrowRight size={16} weight="bold" className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                  <AppleLogo size={17} weight="fill" />
+                  Download on the App Store
                 </a>
               </Magnetic>
               <a

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { List, X } from '@phosphor-icons/react'
 import logoIcon from '../assets/logo-icon.png'
 import { isPrerendering } from '../lib/prerender'
+import { APP_STORE_URL } from '../lib/links'
 
 const NAV_SECTIONS = [
   { label: 'Features', anchor: 'features' },
@@ -99,10 +100,12 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
             <a
-              href={sectionHref('download')}
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary px-5 py-2 rounded-full bg-ps-green text-ps-black text-sm font-semibold active:scale-[0.97]"
             >
-              Join Waitlist
+              Download
             </a>
           </div>
 
@@ -142,11 +145,13 @@ export default function Navbar() {
             Support
           </Link>
           <a
-            href={sectionHref('download')}
+            href={APP_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="mt-2 px-5 py-2.5 rounded-full bg-ps-green text-ps-black text-sm font-semibold text-center active:scale-[0.97] transition-all duration-200"
             onClick={() => setMobileOpen(false)}
           >
-            Join Waitlist
+            Download
           </a>
         </div>
       </div>
