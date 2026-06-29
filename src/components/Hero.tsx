@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, AppleLogo } from '@phosphor-icons/react'
+import { ArrowRight, AppleLogo, Funnel } from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
 import Magnetic from './fx/Magnetic'
 import Tilt from './fx/Tilt'
@@ -193,8 +193,8 @@ export default function Hero() {
               className="text-base sm:text-lg text-ps-muted leading-relaxed max-w-[52ch] mb-8"
             >
               The moment a whale makes a high-conviction bet on Polymarket,
-              you'll know. Polyscope tracks 50+ top wallets around the clock,
-              fires push alerts the instant they trade, and gives you an AI
+              you'll know. Track any Polymarket wallet around the clock,
+              get push alerts the instant they trade, and lean on an AI
               advisor to make sense of it all.
             </motion.p>
 
@@ -235,7 +235,7 @@ export default function Hero() {
               className="flex flex-wrap items-center gap-x-6 gap-y-2"
             >
               {[
-                { value: '50+', label: 'whale wallets tracked' },
+                { value: 'Any', label: 'wallet you can track' },
                 { value: '~5s', label: 'trade detection speed' },
                 { value: '$100k+', label: 'high conviction threshold' },
               ].map(({ value, label }, i) => (
@@ -302,8 +302,20 @@ export default function Hero() {
               >
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-ps-green animate-pulse-dot" />
-                  <span className="text-[9px] text-ps-muted whitespace-nowrap">Tracking 50 whales</span>
+                  <span className="text-[9px] text-ps-muted whitespace-nowrap">Tracking your whales</span>
                   <span className="text-[9px] font-mono text-ps-green">LIVE</span>
+                </div>
+              </div>
+
+              {/* Floating bot-filter chip (bottom-left) — new in v1.1 */}
+              <div
+                className="absolute hidden sm:block card-glass rounded-xl px-3 py-2.5 shadow-2xl animate-float-slow"
+                style={{ bottom: '7%', left: '-24%', animationDelay: '1.4s' }}
+              >
+                <div className="flex items-center gap-2">
+                  <Funnel size={12} weight="bold" className="text-ps-green" />
+                  <span className="text-[10px] font-semibold text-ps-text whitespace-nowrap">Bots filtered</span>
+                  <span className="text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 rounded bg-ps-green text-ps-black leading-none">Pro</span>
                 </div>
               </div>
             </div>

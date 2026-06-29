@@ -14,8 +14,8 @@ interface TierFeature {
 const FEATURES: TierFeature[] = [
   { label: 'Wallets tracked',           free: '5',        pro: 'Unlimited' },
   { label: 'Daily push notifications',  free: '20/day',   pro: 'Unlimited' },
+  { label: 'Suggested whale wallets',   free: 'Top 3 / category',  pro: 'Top 50 / category' },
   { label: 'Signals (High Conviction)', free: false,      pro: 'Unlimited' },
-  { label: 'Suggested whale wallets',   free: false,      pro: 'Full library' },
   { label: 'Ad-free experience',        free: false,      pro: true },
   { label: 'AI Trade Advisor',          free: false,      pro: '~20 queries/day' },
 ]

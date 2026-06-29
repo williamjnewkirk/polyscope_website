@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { ChartLine, Lightning, Wallet, Brain, ArrowUp } from '@phosphor-icons/react'
+import { ChartLine, Lightning, Wallet, Brain, ArrowUp, Funnel, ShieldCheck, IdentificationCard } from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
 import SpotlightCard from './fx/SpotlightCard'
 import { isPrerendering } from '../lib/prerender'
@@ -18,6 +18,14 @@ function FeatureTag({ children }: { children: ReactNode }) {
   return (
     <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-ps-green mb-3">
       {children}
+    </span>
+  )
+}
+
+function ProPill() {
+  return (
+    <span className="inline-flex items-center text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-ps-green text-ps-black leading-none">
+      Pro
     </span>
   )
 }
@@ -209,6 +217,107 @@ function AICard() {
   )
 }
 
+function BotFilterCard() {
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+        {/* Copy */}
+        <div className="flex flex-col justify-center p-8 lg:p-10">
+          <FeatureTag>
+            <Funnel size={14} weight="bold" />
+            Bot Filter
+            <ProPill />
+          </FeatureTag>
+          <h3 className="text-2xl font-bold tracking-tight text-ps-text mb-3">
+            See real human conviction, minus the bot noise.
+          </h3>
+          <p className="text-sm text-ps-muted leading-relaxed max-w-[40ch]">
+            Market-maker and HFT bots fire thousands of trades a day and bury the
+            signal. Polyscope flags them automatically — by trade frequency,
+            simultaneous markets, same-second bursts, and round-the-clock timing —
+            then lets you hide them from the feed, Signals, and suggested wallets
+            with one tap.
+          </p>
+          <p className="text-[11px] text-ps-muted/60 mt-4 italic">
+            Conservatively tuned — never hides real human traders.
+          </p>
+        </div>
+        {/* Phone demo — redesigned wallet profile with bot detection */}
+        <div className="hidden md:flex items-end justify-center overflow-hidden pt-6 pb-0 pr-6">
+          <PhoneMockup screen="walletDetail" className="scale-[0.72] origin-bottom" />
+        </div>
+      </div>
+    </SpotlightCard>
+  )
+}
+
+function WalletProfileCard() {
+  const stats = [
+    { value: '$287K', label: 'Positions' },
+    { value: '$412K', label: 'Biggest Win' },
+    { value: '100%',  label: 'Win Rate' },
+  ]
+
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
+    >
+      <FeatureTag>
+        <IdentificationCard size={14} weight="bold" />
+        Wallet Profiles
+      </FeatureTag>
+      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
+        Every wallet, fully decoded.
+      </h3>
+      <p className="text-sm text-ps-muted leading-relaxed mb-6">
+        Tap any wallet for a Polymarket-style profile — live positions and P/L, a
+        profit-and-loss chart, win rate, and biggest win, plus a bot-likelihood
+        score and the exact reasons behind it.
+      </p>
+      {/* Mini profile demo — a wallet that reads human */}
+      <div className="rounded-xl border border-white/[0.06] bg-ps-surface p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-7 h-7 rounded-full border border-ps-green/50 flex items-center justify-center flex-shrink-0">
+            <span className="text-[11px] font-bold text-ps-green">W</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[12px] font-bold text-ps-text leading-tight truncate">weflyhigh</p>
+            <p className="text-[9px] font-mono text-ps-muted leading-tight">0x03e8...1697</p>
+          </div>
+          <span className="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-ps-green/15 text-ps-green border border-ps-green/30 flex-shrink-0">
+            <ShieldCheck size={9} weight="fill" />
+            Looks Human
+          </span>
+        </div>
+        <p className="text-xl font-extrabold text-ps-green leading-none">+$194,075</p>
+        <p className="text-[9px] text-ps-muted mt-1 mb-2">Past day · via Polymarket</p>
+        <svg viewBox="0 0 100 28" preserveAspectRatio="none" className="w-full h-10 mb-3">
+          <defs>
+            <linearGradient id="wpFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(24,185,116,0.3)" />
+              <stop offset="100%" stopColor="rgba(24,185,116,0)" />
+            </linearGradient>
+          </defs>
+          <path d="M0,16 L9,24 L19,4 L100,4 L100,28 L0,28 Z" fill="url(#wpFill)" />
+          <path d="M0,16 L9,24 L19,4 L100,4" fill="none" stroke="#18b974" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+        </svg>
+        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/[0.05]">
+          {stats.map((s) => (
+            <div key={s.label} className="text-center">
+              <p className="text-[11px] font-bold text-ps-text leading-none">{s.value}</p>
+              <p className="text-[8px] text-ps-muted mt-1">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </SpotlightCard>
+  )
+}
+
 export default function Features() {
   return (
     <section id="features" className="py-24 bg-ps-black">
@@ -227,8 +336,8 @@ export default function Features() {
           </h2>
           <p className="mt-4 text-ps-muted text-base leading-relaxed max-w-[52ch]">
             Polyscope surfaces the trades that matter — from wallets that consistently
-            win — with push alerts, high-conviction signals, and an AI advisor that
-            synthesizes it all in plain English.
+            win — with push alerts, high-conviction signals, a bot filter that strips
+            out the noise, and an AI advisor that synthesizes it all in plain English.
           </p>
         </motion.div>
 
@@ -247,6 +356,10 @@ export default function Features() {
           {/* Row 2: Wallet Tracker (1/3) + AI Advisor (2/3) */}
           <WalletCard />
           <AICard />
+
+          {/* Row 3: Bot Filter (2/3) + Wallet Profiles (1/3) */}
+          <BotFilterCard />
+          <WalletProfileCard />
         </motion.div>
       </div>
     </section>

@@ -30,7 +30,7 @@ const steps = [
 
 const stats = [
   { prefix: '~', to: 5, suffix: 's', label: 'Trade detection speed' },
-  { prefix: '', to: 50, suffix: '+', label: 'Whale wallets tracked' },
+  { prefix: 'Top ', to: 50, suffix: '', label: 'Suggested per category' },
   { prefix: '$', to: 100, suffix: 'k+', label: 'High Conviction threshold' },
   { prefix: '', to: 24, suffix: '/7', label: 'Always-on monitoring' },
 ]

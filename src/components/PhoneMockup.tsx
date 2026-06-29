@@ -11,13 +11,14 @@ import {
   User,
   Warning,
   ArrowUp,
+  ArrowLeft,
   Plus,
 } from '@phosphor-icons/react'
 import logoIcon from '../assets/logo-icon.png'
 import TypeText from './fx/TypeText'
 import { isPrerendering } from '../lib/prerender'
 
-export type PhoneScreen = 'feed' | 'signals' | 'wallets' | 'ai'
+export type PhoneScreen = 'feed' | 'signals' | 'wallets' | 'walletDetail' | 'ai'
 
 interface TradeCardData {
   alias: string
@@ -279,10 +280,125 @@ function AiScreen() {
   )
 }
 
+// Redesigned wallet profile — mirrors Polymarket. Demo data from a flagged bot
+// wallet so the screen showcases the bot detection that powers the Bot Filter.
+const WALLET_DETAIL = {
+  initial: 'S',
+  name: 'swisstony',
+  address: '0x204f...5e14',
+  active: 'active 21s ago',
+  pnl: '+$476,928',
+  pnlSub: 'Past day · via Polymarket',
+  ranges: ['1D', '1W', '1M', '1Y', 'YTD', 'ALL'],
+  stats: [
+    { value: '$6.7M', label: 'Positions Value', green: false },
+    { value: '$712K', label: 'Biggest Win',     green: true  },
+    { value: '480',   label: 'Predictions',      green: false },
+    { value: '100%',  label: 'Win Rate',         green: true  },
+  ],
+  botScore: '92',
+  flags: ['4,048 trades/day', 'Active across 99 markets at once', '28% of fills share the same second'],
+}
+
+function WalletDetailScreen() {
+  const w = WALLET_DETAIL
+  return (
+    <div className="px-4">
+      {/* Back row + identity */}
+      <div className="flex items-center gap-2 mb-2.5">
+        <ArrowLeft size={13} weight="bold" className="text-ps-green flex-shrink-0" />
+        <div className="w-7 h-7 rounded-full border border-ps-green/50 flex items-center justify-center flex-shrink-0">
+          <span className="text-[11px] font-bold text-ps-green">{w.initial}</span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[12px] font-bold text-ps-text leading-tight truncate">{w.name}</p>
+          <p className="text-[8px] font-mono text-ps-muted leading-tight truncate">{w.address} · {w.active}</p>
+        </div>
+        <span className="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-ps-orange/15 text-ps-orange border border-ps-orange/30 flex-shrink-0">
+          <Robot size={9} weight="fill" />
+          BOT
+        </span>
+      </div>
+
+      {/* Profit / Loss card */}
+      <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 mb-2.5">
+        <div className="flex items-center gap-1 mb-1.5">
+          <span className="text-[9px] font-semibold text-ps-muted mr-auto">Profit / Loss</span>
+          {w.ranges.map((r, i) => (
+            <span
+              key={r}
+              className={`text-[8px] font-semibold px-1.5 py-0.5 rounded-md ${
+                i === 0 ? 'bg-ps-green/20 text-ps-green' : 'text-ps-muted'
+              }`}
+            >
+              {r}
+            </span>
+          ))}
+        </div>
+        <p className="text-[26px] leading-none font-extrabold text-ps-green tracking-tight">{w.pnl}</p>
+        <p className="text-[8px] text-ps-muted mt-1 mb-2">{w.pnlSub}</p>
+        <svg viewBox="0 0 100 36" preserveAspectRatio="none" className="w-full h-12">
+          <defs>
+            <linearGradient id="wdFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(24,185,116,0.35)" />
+              <stop offset="100%" stopColor="rgba(24,185,116,0)" />
+            </linearGradient>
+          </defs>
+          <line x1="0" y1="31" x2="100" y2="31" stroke="rgba(255,255,255,0.12)" strokeWidth="0.5" strokeDasharray="2 2" />
+          <path d="M0,30 L13,29 L18,8 L54,7 L100,5 L100,36 L0,36 Z" fill="url(#wdFill)" />
+          <path d="M0,30 L13,29 L18,8 L54,7 L100,5" fill="none" stroke="#18b974" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+        </svg>
+      </div>
+
+      {/* Stats grid */}
+      <div className="grid grid-cols-4 gap-1 mb-2.5">
+        {w.stats.map((s) => (
+          <div key={s.label} className="rounded-lg bg-white/[0.03] border border-white/[0.05] px-1 py-1.5 text-center">
+            <p className={`text-[11px] font-extrabold leading-none ${s.green ? 'text-ps-green' : 'text-ps-text'}`}>{s.value}</p>
+            <p className="text-[7px] text-ps-muted leading-tight mt-1">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Bot detection card */}
+      <div className="rounded-xl border border-ps-orange/30 bg-ps-orange/[0.08] p-3 mb-2.5">
+        <div className="flex items-center gap-2 mb-1.5">
+          <Robot size={15} weight="fill" className="text-ps-orange flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="text-[11px] font-bold text-ps-orange leading-tight">Likely Bot</p>
+            <p className="text-[8px] text-ps-muted leading-tight">Trades like automated software</p>
+          </div>
+          <span className="text-[10px] font-bold text-ps-orange border border-ps-orange/40 rounded-full px-2 py-0.5 flex-shrink-0">
+            {w.botScore}<span className="text-ps-muted text-[8px]">/100</span>
+          </span>
+        </div>
+        <p className="text-[7px] font-bold uppercase tracking-widest text-ps-muted mb-1">Why this wallet was flagged</p>
+        <div className="space-y-0.5">
+          {w.flags.map((f) => (
+            <div key={f} className="flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-ps-orange flex-shrink-0" />
+              <span className="text-[9px] text-ps-text">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Track action */}
+      <div className="flex items-center gap-2">
+        <button className="flex items-center justify-center gap-1 flex-1 py-2 rounded-full bg-ps-green text-ps-black text-[11px] font-bold">
+          <Plus size={11} weight="bold" /> Track Wallet
+        </button>
+        <span className="text-[8px] text-ps-muted font-mono flex-shrink-0">62 / &infin; slots</span>
+      </div>
+    </div>
+  )
+}
+
 const SCREENS: Record<PhoneScreen, () => JSX.Element> = {
   feed: FeedScreen,
   signals: SignalsScreen,
   wallets: WalletsScreen,
+  walletDetail: WalletDetailScreen,
   ai: AiScreen,
 }
 
@@ -354,7 +470,8 @@ export default function PhoneMockup({ screen = 'feed', className = '' }: PhoneMo
         style={{ background: '#111115' }}
       >
         {NAV_ITEMS.map(({ id, label, Icon }) => {
-          const active = id === screen
+          // A wallet profile is reached from the Wallets tab, so keep it lit.
+          const active = id === (screen === 'walletDetail' ? 'wallets' : screen)
           return (
             <div key={label} className="flex flex-col items-center gap-0.5">
               <Icon size={14} weight={active ? 'fill' : 'regular'} className={active ? 'text-ps-green' : 'text-ps-muted'} />

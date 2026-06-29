@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Rss, Lightning, Wallet, Robot } from '@phosphor-icons/react'
+import { Rss, Lightning, Wallet, Robot, Funnel } from '@phosphor-icons/react'
 import PhoneMockup, { type PhoneScreen } from './PhoneMockup'
 import Tilt from './fx/Tilt'
 import { isPrerendering } from '../lib/prerender'
@@ -25,6 +25,12 @@ const TABS: { id: PhoneScreen; Icon: typeof Rss; label: string; desc: string }[]
     Icon: Wallet,
     label: 'Whale Leaderboard',
     desc: "Today's, this week's, and all-time top performers ranked by profit. Follow any wallet with one tap — or follow them all.",
+  },
+  {
+    id: 'walletDetail',
+    Icon: Funnel,
+    label: 'Bot Filter & Profiles',
+    desc: 'Tap any wallet for a Polymarket-style profile with P/L, win rate, and a bot-likelihood score. Pro members hide flagged bots from the feed, Signals, and suggestions with one tap.',
   },
   {
     id: 'ai',
@@ -78,11 +84,11 @@ export default function AppShowcase() {
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-ps-green mb-3">Inside the app</p>
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ps-text max-w-xl leading-tight">
-            Four tools. One radar.
+            Five tools. One radar.
           </h2>
           <p className="mt-4 text-ps-muted text-base leading-relaxed max-w-[52ch]">
-            This is the actual app — live feed, signals, leaderboard, and AI advisor,
-            exactly as they run on your phone.
+            This is the actual app — live feed, signals, leaderboard, bot filter, and
+            AI advisor, exactly as they run on your phone.
           </p>
         </motion.div>
 
