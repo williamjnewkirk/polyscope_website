@@ -25,7 +25,7 @@ const STYLE = `
 
 const CONTENT = `
 <h1>Privacy Policy</h1>
-<p class="updated">Last updated June 05, 2026</p>
+<p class="updated">Last updated June 30, 2026</p>
 
 <p>This Privacy Notice for <strong>Newkirk Technologies LLC</strong> (doing business as Polyscope) ("we," "us," or "our"), describes how and why we might access, collect, store, use, and/or share ("process") your personal information when you use our services ("Services"), including when you:</p>
 <ul>
@@ -113,6 +113,7 @@ const CONTENT = `
 <li><strong>To deliver and facilitate delivery of services to the user.</strong> We may process your information to provide you with the requested service.</li>
 <li><strong>To respond to user inquiries/offer support to users.</strong> We may process your information to respond to your inquiries and solve any potential issues you might have with the requested service.</li>
 <li><strong>To send administrative information to you.</strong> We may process your information to send you details about our products and services, changes to our terms and policies, and other similar information.</li>
+<li><strong>To send you marketing and promotional communications.</strong> We may process your email address to send you service-related messages and, occasionally, product updates, new-feature announcements, and promotional offers about Polyscope. You can opt out of our promotional communications at any time using the unsubscribe link in any such email or by contacting us — you will still receive essential account and transactional messages.</li>
 <li><strong>To fulfill and manage your orders.</strong> We may process your information to fulfill and manage your orders, payments, returns, and exchanges made through the Services.</li>
 <li><strong>To protect our Services.</strong> We may process your information as part of our efforts to keep our Services safe and secure, including fraud monitoring and prevention.</li>
 <li><strong>To identify usage trends.</strong> We may process information about how you use our Services to better understand how they are being used so we can improve them.</li>
