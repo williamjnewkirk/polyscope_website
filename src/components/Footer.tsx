@@ -57,7 +57,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-3 max-w-xs">
             <a href="#" className="flex items-center gap-2.5">
-              <img src={logoIcon} alt="Polyscope logo" className="w-6 h-6" />
+              <img src={logoIcon} alt="Polyscope logo" width={24} height={24} className="w-6 h-6" />
               <span className="font-bold text-base tracking-tight text-ps-text">POLYSCOPE</span>
             </a>
             <p className="text-xs text-ps-muted leading-relaxed">
@@ -120,7 +120,7 @@ export default function Footer() {
           <p className="text-[11px] text-ps-muted">
             &copy; {new Date().getFullYear()} Polyscope. All rights reserved.
           </p>
-          <p className="text-[11px] text-ps-muted/50">
+          <p className="text-[11px] text-ps-muted">
             Data sourced from Polymarket's public APIs · Not affiliated with Polymarket
           </p>
         </div>

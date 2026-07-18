@@ -1,5 +1,5 @@
 import { StrictMode } from 'react'
-import { createRoot, hydrateRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import './index.css'
 import App from './App.tsx'
@@ -86,8 +86,12 @@ const app = (
   </StrictMode>
 )
 
-if (rootElement.hasChildNodes()) {
-  hydrateRoot(rootElement, app)
-} else {
-  createRoot(rootElement).render(app)
-}
+// We deliberately client-render (createRoot) rather than hydrate the react-snap
+// prerendered HTML. The prerendered markup still gives crawlers/no-JS a full
+// page and an instant first paint, but the client renders fresh so Framer Motion
+// entrance animations replay from their hidden initial state. Hydrating here is
+// not viable: an entrance animation must mount hidden (opacity:0) while the
+// prerendered HTML shows the element visible, so every animated node would throw
+// a hydration mismatch (React #418/#423/#425). createRoot sidesteps that entire
+// class of errors. See src/lib/prerender.ts + the isPrerendering guards.
+createRoot(rootElement).render(app)

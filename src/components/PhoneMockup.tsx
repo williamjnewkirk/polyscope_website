@@ -443,7 +443,7 @@ export default function PhoneMockup({ screen = 'feed', className = '' }: PhoneMo
       {/* App header */}
       <div className="flex items-center gap-2 px-4 py-2">
         <div className="w-7 h-7 rounded-full bg-ps-black border border-ps-green/30 flex items-center justify-center overflow-hidden">
-          <img src={logoIcon} alt="Polyscope logo" className="w-5 h-5 object-contain" />
+          <img src={logoIcon} alt="Polyscope logo" width={20} height={20} className="w-5 h-5 object-contain" />
         </div>
         <div>
           <p className="text-[11px] font-bold tracking-wide text-ps-text leading-none">POLYSCOPE</p>

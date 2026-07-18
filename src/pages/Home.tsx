@@ -18,13 +18,15 @@ export default function Home() {
         <meta property="og:description" content="Real-time Polymarket whale alerts on iOS. Track high-conviction trades, follow top performers, and get AI-powered market signals the moment they happen." />
         <meta property="og:url" content="https://polyscopeapp.com/" />
       </Helmet>
-      <Hero />
-      <MarqueeTicker />
-      <Features />
-      <HowItWorks />
-      <AppShowcase />
-      <Pricing />
-      <DownloadCTA />
+      <main>
+        <Hero />
+        <MarqueeTicker />
+        <Features />
+        <HowItWorks />
+        <AppShowcase />
+        <Pricing />
+        <DownloadCTA />
+      </main>
     </>
   )
 }

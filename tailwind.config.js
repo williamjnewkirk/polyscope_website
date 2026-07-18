@@ -13,7 +13,7 @@ export default {
           'green-dim': '#0E6B44',
           orange:  '#D4612E',
           text:    '#EFEFF2',
-          muted:   '#7C7C92',
+          muted:   '#8A8AA0',
         },
       },
       fontFamily: {

@@ -80,7 +80,7 @@ function NotificationToast() {
           >
             <div className="flex items-start gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-ps-black border border-ps-green/30 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <img src={logoIcon} alt="" className="w-[22px] h-[22px] object-contain" />
+                <img src={logoIcon} alt="" width={22} height={22} className="w-[22px] h-[22px] object-contain" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
