@@ -1,6 +1,18 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { ChartLine, Lightning, Wallet, Brain, ArrowUp, Funnel, ShieldCheck, IdentificationCard } from '@phosphor-icons/react'
+import {
+  ChartLine,
+  Lightning,
+  Brain,
+  ArrowUp,
+  Funnel,
+  IdentificationCard,
+  ChartLineUp,
+  UsersThree,
+  Trophy,
+  Target,
+  MagnifyingGlass,
+} from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
 import SpotlightCard from './fx/SpotlightCard'
 import { isPrerendering } from '../lib/prerender'
@@ -79,8 +91,10 @@ function SignalsCard() {
         Flag trades that move markets.
       </h3>
       <p className="text-sm text-ps-muted leading-relaxed mb-6">
-        Positions over $100k are surfaced as potential smart-money signals — instantly,
-        across all Polymarket markets.
+        Positions over $100k are surfaced as potential smart-money signals &mdash; instantly,
+        across all Polymarket markets. Prefer it quieter? &ldquo;Significant trades only&rdquo;
+        pings you when a wallet bets unusually big for itself, and stays silent when it
+        doesn&rsquo;t.
       </p>
       {/* Mini signal demo */}
       <div className="space-y-2">
@@ -108,13 +122,47 @@ function SignalsCard() {
   )
 }
 
-function WalletCard() {
-  const whales = [
-    { rank: 1, name: '0x4f2',                pnl: '+$98,029', tracked: true  },
-    { rank: 2, name: 'ferrariChampions2...', pnl: '+$95,677', tracked: true  },
-    { rank: 3, name: 'afghj2421',            pnl: '+$82,991', tracked: false },
-    { rank: 4, name: 'Vatrer',               pnl: '+$71,426', tracked: false },
-    { rank: 5, name: 'TrevorPlovdivBul...',  pnl: '+$61,452', tracked: false },
+function CopyScoreCard() {
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+        <div className="flex flex-col justify-center p-8 lg:p-10">
+          <FeatureTag>
+            <ChartLineUp size={14} weight="bold" />
+            Copy Score
+            <ProPill />
+          </FeatureTag>
+          <h3 className="text-2xl font-bold tracking-tight text-ps-text mb-3">
+            Every wallet, rated 0&ndash;100 on real edge.
+          </h3>
+          <p className="text-sm text-ps-muted leading-relaxed max-w-[40ch]">
+            On a prediction market a raw win rate lies &mdash; betting heavy favourites
+            at 90&cent; &ldquo;wins&rdquo; 90% of the time with zero skill. Copy Score is
+            price-adjusted: it measures how far a trader beats the odds they actually
+            paid, blended with consistency, return on capital, and how recently
+            they&rsquo;ve traded.
+          </p>
+          <p className="text-[11px] text-ps-muted/60 mt-4 italic">
+            Deliberately conservative &mdash; wallets with too few resolved bets are held
+            back until there&rsquo;s enough data to judge them fairly.
+          </p>
+        </div>
+        <div className="hidden md:flex items-end justify-center overflow-hidden pt-6 pb-0 pr-6">
+          <PhoneMockup screen="copyScore" className="scale-[0.72] origin-bottom" />
+        </div>
+      </div>
+    </SpotlightCard>
+  )
+}
+
+function ClustersCard() {
+  const legs = [
+    { addr: '0xe16d...5e30', size: '$1,000' },
+    { addr: '0xc44f...d49f', size: '$14K' },
+    { addr: '0xa187...7fd4', size: '$5K' },
   ]
 
   return (
@@ -123,34 +171,249 @@ function WalletCard() {
       className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
     >
       <FeatureTag>
-        <Wallet size={14} weight="bold" />
-        Whale Tracker
+        <UsersThree size={14} weight="bold" />
+        Smart Money Clusters
+        <ProPill />
       </FeatureTag>
       <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
-        Follow the top performers.
+        When proven traders move together.
       </h3>
       <p className="text-sm text-ps-muted leading-relaxed mb-6">
-        Polymarket's up-to-date leaderboard, right at your fingertips. See who's making
-        the biggest moves and track them with one tap for instant alerts on every trade.
+        One big trade is a single opinion. Several high-scoring wallets independently
+        taking the same side within minutes is a far stronger signal &mdash; and it&rsquo;s
+        nearly impossible to spot by hand. Polyscope watches for it and pushes it the
+        instant it happens.
+      </p>
+      {/* Mini cluster demo */}
+      <div className="rounded-xl border border-blue-500/60 bg-blue-500/[0.07] p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <UsersThree size={13} weight="fill" className="text-blue-400" />
+          <span className="text-[11px] font-bold text-blue-400">3 smart wallets &middot; $20K</span>
+          <span className="text-[10px] text-ps-muted ml-auto">2m ago</span>
+        </div>
+        <p className="text-[12px] font-semibold text-ps-text leading-tight mb-2">
+          Will Spain win on 2026-07-19?
+        </p>
+        <div className="flex items-center gap-2 mb-2.5">
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ps-green/15 text-ps-green">
+            BUY Yes @ 43&cent;
+          </span>
+          <span className="text-[10px] text-ps-muted">avg score 84</span>
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {legs.map((l) => (
+            <span
+              key={l.addr}
+              className="text-[9px] font-mono text-ps-muted px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07]"
+            >
+              {l.addr} &middot; {l.size}
+            </span>
+          ))}
+        </div>
+      </div>
+    </SpotlightCard>
+  )
+}
+
+function LeaderboardsCard() {
+  const rows = [
+    { rank: 1, name: 'pada',            roi: '+121.8%', bot: false },
+    { rank: 2, name: 'asparagus2012',   roi: '+94.9%',  bot: false },
+    { rank: 3, name: '0x75973C6...',    roi: '+57.5%',  bot: true  },
+    { rank: 4, name: 'therighteous...', roi: '+53.4%',  bot: true  },
+  ]
+
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
+    >
+      <FeatureTag>
+        <Trophy size={14} weight="bold" />
+        Leaderboards
+      </FeatureTag>
+      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
+        Ranked by edge, not bankroll.
+      </h3>
+      <p className="text-sm text-ps-muted leading-relaxed mb-6">
+        Sort suggested traders by ROI or straight by Copy Score, so sharp smaller
+        accounts surface instead of only the biggest wallets. Flagged bots stay
+        labelled and capped, so market-makers never masquerade as elite traders.
       </p>
       {/* Mini leaderboard */}
       <div className="space-y-2">
-        {whales.map((w) => (
-          <div key={w.rank} className="flex items-center gap-3 py-2 border-b border-white/[0.05] last:border-0">
-            <span className="text-[11px] font-mono text-ps-muted w-4">#{w.rank}</span>
-            <span className="text-[11px] font-semibold text-ps-text flex-1 truncate">{w.name}</span>
-            <span className="text-[11px] font-mono text-ps-green">{w.pnl}</span>
-            {w.tracked ? (
-              <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full bg-ps-green/15 text-ps-green border border-ps-green/20">
-                Tracking
-              </span>
-            ) : (
-              <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] text-ps-muted border border-white/[0.08]">
-                + Follow
+        {rows.map((r) => (
+          <div key={r.rank} className="flex items-center gap-3 py-2 border-b border-white/[0.05] last:border-0">
+            <span className="text-[11px] font-mono text-ps-muted w-4">#{r.rank}</span>
+            <span className="text-[11px] font-semibold text-ps-text truncate">{r.name}</span>
+            {r.bot && (
+              <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-ps-orange/15 text-ps-orange border border-ps-orange/30">
+                BOT
               </span>
             )}
+            <span className="text-[11px] font-mono text-ps-green ml-auto">{r.roi} ROI</span>
           </div>
         ))}
+      </div>
+      <p className="text-[11px] text-ps-muted/60 mt-4 italic">
+        ROI ranking is free. Copy Score ranking is Pro.
+      </p>
+    </SpotlightCard>
+  )
+}
+
+function TraderAnalyticsCard() {
+  const metrics = [
+    { value: '+23.9¢/sh', label: 'Edge' },
+    { value: '+128%',     label: 'ROI' },
+    { value: '1.7',       label: 'Consistency' },
+    { value: '131d',      label: 'Entry lead' },
+  ]
+  const categories = [
+    { name: 'Politics', meta: '93% win · 28', pnl: '+$941K', pct: 100 },
+    { name: 'Crypto',   meta: '78% win · 14', pnl: '+$212K', pct: 58 },
+    { name: 'Tech',     meta: '100% win · 2', pnl: '+$64.2K', pct: 30 },
+  ]
+
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+        <div className="flex flex-col justify-center p-8 lg:p-10 order-2 md:order-1">
+          <FeatureTag>
+            <IdentificationCard size={14} weight="bold" />
+            Trader Analytics
+            <ProPill />
+          </FeatureTag>
+          <h3 className="text-2xl font-bold tracking-tight text-ps-text mb-3">
+            See what a trader is actually good at.
+          </h3>
+          <p className="text-sm text-ps-muted leading-relaxed max-w-[40ch]">
+            Under the score sits a full performance profile: profit per share beyond
+            the entry price, realized ROI, a risk-adjusted consistency measure, how
+            early they enter before resolution, whether they scale in or go all-in
+            &mdash; and a category-by-category breakdown of where they win and lose.
+          </p>
+        </div>
+        {/* Analytics demo */}
+        <div className="order-1 md:order-2 p-6 flex flex-col justify-center">
+          <div className="rounded-2xl bg-ps-surface border border-white/[0.07] p-4">
+            <div className="grid grid-cols-4 gap-1.5 mb-4">
+              {metrics.map((m) => (
+                <div key={m.label} className="rounded-lg bg-white/[0.03] border border-white/[0.05] px-1 py-2 text-center">
+                  <p className="text-[11px] font-extrabold text-ps-green leading-none">{m.value}</p>
+                  <p className="text-[8px] text-ps-muted mt-1 leading-tight">{m.label}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-[9px] font-bold uppercase tracking-widest text-ps-muted mb-2">
+              Performance by category
+            </p>
+            <div className="space-y-2.5">
+              {categories.map((c) => (
+                <div key={c.name}>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[11px] font-bold text-ps-text">{c.name}</span>
+                    <span className="text-[9px] text-ps-muted ml-auto">{c.meta}</span>
+                    <span className="text-[11px] font-bold text-ps-green">{c.pnl}</span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-white/[0.06] mt-1.5 overflow-hidden">
+                    <div className="h-full rounded-full bg-ps-green" style={{ width: `${c.pct}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </SpotlightCard>
+  )
+}
+
+function EVCard() {
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
+    >
+      <FeatureTag>
+        <Target size={14} weight="bold" />
+        Expected Value
+        <ProPill />
+      </FeatureTag>
+      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
+        Does this trade fit their strengths?
+      </h3>
+      <p className="text-sm text-ps-muted leading-relaxed mb-6">
+        Open any trade from a scored wallet and Polyscope shows that trader&rsquo;s
+        historical edge on trades like it &mdash; in dollars and cents per share &mdash;
+        so you can weigh it against their proven record.
+      </p>
+      {/* Mini EV demo */}
+      <div className="rounded-xl border border-ps-green/25 bg-ps-green/[0.06] p-4">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <ChartLineUp size={12} weight="bold" className="text-ps-green" />
+          <p className="text-[9px] font-bold uppercase tracking-widest text-ps-muted">
+            Trader&rsquo;s historical edge
+          </p>
+        </div>
+        <p className="text-2xl font-extrabold text-ps-green leading-none mb-2">
+          +$6.3k <span className="text-[11px] font-bold text-ps-muted">(+2.0&cent;/share)</span>
+        </p>
+        <p className="text-[10px] text-ps-muted leading-relaxed">
+          Based on 14 resolved positions at similar prices. Past performance
+          doesn&rsquo;t predict future results.
+        </p>
+      </div>
+    </SpotlightCard>
+  )
+}
+
+function AddByNameCard() {
+  const results = [
+    { initial: 'P', name: 'Poly7-meta4',    address: '0x95b6...50a9' },
+    { initial: 'J', name: 'Jon-Poly',       address: '0x97ba...27c3' },
+    { initial: 'P', name: 'Poly-Master-Trade', address: '0xe6a5...412f' },
+  ]
+
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
+    >
+      <FeatureTag>
+        <MagnifyingGlass size={14} weight="bold" />
+        Search by Name
+      </FeatureTag>
+      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
+        Track anyone by name.
+      </h3>
+      <p className="text-sm text-ps-muted leading-relaxed mb-6">
+        No more hunting for a 0x address. Type a trader&rsquo;s Polymarket name and
+        Polyscope finds the wallet and fills everything in with one tap.
+      </p>
+      {/* Mini search demo */}
+      <div className="rounded-xl border border-white/[0.06] bg-ps-surface p-4">
+        <div className="flex items-center gap-2 bg-white/[0.05] rounded-lg px-3 py-2 border border-white/[0.09] mb-3">
+          <MagnifyingGlass size={12} className="text-ps-muted flex-shrink-0" />
+          <span className="text-[12px] font-medium text-ps-text">poly</span>
+        </div>
+        <div className="space-y-2">
+          {results.map((r) => (
+            <div key={r.name} className="flex items-center gap-2.5">
+              <div className="w-6 h-6 rounded-full bg-ps-green/15 border border-ps-green/30 flex items-center justify-center flex-shrink-0">
+                <span className="text-[10px] font-bold text-ps-green">{r.initial}</span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-bold text-ps-text truncate leading-tight">{r.name}</p>
+                <p className="text-[9px] font-mono text-ps-muted truncate leading-tight">{r.address}</p>
+              </div>
+              <span className="text-[10px] font-bold text-ps-green flex-shrink-0">Use</span>
+            </div>
+          ))}
+        </div>
       </div>
     </SpotlightCard>
   )
@@ -254,69 +517,6 @@ function BotFilterCard() {
   )
 }
 
-function WalletProfileCard() {
-  const stats = [
-    { value: '$287K', label: 'Positions' },
-    { value: '$412K', label: 'Biggest Win' },
-    { value: '100%',  label: 'Win Rate' },
-  ]
-
-  return (
-    <SpotlightCard
-      variants={itemVariants}
-      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
-    >
-      <FeatureTag>
-        <IdentificationCard size={14} weight="bold" />
-        Wallet Profiles
-      </FeatureTag>
-      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
-        Every wallet, fully decoded.
-      </h3>
-      <p className="text-sm text-ps-muted leading-relaxed mb-6">
-        Tap any wallet for a Polymarket-style profile — live positions and P/L, a
-        profit-and-loss chart, win rate, and biggest win, plus a bot-likelihood
-        score and the exact reasons behind it.
-      </p>
-      {/* Mini profile demo — a wallet that reads human */}
-      <div className="rounded-xl border border-white/[0.06] bg-ps-surface p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-7 h-7 rounded-full border border-ps-green/50 flex items-center justify-center flex-shrink-0">
-            <span className="text-[11px] font-bold text-ps-green">W</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[12px] font-bold text-ps-text leading-tight truncate">weflyhigh</p>
-            <p className="text-[9px] font-mono text-ps-muted leading-tight">0x03e8...1697</p>
-          </div>
-          <span className="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-ps-green/15 text-ps-green border border-ps-green/30 flex-shrink-0">
-            <ShieldCheck size={9} weight="fill" />
-            Looks Human
-          </span>
-        </div>
-        <p className="text-xl font-extrabold text-ps-green leading-none">+$194,075</p>
-        <p className="text-[9px] text-ps-muted mt-1 mb-2">Past day · via Polymarket</p>
-        <svg viewBox="0 0 100 28" preserveAspectRatio="none" className="w-full h-10 mb-3">
-          <defs>
-            <linearGradient id="wpFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(24,185,116,0.3)" />
-              <stop offset="100%" stopColor="rgba(24,185,116,0)" />
-            </linearGradient>
-          </defs>
-          <path d="M0,16 L9,24 L19,4 L100,4 L100,28 L0,28 Z" fill="url(#wpFill)" />
-          <path d="M0,16 L9,24 L19,4 L100,4" fill="none" stroke="#18b974" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-        </svg>
-        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/[0.05]">
-          {stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-[11px] font-bold text-ps-text leading-none">{s.value}</p>
-              <p className="text-[8px] text-ps-muted mt-1">{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </SpotlightCard>
-  )
-}
 
 export default function Features() {
   return (
@@ -332,12 +532,13 @@ export default function Features() {
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-ps-green mb-3">Features</p>
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ps-text max-w-xl leading-tight">
-            Built for traders who act fast.
+            Built for traders who want proof.
           </h2>
           <p className="mt-4 text-ps-muted text-base leading-relaxed max-w-[52ch]">
-            Polyscope surfaces the trades that matter — from wallets that consistently
-            win — with push alerts, high-conviction signals, a bot filter that strips
-            out the noise, and an AI advisor that synthesizes it all in plain English.
+            Polyscope doesn&rsquo;t just tell you what happened &mdash; it tells you who&rsquo;s
+            worth watching. Every wallet is scored on price-adjusted edge and opened up
+            into a full performance profile, with cluster alerts, edge-ranked
+            leaderboards, a bot filter, and an AI advisor on top.
           </p>
         </motion.div>
 
@@ -349,17 +550,25 @@ export default function Features() {
           viewport={{ once: true, margin: '-60px' }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-4"
         >
-          {/* Row 1: Live Feed (2/3) + Signals (1/3) */}
-          <LiveFeedCard />
-          <SignalsCard />
+          {/* Row 1: Copy Score (2/3) + Smart Money Clusters (1/3) */}
+          <CopyScoreCard />
+          <ClustersCard />
 
-          {/* Row 2: Wallet Tracker (1/3) + AI Advisor (2/3) */}
-          <WalletCard />
+          {/* Row 2: Leaderboards (1/3) + Trader Analytics (2/3) */}
+          <LeaderboardsCard />
+          <TraderAnalyticsCard />
+
+          {/* Row 3: Live Feed (2/3) + Expected Value (1/3) */}
+          <LiveFeedCard />
+          <EVCard />
+
+          {/* Row 4: Signals (1/3) + AI Advisor (2/3) */}
+          <SignalsCard />
           <AICard />
 
-          {/* Row 3: Bot Filter (2/3) + Wallet Profiles (1/3) */}
+          {/* Row 5: Bot Filter (2/3) + Search by Name (1/3) */}
           <BotFilterCard />
-          <WalletProfileCard />
+          <AddByNameCard />
         </motion.div>
       </div>
     </section>

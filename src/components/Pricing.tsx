@@ -12,12 +12,20 @@ interface TierFeature {
 }
 
 const FEATURES: TierFeature[] = [
-  { label: 'Wallets tracked',           free: '5',        pro: 'Unlimited' },
-  { label: 'Daily push notifications',  free: '20/day',   pro: 'Unlimited' },
-  { label: 'Suggested whale wallets',   free: 'Top 3 / category',  pro: 'Top 50 / category' },
-  { label: 'Signals (High Conviction)', free: false,      pro: 'Unlimited' },
-  { label: 'Ad-free experience',        free: false,      pro: true },
-  { label: 'AI Trade Advisor',          free: false,      pro: '~20 queries/day' },
+  { label: 'Wallets tracked',              free: '5',                pro: 'Unlimited' },
+  { label: 'Daily push notifications',     free: '20/day',           pro: 'Unlimited' },
+  { label: 'Add wallets by name',          free: true,               pro: true },
+  { label: 'ROI leaderboard',              free: true,               pro: true },
+  { label: 'Significant-trades-only alerts', free: true,             pro: true },
+  { label: 'Suggested whale wallets',      free: 'Top 3 / category', pro: 'Top 50 / category' },
+  { label: 'Copy Score + trader analytics', free: 'Preview only',    pro: 'Full access' },
+  { label: 'Copy Score leaderboard',       free: false,              pro: true },
+  { label: 'Smart Money Clusters + alerts', free: false,             pro: true },
+  { label: 'Expected-value trade estimates', free: false,            pro: true },
+  { label: 'Bot filter',                   free: false,              pro: true },
+  { label: 'Signals (High Conviction)',    free: false,              pro: 'Unlimited' },
+  { label: 'Ad-free experience',           free: false,              pro: true },
+  { label: 'AI Trade Advisor',             free: false,              pro: '~20 queries/day' },
 ]
 
 const PRO = {
@@ -97,7 +105,8 @@ export default function Pricing() {
                 <span className="text-sm text-ps-muted mb-1.5">/mo</span>
               </div>
               <p className="text-xs text-ps-muted leading-relaxed">
-                Follow up to 5 wallets and start tracking what the whales are doing — no card needed.
+                Follow up to 5 wallets, add them by name, and rank traders on the ROI
+                leaderboard &mdash; no card needed.
               </p>
             </div>
             <a
@@ -143,7 +152,8 @@ export default function Pricing() {
                 <p className="text-xs text-ps-green font-medium mb-2">{pro.trial}</p>
               )}
               <p className="text-xs text-ps-muted leading-relaxed">
-                Unlimited wallets, signals, AI advisor, and no ads — everything in one plan.
+                Copy Score and full trader analytics, smart money cluster alerts,
+                unlimited wallets, AI advisor, and no ads &mdash; everything in one plan.
               </p>
             </div>
 

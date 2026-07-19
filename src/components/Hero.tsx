@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, AppleLogo, Funnel } from '@phosphor-icons/react'
+import { ArrowRight, AppleLogo, Funnel, UsersThree } from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
 import Magnetic from './fx/Magnetic'
 import Tilt from './fx/Tilt'
@@ -29,12 +29,17 @@ const word = {
 }
 
 const HEADLINE: { text: string; accent?: boolean; break?: boolean }[] = [
-  { text: 'Track' },
+  { text: 'Find' },
   { text: 'the' },
-  { text: 'smart', accent: true },
-  { text: 'money' },
-  { text: 'on', break: true },
-  { text: 'Polymarket.' },
+  { text: 'smartest', accent: true },
+  { text: 'money', break: true },
+  { text: 'on' },
+  { text: 'Polymarket —' },
+  { text: 'and', break: true },
+  { text: 'know' },
+  { text: 'why' },
+  { text: "it's" },
+  { text: 'smart.' },
 ]
 
 // Real alerts the app sends, replayed as a live notification simulator
@@ -150,7 +155,7 @@ export default function Hero() {
             </motion.div>
 
             {/* Headline — word-by-word blur reveal */}
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-ps-text mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.08] text-ps-text mb-6">
               {HEADLINE.map((w, i) => (
                 <span key={i} className="inline">
                   {w.break && <br />}
@@ -192,10 +197,10 @@ export default function Hero() {
               animate="visible"
               className="text-base sm:text-lg text-ps-muted leading-relaxed max-w-[52ch] mb-8"
             >
-              The moment a whale makes a high-conviction bet on Polymarket,
-              you'll know. Track any Polymarket wallet around the clock,
-              get push alerts the instant they trade, and lean on an AI
-              advisor to make sense of it all.
+              Every wallet gets a 0&ndash;100 Copy Score that measures real,
+              price-adjusted edge &mdash; skill, not luck. See who's actually
+              good, get alerted when several proven traders pile into the same
+              market, and track any wallet by name.
             </motion.p>
 
             {/* CTAs */}
@@ -235,7 +240,7 @@ export default function Hero() {
               className="flex flex-wrap items-center gap-x-6 gap-y-2"
             >
               {[
-                { value: 'Any', label: 'wallet you can track' },
+                { value: '0–100', label: 'Copy Score per wallet' },
                 { value: '~5s', label: 'trade detection speed' },
                 { value: '$100k+', label: 'high conviction threshold' },
               ].map(({ value, label }, i) => (
@@ -279,7 +284,7 @@ export default function Hero() {
 
               <div className="animate-float">
                 <Tilt max={8}>
-                  <PhoneMockup screen="feed" />
+                  <PhoneMockup screen="copyScore" />
                 </Tilt>
               </div>
 
@@ -295,15 +300,18 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Floating live-tracking chip (left) */}
+              {/* Floating smart-money-cluster chip (left) — offset far enough left
+                  that it clears the Copy Score metric grid on the phone */}
               <div
                 className="absolute hidden sm:block card-glass rounded-xl px-3 py-2.5 shadow-2xl animate-float"
-                style={{ top: '30%', left: '-30%', animationDelay: '0.8s' }}
+                style={{ top: '34%', left: '-52%', animationDelay: '0.8s' }}
               >
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-ps-green animate-pulse-dot" />
-                  <span className="text-[9px] text-ps-muted whitespace-nowrap">Tracking your whales</span>
-                  <span className="text-[9px] font-mono text-ps-green">LIVE</span>
+                  <UsersThree size={12} weight="fill" className="text-blue-400" />
+                  <span className="text-[10px] font-semibold text-blue-400 whitespace-nowrap">
+                    3 smart wallets
+                  </span>
+                  <span className="text-[10px] font-mono text-ps-text">$20K</span>
                 </div>
               </div>
 

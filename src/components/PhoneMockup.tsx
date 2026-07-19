@@ -13,12 +13,25 @@ import {
   ArrowUp,
   ArrowLeft,
   Plus,
+  UsersThree,
+  ShieldCheck,
+  ChartLineUp,
+  X,
 } from '@phosphor-icons/react'
 import logoIcon from '../assets/logo-icon.png'
 import TypeText from './fx/TypeText'
 import { isPrerendering } from '../lib/prerender'
 
-export type PhoneScreen = 'feed' | 'signals' | 'wallets' | 'walletDetail' | 'ai'
+export type PhoneScreen =
+  | 'feed'
+  | 'signals'
+  | 'wallets'
+  | 'walletDetail'
+  | 'copyScore'
+  | 'clusters'
+  | 'tradeDetail'
+  | 'addWallet'
+  | 'ai'
 
 interface TradeCardData {
   alias: string
@@ -49,14 +62,17 @@ const SIGNAL_TRADES: TradeCardData[] = [
   { alias: '0xb8c2...91ea', address: '0xb8c2...91ea', action: 'BUY', market: 'Fed rate cut in September 2026?', outcome: 'Yes', size: '$187,400.00', price: '66¢', time: '20h ago', highConviction: true },
 ]
 
+// Ranked by ROI (not raw profit) so sharp smaller accounts surface too — and
+// suspected bots stay labelled, mirroring the real Suggested Wallets tab.
 const SUGGESTED_WALLETS = [
-  { rank: 1, name: '0x4f2', pnl: '+$98,029' },
-  { rank: 2, name: 'ferrariChampions2...', pnl: '+$95,677' },
-  { rank: 3, name: 'afghj2421', pnl: '+$82,991' },
-  { rank: 4, name: 'Vatrer', pnl: '+$71,426' },
-  { rank: 5, name: 'TrevorPlovdivBulga...', pnl: '+$61,452' },
-  { rank: 6, name: 'Bonereaper', pnl: '+$54,300' },
+  { rank: 1, name: 'pada',          roi: '+121.8% ROI', pnl: '+$1.13M',  bot: false },
+  { rank: 2, name: 'asparagus2012', roi: '+94.9% ROI',  pnl: '+$2.30M',  bot: false },
+  { rank: 3, name: '0x75973C6...',  roi: '+57.5% ROI',  pnl: '+$917,893', bot: true },
+  { rank: 4, name: 'therighteous...', roi: '+53.4% ROI', pnl: '+$566,303', bot: true },
+  { rank: 5, name: 'Bonereaper',    roi: '+41.2% ROI',  pnl: '+$54,300', bot: false },
 ]
+
+const WALLET_SORTS = ['Profit/Loss', 'Volume', 'ROI', 'Copy Score']
 
 const AI_QUESTION = 'What’s driving the conflicting MicroStrategy position signals?'
 const AI_ANSWER =
@@ -199,12 +215,12 @@ function WalletsScreen() {
           Suggested Wallets
         </span>
       </div>
-      <div className="flex gap-1.5 px-4 mb-2.5">
-        {['Today', 'Weekly', 'Monthly', 'All Time'].map((period, i) => (
+      <div className="flex gap-1.5 px-4 mb-1.5">
+        {['Today', 'Weekly', 'Monthly', 'All Time'].map((period) => (
           <span
             key={period}
             className={`text-[9px] px-2.5 py-1 rounded-full border whitespace-nowrap ${
-              i === 0
+              period === 'Monthly'
                 ? 'font-semibold text-ps-green border-ps-green/40 bg-ps-green/10'
                 : 'text-ps-muted border-white/[0.06] bg-white/[0.04]'
             }`}
@@ -213,14 +229,20 @@ function WalletsScreen() {
           </span>
         ))}
       </div>
-      <div className="flex items-center justify-between px-4 mb-2.5">
-        <span className="text-[9px] font-semibold text-ps-text px-2.5 py-1 rounded-full bg-white/[0.07] border border-white/[0.10]">
-          Profit/Loss
-        </span>
-        <span className="flex items-center gap-1 text-[9px] font-semibold text-ps-green px-2.5 py-1 rounded-full border border-ps-green/40">
-          <Plus size={8} weight="bold" />
-          Follow All
-        </span>
+      {/* Sort options — ROI and Copy Score rank by edge, not just raw profit */}
+      <div className="flex items-center gap-1.5 px-4 mb-2.5 flex-wrap">
+        {WALLET_SORTS.map((sort) => (
+          <span
+            key={sort}
+            className={`text-[9px] px-2.5 py-1 rounded-full border whitespace-nowrap ${
+              sort === 'ROI'
+                ? 'font-semibold text-blue-400 border-blue-500/60 bg-blue-500/10'
+                : 'text-ps-muted border-white/[0.06] bg-white/[0.04]'
+            }`}
+          >
+            {sort}
+          </span>
+        ))}
       </div>
       <div className="px-4 space-y-2">
         {SUGGESTED_WALLETS.map((w) => (
@@ -232,19 +254,23 @@ function WalletsScreen() {
               #{w.rank}
             </span>
             <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-bold text-ps-text truncate leading-tight">{w.name}</p>
-              <p className="text-[10px] font-mono text-ps-green leading-tight">{w.pnl} today</p>
+              <div className="flex items-center gap-1">
+                <p className="text-[11px] font-bold text-ps-text truncate leading-tight">{w.name}</p>
+                {w.bot && (
+                  <span className="flex items-center gap-0.5 text-[7px] font-bold px-1 py-px rounded bg-ps-orange/15 text-ps-orange border border-ps-orange/30 flex-shrink-0">
+                    <Robot size={7} weight="fill" />
+                    BOT
+                  </span>
+                )}
+              </div>
+              <p className="text-[9px] font-mono text-ps-green leading-tight">
+                {w.roi} · {w.pnl}
+              </p>
             </div>
-            {w.rank <= 2 ? (
-              <span className="text-[9px] font-semibold px-2.5 py-1 rounded-full bg-ps-green/15 text-ps-green border border-ps-green/30">
-                Tracking
-              </span>
-            ) : (
-              <span className="flex items-center gap-0.5 text-[9px] font-semibold px-2.5 py-1 rounded-full text-ps-green border border-ps-green/40">
-                <Plus size={8} weight="bold" />
-                Follow
-              </span>
-            )}
+            <span className="flex items-center gap-0.5 text-[9px] font-semibold px-2.5 py-1 rounded-full text-ps-green border border-ps-green/40 flex-shrink-0">
+              <Plus size={8} weight="bold" />
+              Follow
+            </span>
           </div>
         ))}
       </div>
@@ -394,12 +420,314 @@ function WalletDetailScreen() {
   )
 }
 
+// Flagship analysis screen. Demo data mirrors a genuinely strong human wallet so
+// the Copy Score reads as a real "Strong record" rather than a placeholder.
+const COPY_SCORE_WALLET = {
+  initial: 'T',
+  name: 'texasdolly',
+  address: '0x2e69...858d',
+  score: '94',
+  verdict: 'Strong record',
+  metrics: [
+    { value: '+23.9¢/sh', label: 'Edge' },
+    { value: '+128%', label: 'ROI' },
+    { value: '1.7', label: 'Consistency' },
+    { value: '131d', label: 'Entry lead' },
+  ],
+  style: ['Scales into positions', '58% early entries', 'Holds to resolution'],
+  categories: [
+    { name: 'Politics', meta: '93% win · 28', pnl: '+$941K', pct: 100 },
+    { name: 'Crypto', meta: '78% win · 14', pnl: '+$212K', pct: 58 },
+    { name: 'Tech', meta: '100% win · 2', pnl: '+$64.2K', pct: 30 },
+  ],
+}
+
+function CopyScoreScreen() {
+  const w = COPY_SCORE_WALLET
+  return (
+    <div className="px-4">
+      {/* Identity */}
+      <div className="flex items-center gap-2 mb-2.5">
+        <ArrowLeft size={13} weight="bold" className="text-ps-green flex-shrink-0" />
+        <div className="w-7 h-7 rounded-full border border-ps-green/50 flex items-center justify-center flex-shrink-0">
+          <span className="text-[11px] font-bold text-ps-green">{w.initial}</span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[12px] font-bold text-ps-text leading-tight truncate">{w.name}</p>
+          <p className="text-[8px] font-mono text-ps-muted leading-tight truncate">{w.address}</p>
+        </div>
+        <span className="flex items-center gap-1 text-[8px] font-bold px-2 py-0.5 rounded-full bg-ps-green/15 text-ps-green border border-ps-green/30 flex-shrink-0">
+          <ShieldCheck size={9} weight="fill" />
+          Human
+        </span>
+      </div>
+
+      {/* Copy Score */}
+      <div className="rounded-xl border border-ps-green/30 bg-ps-green/[0.07] p-3 mb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-ps-green/15 border border-ps-green/30 flex items-center justify-center flex-shrink-0">
+            <ChartLineUp size={14} weight="bold" className="text-ps-green" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[12px] font-bold text-ps-text leading-tight">Copy Score</p>
+            <p className="text-[9px] text-ps-green leading-tight">{w.verdict}</p>
+          </div>
+          <span className="text-[15px] font-extrabold text-ps-green border border-ps-green/40 rounded-full px-2.5 py-0.5 flex-shrink-0">
+            {w.score}
+            <span className="text-ps-muted text-[8px] font-bold">/100</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Metric grid */}
+      <div className="grid grid-cols-4 gap-1 mb-2">
+        {w.metrics.map((m) => (
+          <div key={m.label} className="rounded-lg bg-white/[0.03] border border-white/[0.05] px-1 py-1.5 text-center">
+            <p className="text-[10px] font-extrabold leading-none text-ps-green">{m.value}</p>
+            <p className="text-[7px] text-ps-muted leading-tight mt-1">{m.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Position style */}
+      <div className="flex flex-wrap gap-1 mb-2.5">
+        {w.style.map((s) => (
+          <span key={s} className="text-[8px] text-ps-muted px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07]">
+            {s}
+          </span>
+        ))}
+      </div>
+
+      {/* Performance by category */}
+      <p className="text-[7px] font-bold uppercase tracking-widest text-ps-muted mb-1.5">
+        Performance by category
+      </p>
+      <div className="space-y-1.5 mb-2">
+        {w.categories.map((c) => (
+          <div key={c.name}>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[10px] font-bold text-ps-text">{c.name}</span>
+              <span className="text-[8px] text-ps-muted ml-auto">{c.meta}</span>
+              <span className="text-[10px] font-bold text-ps-green">{c.pnl}</span>
+            </div>
+            <div className="h-1 rounded-full bg-white/[0.06] mt-1 overflow-hidden">
+              <div className="h-full rounded-full bg-ps-green" style={{ width: `${c.pct}%` }} />
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="text-[7px] text-ps-muted italic leading-snug">
+        Based on 72 resolved positions (public data). Past performance doesn&rsquo;t
+        predict future results.
+      </p>
+    </div>
+  )
+}
+
+const CLUSTER = {
+  wallets: '3 smart wallets',
+  total: '$20K',
+  ago: '2m ago',
+  market: 'Will Spain win on 2026-07-19?',
+  side: 'BUY Yes @ 43¢',
+  avg: 'avg score 84',
+  legs: ['0xe16d...5e30 · $1,000', '0xc44f...d49f · $14K', '0xa187...7fd4 · $5K'],
+}
+
+function ClustersScreen() {
+  return (
+    <>
+      <div className="px-4 mb-2">
+        <div className="flex items-center gap-2 bg-white/[0.05] rounded-xl px-3 py-2 border border-white/[0.07]">
+          <MagnifyingGlass size={11} className="text-ps-muted flex-shrink-0" />
+          <span className="text-[10px] text-ps-muted flex-1 truncate">Search by trader or market...</span>
+        </div>
+      </div>
+      <div className="flex gap-2 px-4 mb-2.5">
+        <span className="text-[10px] font-semibold px-3 py-1 rounded-full bg-ps-green text-ps-black">Newest</span>
+        <span className="text-[10px] text-ps-muted px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.06]">
+          Highest $
+        </span>
+      </div>
+
+      <div className="px-4">
+        <p className="text-[11px] font-bold text-ps-text mb-1.5">Smart Money Clusters</p>
+        {/* Cluster card — deliberately blue to separate it from orange signals */}
+        <div className="rounded-xl border border-blue-500 bg-blue-500/[0.07] p-2.5 mb-2.5">
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <div className="w-4 h-4 rounded-md bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+              <UsersThree size={9} weight="fill" className="text-blue-400" />
+            </div>
+            <span className="text-[10px] font-bold text-blue-400">
+              {CLUSTER.wallets} · {CLUSTER.total}
+            </span>
+            <span className="text-[8px] text-ps-muted ml-auto">{CLUSTER.ago}</span>
+          </div>
+          <p className="text-[11px] font-semibold text-ps-text leading-tight mb-1.5">{CLUSTER.market}</p>
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <span className="text-[9px] font-bold px-2 py-0.5 rounded-md bg-ps-green/15 text-ps-green">
+              {CLUSTER.side}
+            </span>
+            <span className="text-[8px] text-ps-muted">{CLUSTER.avg}</span>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {CLUSTER.legs.map((l) => (
+              <span
+                key={l}
+                className="text-[7px] font-mono text-ps-muted px-1.5 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07]"
+              >
+                {l}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <TradeCardItem trade={SIGNAL_TRADES[0]} />
+      </div>
+    </>
+  )
+}
+
+const TRADE_DETAIL = {
+  market: 'Will Argentina win on 2026-07-19?',
+  outcome: 'No',
+  when: 'Jul 19 at 12:44',
+  stats: [
+    { label: 'Size', value: '$234,568.42', green: false },
+    { label: 'To win', value: '$82,415.93', green: true },
+    { label: 'Entry price', value: '74¢', green: false },
+    { label: 'Implied prob.', value: '74.0%', green: false },
+  ],
+}
+
+function TradeDetailScreen() {
+  return (
+    <div className="px-4">
+      <div className="flex items-center gap-2 mb-2.5">
+        <ArrowLeft size={13} weight="bold" className="text-ps-green flex-shrink-0" />
+        <p className="text-[12px] font-bold text-ps-text leading-tight">Trade Detail</p>
+      </div>
+
+      <div className="rounded-xl border border-ps-orange/40 bg-ps-orange/[0.08] px-2.5 py-2 mb-2.5 flex items-start gap-1.5">
+        <Warning size={11} weight="fill" className="text-ps-orange flex-shrink-0 mt-px" />
+        <p className="text-[9px] font-bold text-ps-orange leading-snug">
+          High Conviction — trade exceeds $100,000 USDC
+        </p>
+      </div>
+
+      <div className="flex items-center gap-2 mb-2.5">
+        <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-ps-green/15 text-ps-green tracking-wider">
+          BUY
+        </span>
+        <span className="text-[9px] text-ps-muted ml-auto">{TRADE_DETAIL.when}</span>
+      </div>
+
+      <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-2.5 mb-2">
+        <p className="text-[7px] font-bold uppercase tracking-widest text-ps-muted mb-1">Market</p>
+        <p className="text-[11px] font-semibold text-ps-text leading-tight mb-1.5">{TRADE_DETAIL.market}</p>
+        <span className="text-[9px] font-medium px-2 py-0.5 rounded-md bg-ps-green/15 text-ps-green">
+          {TRADE_DETAIL.outcome}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-2 gap-1 mb-2">
+        {TRADE_DETAIL.stats.map((s) => (
+          <div key={s.label} className="rounded-lg bg-white/[0.03] border border-white/[0.05] px-2 py-1.5">
+            <p className="text-[7px] uppercase tracking-wider text-ps-muted leading-none mb-1">{s.label}</p>
+            <p className={`text-[12px] font-extrabold leading-none ${s.green ? 'text-ps-green' : 'text-ps-text'}`}>
+              {s.value}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Expected-value estimate */}
+      <div className="rounded-xl border border-ps-green/25 bg-ps-green/[0.06] p-2.5">
+        <div className="flex items-center gap-1.5 mb-1">
+          <ChartLineUp size={10} weight="bold" className="text-ps-green" />
+          <p className="text-[7px] font-bold uppercase tracking-widest text-ps-muted">
+            Trader&rsquo;s historical edge
+          </p>
+        </div>
+        <p className="text-[18px] font-extrabold text-ps-green leading-none mb-1">
+          +$6.3k <span className="text-[9px] font-bold text-ps-muted">(+2.0¢/share)</span>
+        </p>
+        <p className="text-[7px] text-ps-muted leading-snug">
+          If this trade performs like this wallet&rsquo;s past record, a position this size
+          would have returned about that much beyond the market&rsquo;s implied odds. Based on
+          14 resolved positions at similar prices.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+const NAME_RESULTS = [
+  { initial: 'P', name: 'Poly7-meta4', address: '0x95b6...50a9' },
+  { initial: 'P', name: 'Poly-1718557509562', address: '0xf9a4...30a6' },
+  { initial: 'J', name: 'Jon-Poly', address: '0x97ba...27c3' },
+  { initial: 'P', name: 'Poly-Master-Trade', address: '0xe6a5...412f' },
+]
+
+function AddWalletScreen() {
+  return (
+    <div className="px-4">
+      <div className="flex items-center mb-2.5">
+        <p className="text-[14px] font-extrabold text-ps-text leading-tight">Add Wallet</p>
+        <X size={13} weight="bold" className="text-ps-muted ml-auto" />
+      </div>
+
+      <div className="flex items-center gap-2 bg-white/[0.05] rounded-xl px-3 py-2 border border-white/[0.09] mb-2.5">
+        <MagnifyingGlass size={11} className="text-ps-muted flex-shrink-0" />
+        <span className="text-[11px] font-medium text-ps-text flex-1">poly</span>
+        <X size={10} weight="bold" className="text-ps-muted" />
+      </div>
+
+      <div className="rounded-xl border border-white/[0.07] overflow-hidden mb-2.5">
+        {NAME_RESULTS.map((r, i) => (
+          <div
+            key={r.name}
+            className={`flex items-center gap-2 px-2.5 py-2 ${i > 0 ? 'border-t border-white/[0.06]' : ''}`}
+          >
+            <div className="w-6 h-6 rounded-full bg-ps-green/15 border border-ps-green/30 flex items-center justify-center flex-shrink-0">
+              <span className="text-[9px] font-bold text-ps-green">{r.initial}</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold text-ps-text leading-tight truncate">{r.name}</p>
+              <p className="text-[8px] font-mono text-ps-muted leading-tight truncate">{r.address}</p>
+            </div>
+            <span className="text-[9px] font-bold text-ps-green flex-shrink-0">Use</span>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-[8px] text-ps-muted text-center mb-2">— or paste an address —</p>
+      <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] px-3 py-2">
+        <span className="text-[9px] text-ps-muted">Wallet address (0x...)</span>
+      </div>
+    </div>
+  )
+}
+
 const SCREENS: Record<PhoneScreen, () => JSX.Element> = {
   feed: FeedScreen,
   signals: SignalsScreen,
   wallets: WalletsScreen,
   walletDetail: WalletDetailScreen,
+  copyScore: CopyScoreScreen,
+  clusters: ClustersScreen,
+  tradeDetail: TradeDetailScreen,
+  addWallet: AddWalletScreen,
   ai: AiScreen,
+}
+
+// Which bottom-nav tab lights up for screens reached from inside another tab.
+const NAV_PARENT: Partial<Record<PhoneScreen, PhoneScreen>> = {
+  walletDetail: 'wallets',
+  copyScore: 'wallets',
+  addWallet: 'wallets',
+  clusters: 'signals',
+  tradeDetail: 'feed',
 }
 
 const NAV_ITEMS: { id: PhoneScreen | 'profile'; label: string; Icon: typeof Rss }[] = [
@@ -470,8 +798,8 @@ export default function PhoneMockup({ screen = 'feed', className = '' }: PhoneMo
         style={{ background: '#111115' }}
       >
         {NAV_ITEMS.map(({ id, label, Icon }) => {
-          // A wallet profile is reached from the Wallets tab, so keep it lit.
-          const active = id === (screen === 'walletDetail' ? 'wallets' : screen)
+          // Detail screens are reached from inside a tab, so keep that tab lit.
+          const active = id === (NAV_PARENT[screen] ?? screen)
           return (
             <div key={label} className="flex flex-col items-center gap-0.5">
               <Icon size={14} weight={active ? 'fill' : 'regular'} className={active ? 'text-ps-green' : 'text-ps-muted'} />

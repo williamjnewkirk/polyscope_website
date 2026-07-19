@@ -11,11 +11,11 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Polyscope | Polymarket Whale Intelligence App</title>
-        <meta name="description" content="Real-time Polymarket whale alerts on iOS. Track high-conviction trades, follow top performers, and get AI-powered market signals the moment they happen." />
+        <title>Polyscope | Copy Score & Trader Analytics for Polymarket</title>
+        <meta name="description" content="Every Polymarket wallet rated 0–100 on price-adjusted edge. See trader analytics, get smart money cluster alerts, and rank traders by ROI and Copy Score on iOS and Android." />
         <link rel="canonical" href="https://polyscopeapp.com/" />
-        <meta property="og:title" content="Polyscope | Polymarket Whale Intelligence App" />
-        <meta property="og:description" content="Real-time Polymarket whale alerts on iOS. Track high-conviction trades, follow top performers, and get AI-powered market signals the moment they happen." />
+        <meta property="og:title" content="Polyscope | Copy Score & Trader Analytics for Polymarket" />
+        <meta property="og:description" content="Every Polymarket wallet rated 0–100 on price-adjusted edge. See trader analytics, get smart money cluster alerts, and rank traders by ROI and Copy Score on iOS and Android." />
         <meta property="og:url" content="https://polyscopeapp.com/" />
       </Helmet>
       <main>

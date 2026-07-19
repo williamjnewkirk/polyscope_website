@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Rss, Lightning, Wallet, Robot, Funnel } from '@phosphor-icons/react'
+import { Rss, Lightning, Wallet, Robot, ChartLineUp, UsersThree } from '@phosphor-icons/react'
 import PhoneMockup, { type PhoneScreen } from './PhoneMockup'
 import Tilt from './fx/Tilt'
 import { isPrerendering } from '../lib/prerender'
@@ -9,28 +9,34 @@ const ADVANCE_MS = 6000
 
 const TABS: { id: PhoneScreen; Icon: typeof Rss; label: string; desc: string }[] = [
   {
-    id: 'feed',
-    Icon: Rss,
-    label: 'Live Feed',
-    desc: 'Every qualifying trade from the wallets you follow, seconds after it lands on-chain. Search by trader or market, filter by size.',
+    id: 'copyScore',
+    Icon: ChartLineUp,
+    label: 'Copy Score & Trader Analytics',
+    desc: 'Every wallet rated 0–100 on price-adjusted edge, plus ROI, consistency, entry timing, position style, and category-by-category performance.',
   },
   {
-    id: 'signals',
-    Icon: Lightning,
-    label: 'High-Conviction Signals',
-    desc: 'Trades over $100,000 USDC from anywhere on Polymarket — not just wallets you follow — flagged the moment they print.',
+    id: 'clusters',
+    Icon: UsersThree,
+    label: 'Smart Money Clusters',
+    desc: 'The moment several high-scoring wallets independently buy the same market within minutes, Polyscope surfaces it — and pushes it to your phone.',
   },
   {
     id: 'wallets',
     Icon: Wallet,
-    label: 'Whale Leaderboard',
-    desc: "Today's, this week's, and all-time top performers ranked by profit. Follow any wallet with one tap — or follow them all.",
+    label: 'ROI & Copy Score Leaderboards',
+    desc: 'Rank suggested traders by return or by Copy Score, not just raw profit — so sharp smaller accounts surface instead of only the biggest bankrolls.',
   },
   {
-    id: 'walletDetail',
-    Icon: Funnel,
-    label: 'Bot Filter & Profiles',
-    desc: 'Tap any wallet for a Polymarket-style profile with P/L, win rate, and a bot-likelihood score. Pro members hide flagged bots from the feed, Signals, and suggestions with one tap.',
+    id: 'tradeDetail',
+    Icon: Lightning,
+    label: 'Expected-Value Estimates',
+    desc: "Open any trade from a scored wallet to see that trader's historical edge on trades like it, in cents per share — so you can judge whether it fits their proven strengths.",
+  },
+  {
+    id: 'feed',
+    Icon: Rss,
+    label: 'Live Feed',
+    desc: 'Every qualifying trade from the wallets you follow, seconds after it lands on-chain. Search by trader or market, filter by size.',
   },
   {
     id: 'ai',
@@ -41,7 +47,7 @@ const TABS: { id: PhoneScreen; Icon: typeof Rss; label: string; desc: string }[]
 ]
 
 export default function AppShowcase() {
-  const [active, setActive] = useState<PhoneScreen>('feed')
+  const [active, setActive] = useState<PhoneScreen>('copyScore')
   // Bumped on every manual selection so the progress bar restarts cleanly
   const [cycle, setCycle] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -84,11 +90,14 @@ export default function AppShowcase() {
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-ps-green mb-3">Inside the app</p>
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ps-text max-w-xl leading-tight">
-            Five tools. One radar.
+            Don&rsquo;t just see the trades.
+            <br />
+            See who&rsquo;s actually good.
           </h2>
           <p className="mt-4 text-ps-muted text-base leading-relaxed max-w-[52ch]">
-            This is the actual app — live feed, signals, leaderboard, bot filter, and
-            AI advisor, exactly as they run on your phone.
+            This is the actual app &mdash; Copy Score, trader analytics, smart money
+            clusters, leaderboards, and expected-value estimates, exactly as they run
+            on your phone.
           </p>
         </motion.div>
 
