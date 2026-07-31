@@ -7,6 +7,7 @@ import Support from './pages/Support'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Eula from './pages/Eula'
+import Download from './pages/Download'
 
 // During react-snap prerendering, disable Framer Motion animations so all
 // content renders at its final visible state (opacity:1) in the static HTML.
@@ -25,6 +26,8 @@ export default function App() {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/eula" element={<Eula />} />
+            {/* Prod serves public/download/index.html for this path; this is the in-router fallback. */}
+            <Route path="/download" element={<Download />} />
           </Routes>
           <Footer />
         </div>

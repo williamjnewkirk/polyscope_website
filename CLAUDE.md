@@ -20,7 +20,7 @@ npm run preview  # preview the production build locally
 
 - **React 18** + **TypeScript** — component framework
 - **Vite 6** — build tool; `base: '/'` in `vite.config.ts` (custom domain at root). Local URLs are `http://localhost:5173/` (dev) and `http://localhost:4173/` (preview) — no subpath.
-- **react-router-dom 7** — `/`, `/support`, `/privacy`, `/terms`, `/eula` routes (pages in `src/pages/`)
+- **react-router-dom 7** — `/`, `/support`, `/privacy`, `/terms`, `/eula`, `/download` routes (pages in `src/pages/`). `/download` is a redirect to the App Store: `public/download/index.html` is a static page GitHub Pages serves directly (instant, no JS bundle), and `src/pages/Download.tsx` is the in-router fallback. Outbound URLs live in `src/lib/links.ts`.
 - **react-snap** — postbuild prerender of all routes to static HTML; `src/lib/prerender.ts` exposes `isPrerendering`, and `main.tsx` stubs `IntersectionObserver` during prerender so animated content is captured visible
 - **Tailwind CSS v3** — utility styling; custom `ps-*` color tokens in `tailwind.config.js`
 - **Framer Motion** — scroll-reveal animations (`whileInView`) and pricing toggle

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, follow">
+  <title>Downloading Polyscope…</title>
+
+  <!-- Static redirect for polyscopeapp.com/download → the App Store listing.
+       Served directly by GitHub Pages (no React bundle), so the hop is instant.
+       Keep this URL in sync with APP_STORE_URL in src/lib/links.ts. -->
+  <link rel="canonical" href="https://apps.apple.com/us/app/polyscope/id6772628383">
+  <meta http-equiv="refresh" content="0; url=https://apps.apple.com/us/app/polyscope/id6772628383">
+  <script>
+    // Fires before the meta refresh in every modern browser. `replace` keeps
+    // /download out of history so Back returns to where the user came from.
+    window.location.replace('https://apps.apple.com/us/app/polyscope/id6772628383');
+  </script>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #0A0A0C;
+      color: #6B7280;
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    main {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-align: center;
+      padding: 24px;
+    }
+    p { font-size: 14px; margin: 0; }
+    a { color: #22C55E; font-size: 14px; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <main>
+    <p>Taking you to the App Store…</p>
+    <a href="https://apps.apple.com/us/app/polyscope/id6772628383">Open Polyscope on the App Store</a>
+  </main>
+</body>
+</html>
