@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { PaperPlaneTilt, CheckCircle, WarningCircle, CaretDown } from '@phosphor-icons/react'
+import { PaperPlaneTilt, CheckCircle, WarningCircle, CaretDown, ArrowSquareOut } from '@phosphor-icons/react'
+import { STATUS_URL } from '../lib/links'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mqejqvpj'
 const RATE_LIMIT_KEY = 'ps_contact_submissions'
@@ -301,6 +302,19 @@ export default function Support() {
           Or email us directly at{' '}
           <a href="mailto:support@polyscopeapp.com" className="text-ps-text hover:text-ps-green transition-colors">
             support@polyscopeapp.com
+          </a>
+        </p>
+
+        <p className="text-center text-xs text-ps-muted mt-2">
+          Think something's down? Check the{' '}
+          <a
+            href={STATUS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-ps-text hover:text-ps-green transition-colors"
+          >
+            live system status
+            <ArrowSquareOut size={12} weight="bold" className="inline-block ml-1 align-[-1px]" />
           </a>
         </p>
       </div>

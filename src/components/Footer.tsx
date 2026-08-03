@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import logoIcon from '../assets/logo-icon.png'
-import { X_URL, TIKTOK_URL, INSTAGRAM_URL, YOUTUBE_URL, DISCORD_URL } from '../lib/links'
+import { X_URL, TIKTOK_URL, INSTAGRAM_URL, YOUTUBE_URL, DISCORD_URL, STATUS_URL } from '../lib/links'
 
 const footerLinks = {
   Product: [
@@ -11,6 +11,7 @@ const footerLinks = {
   Company: [
     { label: 'Join Waitlist', href: '#download' },
     { label: 'Support', href: '/support', isRoute: true },
+    { label: 'System Status', href: STATUS_URL, isExternal: true },
   ],
   Legal: [
     { label: 'Privacy Policy', href: '/privacy', isRoute: true },
@@ -101,7 +102,7 @@ export default function Footer() {
 
           {/* Nav columns */}
           <div className="grid grid-cols-3 gap-8 md:pl-16">
-            {(Object.entries(footerLinks) as [string, { label: string; href: string; isRoute?: boolean }[]][]).map(([group, links]) => (
+            {(Object.entries(footerLinks) as [string, { label: string; href: string; isRoute?: boolean; isExternal?: boolean }[]][]).map(([group, links]) => (
               <div key={group}>
                 <p className="text-[11px] font-bold uppercase tracking-widest text-ps-muted mb-3">{group}</p>
                 <ul className="space-y-2">
@@ -111,6 +112,15 @@ export default function Footer() {
                         <Link to={link.href} className="text-xs text-ps-muted hover:text-ps-text transition-colors">
                           {link.label}
                         </Link>
+                      ) : link.isExternal ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-ps-muted hover:text-ps-text transition-colors"
+                        >
+                          {link.label}
+                        </a>
                       ) : (
                         <a href={link.href} className="text-xs text-ps-muted hover:text-ps-text transition-colors">
                           {link.label}
