@@ -25,6 +25,9 @@ import { isPrerendering } from '../lib/prerender'
 export type PhoneScreen =
   | 'feed'
   | 'signals'
+  | 'markets'
+  | 'marketDetail'
+  | 'positions'
   | 'wallets'
   | 'walletDetail'
   | 'copyScore'
@@ -169,16 +172,41 @@ function FeedScreen() {
   )
 }
 
+// Signals is a three-way view in 1.4 — live trades, graded markets, and clusters.
+function SignalTabs({ active }: { active: 'Signals' | 'Markets' | 'Clusters' }) {
+  return (
+    <div className="flex gap-1 px-4 mb-2">
+      {(['Signals', 'Markets', 'Clusters'] as const).map((tab) => (
+        <span
+          key={tab}
+          className={`flex-1 text-center text-[10px] font-bold py-1 rounded-full border ${
+            tab === active
+              ? 'text-ps-text bg-white/[0.07] border-white/[0.16]'
+              : 'text-ps-muted border-transparent'
+          }`}
+        >
+          {tab}
+        </span>
+      ))}
+    </div>
+  )
+}
+
 function SignalsScreen() {
   const doubled = [...SIGNAL_TRADES, ...SIGNAL_TRADES]
   return (
     <>
-      <div className="flex gap-2 px-4 mb-2">
+      <SignalTabs active="Signals" />
+      <div className="flex items-center gap-2 px-4 mb-2">
         <span className="text-[10px] font-semibold px-3 py-1 rounded-full bg-ps-green/15 text-ps-green border border-ps-green/25">
           Newest
         </span>
         <span className="text-[10px] text-ps-muted px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.06]">
           Highest $
+        </span>
+        {/* Filter sheet — trades / positions / both, min size, category, resolving soon */}
+        <span className="ml-auto w-6 h-6 rounded-full border border-ps-green/50 flex items-center justify-center flex-shrink-0">
+          <FadersHorizontal size={11} weight="bold" className="text-ps-green" />
         </span>
       </div>
       <div className="mx-4 mb-2.5 p-2.5 rounded-xl bg-ps-orange/10 border border-ps-orange/25">
@@ -189,10 +217,355 @@ function SignalsScreen() {
           </p>
         </div>
       </div>
-      <div className="relative overflow-hidden px-4" style={{ height: '330px' }}>
+      <div className="relative overflow-hidden px-4" style={{ height: '302px' }}>
         <div className="animate-scroll-up group-hover/phone:[animation-play-state:paused]" style={{ animationDuration: '20s' }}>
           {doubled.map((trade, i) => (
             <TradeCardItem key={i} trade={trade} />
+          ))}
+        </div>
+        <div
+          className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, transparent, #111115)' }}
+        />
+      </div>
+    </>
+  )
+}
+
+// ── Markets (new in 1.4) ─────────────────────────────────────────────────
+// Every busy market graded on how much qualified evidence backs one outcome
+// over the last 24h. A measurement of whale buying — never a forecast.
+const MARKET_SIGNALS = [
+  {
+    market: 'LoL: Karmine Corp vs Team Heretics — Game 2 Winner',
+    lean: 'Karmine Corp',
+    score: '82',
+    band: 'Strong signal',
+    price: '95¢',
+    evidence: '$61K from 14 qualified wallets · bought avg 85¢, now 95¢',
+    meta: 'Avg Copy Score 86 · Bots excluded',
+    ago: 'as of 3m ago',
+    strong: true,
+  },
+  {
+    market: 'San Francisco Giants vs. Texas Rangers',
+    lean: 'Texas Rangers',
+    score: '63',
+    band: 'Moderate signal',
+    price: '53¢',
+    evidence: '$18K from 9 qualified wallets · bought avg 51¢, now 53¢',
+    meta: 'Avg Copy Score 88 · Bots excluded',
+    ago: 'as of 2m ago',
+    strong: false,
+  },
+  {
+    market: 'Fed rate cut in September 2026?',
+    lean: 'Yes',
+    score: '74',
+    band: 'Strong signal',
+    price: '66¢',
+    evidence: '$140K from 11 qualified wallets · bought avg 61¢, now 66¢',
+    meta: 'Avg Copy Score 91 · Bots excluded',
+    ago: 'as of 8m ago',
+    strong: true,
+  },
+]
+
+function MarketSignalCard({ m }: { m: (typeof MARKET_SIGNALS)[number] }) {
+  return (
+    <div
+      className={`rounded-xl p-2.5 mb-2 border ${
+        m.strong ? 'border-ps-green bg-ps-green/[0.06]' : 'border-white/[0.09] bg-white/[0.03]'
+      }`}
+    >
+      <p className="text-[11px] font-bold text-ps-text leading-tight mb-1.5 line-clamp-2">{m.market}</p>
+      <div className="flex items-end gap-2 mb-1.5">
+        <div className="min-w-0 flex-1">
+          <p className="text-[7px] font-bold uppercase tracking-widest text-ps-muted leading-none mb-1">
+            Smart money lean
+          </p>
+          <p className="text-[13px] font-extrabold text-ps-text leading-none truncate">{m.lean}</p>
+        </div>
+        <div
+          className={`text-center rounded-lg border px-2 py-1 flex-shrink-0 ${
+            m.strong ? 'border-ps-green/60 bg-ps-green/[0.08]' : 'border-white/[0.14]'
+          }`}
+        >
+          <p className={`text-[13px] font-extrabold leading-none ${m.strong ? 'text-ps-green' : 'text-ps-text'}`}>
+            {m.score}
+            <span className="text-[8px] text-ps-muted font-bold">/100</span>
+          </p>
+          <p
+            className={`text-[6px] font-bold uppercase tracking-wider leading-none mt-1 ${
+              m.strong ? 'text-ps-green' : 'text-ps-muted'
+            }`}
+          >
+            {m.band}
+          </p>
+        </div>
+      </div>
+      <p className="text-[8px] text-ps-muted leading-snug mb-1">
+        Market price <span className="font-mono font-bold text-ps-text">{m.price}</span> at signal time
+      </p>
+      <p className="text-[8px] text-ps-muted leading-snug">{m.evidence}</p>
+      <div className="flex items-center gap-1 mt-1">
+        <span className="text-[7px] text-ps-muted/70">{m.meta}</span>
+        <span className="text-[7px] text-ps-muted/70 ml-auto">{m.ago}</span>
+      </div>
+    </div>
+  )
+}
+
+function MarketsScreen() {
+  return (
+    <>
+      <SignalTabs active="Markets" />
+      <div className="flex items-center gap-1.5 px-4 mb-2">
+        <span className="text-[8px] font-bold uppercase tracking-widest text-ps-muted">Sort</span>
+        {['Strength', 'Volume', 'Smart $'].map((s) => (
+          <span
+            key={s}
+            className={`text-[9px] px-2 py-0.5 rounded-full border ${
+              s === 'Strength'
+                ? 'font-semibold text-blue-400 border-blue-500/60 bg-blue-500/10'
+                : 'text-ps-muted border-white/[0.06] bg-white/[0.04]'
+            }`}
+          >
+            {s}
+          </span>
+        ))}
+      </div>
+      <div className="px-4">
+        <p className="text-[11px] font-bold text-ps-text leading-tight">Where smart money went</p>
+        <p className="text-[8px] text-ps-muted leading-snug mt-0.5">
+          Measured whale buying over the last 24h &mdash; not a prediction.
+        </p>
+        <p className="text-[8px] text-ps-muted/60 leading-snug mb-2">
+          15 of 250 scanned markets currently qualify &middot; updated 3m ago
+        </p>
+        {MARKET_SIGNALS.map((m) => (
+          <MarketSignalCard key={m.market} m={m} />
+        ))}
+      </div>
+    </>
+  )
+}
+
+// Market detail — the full evidence breakdown behind a single lean.
+const MARKET_DETAIL = {
+  category: 'MLB',
+  market: 'San Francisco Giants vs. Texas Rangers',
+  lean: 'Texas Rangers',
+  score: '66',
+  price: '53¢',
+  factors: [
+    { label: 'Independent wallets', pct: 52 },
+    { label: 'Wallet track record', pct: 96 },
+    { label: 'Money behind it', pct: 33 },
+    { label: 'One-sidedness', pct: 85 },
+    { label: 'Recency', pct: 85 },
+  ],
+}
+
+function MarketDetailScreen() {
+  const m = MARKET_DETAIL
+  return (
+    <div className="px-4">
+      <div className="flex items-center gap-2 mb-2">
+        <ArrowLeft size={13} weight="bold" className="text-ps-green flex-shrink-0" />
+        <div className="min-w-0">
+          <p className="text-[12px] font-bold text-ps-text leading-tight">Market</p>
+          <p className="text-[8px] text-ps-muted leading-tight">{m.category}</p>
+        </div>
+      </div>
+      <p className="text-[11px] font-bold text-ps-text leading-tight mb-2">{m.market}</p>
+
+      {/* Smart money lean */}
+      <div className="rounded-xl border border-ps-green bg-ps-green/[0.06] p-2.5 mb-2">
+        <div className="flex items-end gap-2 mb-1.5">
+          <div className="min-w-0 flex-1">
+            <p className="text-[7px] font-bold uppercase tracking-widest text-ps-muted leading-none mb-1">
+              Smart money lean
+            </p>
+            <p className="text-[14px] font-extrabold text-ps-text leading-none truncate">{m.lean}</p>
+          </div>
+          <div className="text-center rounded-lg border border-ps-green/60 px-2 py-1 flex-shrink-0">
+            <p className="text-[13px] font-extrabold text-ps-green leading-none">
+              {m.score}
+              <span className="text-[8px] text-ps-muted font-bold">/100</span>
+            </p>
+            <p className="text-[6px] font-bold uppercase tracking-wider text-ps-green leading-none mt-1">
+              Strong signal
+            </p>
+          </div>
+        </div>
+        <p className="text-[8px] text-ps-muted leading-snug mb-1">
+          Market price <span className="font-mono font-bold text-ps-text">{m.price}</span> at signal time
+          &middot; 2m ago
+        </p>
+        <p className="text-[8px] text-ps-muted leading-snug mb-1">
+          These wallets paid an average of 51&cent;; the outcome trades at 53&cent; now &mdash; so the
+          market has moved toward them since.
+        </p>
+        <p className="text-[8px] text-ps-muted/70 leading-snug">
+          $18K of qualified volume from 9 wallets &middot; Avg Copy Score 88 &middot; Bots excluded
+        </p>
+      </div>
+
+      {/* Signal strength breakdown */}
+      <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] p-2.5 mb-2">
+        <p className="text-[11px] font-bold text-ps-text leading-tight mb-0.5">
+          Signal strength {m.score}/100
+        </p>
+        <p className="text-[7px] text-ps-muted leading-snug mb-2">
+          How much qualified evidence backs this lean &mdash; not a probability, and not a
+          prediction about how the market resolves.
+        </p>
+        <div className="space-y-1.5">
+          {m.factors.map((f) => (
+            <div key={f.label} className="flex items-center gap-2">
+              <span className="text-[8px] text-ps-text w-[74px] flex-shrink-0 leading-tight whitespace-nowrap">
+                {f.label}
+              </span>
+              <div className="h-1 flex-1 rounded-full bg-white/[0.07] overflow-hidden">
+                <div className="h-full rounded-full bg-ps-green" style={{ width: `${f.pct}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 24h price chart */}
+      <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] p-2.5">
+        <div className="flex items-baseline gap-2 mb-1">
+          <p className="text-[10px] font-bold text-ps-text leading-none">{m.lean} &middot; last 24h</p>
+          <span className="text-[8px] font-mono text-ps-muted ml-auto">{m.price} now</span>
+        </div>
+        <svg viewBox="0 0 100 28" preserveAspectRatio="none" className="w-full h-9">
+          <path
+            d="M0,22 L18,22 L18,17 L42,17 L42,19 L64,19 L64,14 L82,14 L82,4 L100,4"
+            fill="none"
+            stroke="#18b974"
+            strokeWidth="1.2"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+          />
+          {[
+            [18, 22],
+            [64, 19],
+            [92, 4],
+          ].map(([cx, cy]) => (
+            <circle key={cx} cx={cx} cy={cy} r="1.6" fill="#18b974" />
+          ))}
+        </svg>
+      </div>
+    </div>
+  )
+}
+
+// ── Big open positions (new in 1.4) ──────────────────────────────────────
+// $1M+ books whales are still holding, ranked by capital committed.
+const OPEN_POSITIONS = [
+  {
+    address: '0x2c33...0563',
+    held: 'held 3d',
+    market: '2026 Balance of Power: D Senate, D House',
+    side: 'No',
+    cost: '$5.0M',
+    now: '$5.5M',
+    pnl: '+11%',
+    entry: '50¢',
+  },
+  {
+    address: '0xa2cd...2ba0',
+    held: 'held 3d',
+    market: 'Will the US confirm that aliens exist before 2027?',
+    side: 'No',
+    cost: '$1.3M',
+    now: '$1.4M',
+    pnl: '+8%',
+    entry: '87¢',
+  },
+  {
+    address: '0x6b19...c410',
+    held: 'held 9d',
+    market: 'Fed rate cut in September 2026?',
+    side: 'Yes',
+    cost: '$2.4M',
+    now: '$2.7M',
+    pnl: '+13%',
+    entry: '66¢',
+  },
+]
+
+function PositionCard({ p }: { p: (typeof OPEN_POSITIONS)[number] }) {
+  return (
+    <div className="relative rounded-xl p-2.5 mb-2 border border-white/[0.06] bg-white/[0.03] overflow-hidden">
+      <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-blue-500" />
+      <div className="flex items-center gap-1.5 mb-1.5">
+        <span className="flex items-center gap-1 text-[7px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-400 border border-blue-500/30">
+          <Wallet size={7} weight="fill" />
+          Position
+        </span>
+        <span className="text-[9px] font-mono font-semibold text-ps-green truncate">{p.address}</span>
+        <span className="text-[8px] text-ps-muted ml-auto flex-shrink-0">{p.held}</span>
+      </div>
+      <p className="text-[11px] font-semibold text-ps-text leading-tight mb-1.5 line-clamp-2">{p.market}</p>
+      <span
+        className={`inline-block text-[9px] font-bold px-2 py-0.5 rounded-md mb-2 ${
+          p.side === 'No' ? 'bg-red-500/15 text-red-400' : 'bg-ps-green/15 text-ps-green'
+        }`}
+      >
+        {p.side}
+      </span>
+      <div className="grid grid-cols-4 gap-1 pt-1.5 border-t border-white/[0.06]">
+        {[
+          { label: 'Cost basis', value: p.cost, green: false },
+          { label: 'Value now', value: p.now, green: false },
+          { label: 'P&L', value: p.pnl, green: true },
+          { label: 'Entry', value: p.entry, green: false },
+        ].map((s) => (
+          <div key={s.label}>
+            <p className="text-[6px] uppercase tracking-wider text-ps-muted leading-none mb-1">{s.label}</p>
+            <p
+              className={`text-[10px] font-extrabold leading-none font-mono ${
+                s.green ? 'text-ps-green' : 'text-ps-text'
+              }`}
+            >
+              {s.value}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PositionsScreen() {
+  const doubled = [...OPEN_POSITIONS, ...OPEN_POSITIONS]
+  return (
+    <>
+      <SignalTabs active="Signals" />
+      <div className="flex items-center gap-2 px-4 mb-2">
+        <span className="text-[10px] font-semibold px-3 py-1 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/40">
+          Positions
+        </span>
+        <span className="text-[10px] text-ps-muted px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.06]">
+          $1M+ min
+        </span>
+        <span className="ml-auto w-6 h-6 rounded-full border border-ps-green/50 flex items-center justify-center flex-shrink-0">
+          <FadersHorizontal size={11} weight="bold" className="text-ps-green" />
+        </span>
+      </div>
+      <div className="px-4 mb-1.5">
+        <p className="text-[8px] text-ps-muted leading-snug">
+          Open books whales are still holding, ranked by capital committed.
+        </p>
+      </div>
+      <div className="relative overflow-hidden px-4" style={{ height: '318px' }}>
+        <div className="animate-scroll-up group-hover/phone:[animation-play-state:paused]" style={{ animationDuration: '22s' }}>
+          {doubled.map((p, i) => (
+            <PositionCard key={i} p={p} />
           ))}
         </div>
         <div
@@ -524,65 +897,76 @@ function CopyScoreScreen() {
   )
 }
 
-const CLUSTER = {
-  wallets: '3 smart wallets',
-  total: '$20K',
-  ago: '2m ago',
-  market: 'Will Spain win on 2026-07-19?',
-  side: 'BUY Yes @ 43¢',
-  avg: 'avg score 84',
-  legs: ['0xe16d...5e30 · $1,000', '0xc44f...d49f · $14K', '0xa187...7fd4 · $5K'],
-}
+// Clusters got their own view in 1.4, and a much higher bar to fire: four
+// proven wallets (was three), a higher Copy Score floor, and a minimum size.
+const CLUSTERS = [
+  {
+    wallets: '4 smart wallets',
+    total: '$62K',
+    ago: '2m ago',
+    market: 'Will Spain win on 2026-07-19?',
+    side: 'BUY Yes @ 43¢',
+    avg: 'avg score 84',
+    legs: ['0xe16d...5e30 · $28K', '0xc44f...d49f · $14K', '0xa187...7fd4 · $12K', '0x7b02...9c61 · $8K'],
+  },
+  {
+    wallets: '5 smart wallets',
+    total: '$140K',
+    ago: '38m ago',
+    market: 'Fed rate cut in September 2026?',
+    side: 'BUY Yes @ 66¢',
+    avg: 'avg score 91',
+    legs: ['0xb8c2...91ea · $61K', '0x4280...7f21 · $34K', '0x9c11...20aa · $25K', '+2 more'],
+  },
+]
 
 function ClustersScreen() {
   return (
     <>
+      <SignalTabs active="Clusters" />
       <div className="px-4 mb-2">
         <div className="flex items-center gap-2 bg-white/[0.05] rounded-xl px-3 py-2 border border-white/[0.07]">
           <MagnifyingGlass size={11} className="text-ps-muted flex-shrink-0" />
           <span className="text-[10px] text-ps-muted flex-1 truncate">Search by trader or market...</span>
         </div>
       </div>
-      <div className="flex gap-2 px-4 mb-2.5">
-        <span className="text-[10px] font-semibold px-3 py-1 rounded-full bg-ps-green text-ps-black">Newest</span>
-        <span className="text-[10px] text-ps-muted px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.06]">
-          Highest $
-        </span>
-      </div>
 
       <div className="px-4">
-        <p className="text-[11px] font-bold text-ps-text mb-1.5">Smart Money Clusters</p>
-        {/* Cluster card — deliberately blue to separate it from orange signals */}
-        <div className="rounded-xl border border-blue-500 bg-blue-500/[0.07] p-2.5 mb-2.5">
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <div className="w-4 h-4 rounded-md bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-              <UsersThree size={9} weight="fill" className="text-blue-400" />
-            </div>
-            <span className="text-[10px] font-bold text-blue-400">
-              {CLUSTER.wallets} · {CLUSTER.total}
-            </span>
-            <span className="text-[8px] text-ps-muted ml-auto">{CLUSTER.ago}</span>
-          </div>
-          <p className="text-[11px] font-semibold text-ps-text leading-tight mb-1.5">{CLUSTER.market}</p>
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <span className="text-[9px] font-bold px-2 py-0.5 rounded-md bg-ps-green/15 text-ps-green">
-              {CLUSTER.side}
-            </span>
-            <span className="text-[8px] text-ps-muted">{CLUSTER.avg}</span>
-          </div>
-          <div className="flex flex-wrap gap-1">
-            {CLUSTER.legs.map((l) => (
-              <span
-                key={l}
-                className="text-[7px] font-mono text-ps-muted px-1.5 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07]"
-              >
-                {l}
+        <p className="text-[11px] font-bold text-ps-text leading-tight">Smart Money Clusters</p>
+        <p className="text-[8px] text-ps-muted leading-snug mt-0.5 mb-2">
+          4+ proven wallets, independently, same side, same market &mdash; above a minimum size.
+        </p>
+        {/* Cluster cards — deliberately blue to separate them from orange signals */}
+        {CLUSTERS.map((c) => (
+          <div key={c.market} className="rounded-xl border border-blue-500 bg-blue-500/[0.07] p-2.5 mb-2">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <div className="w-4 h-4 rounded-md bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <UsersThree size={9} weight="fill" className="text-blue-400" />
+              </div>
+              <span className="text-[10px] font-bold text-blue-400">
+                {c.wallets} · {c.total}
               </span>
-            ))}
+              <span className="text-[8px] text-ps-muted ml-auto">{c.ago}</span>
+            </div>
+            <p className="text-[11px] font-semibold text-ps-text leading-tight mb-1.5">{c.market}</p>
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <span className="text-[9px] font-bold px-2 py-0.5 rounded-md bg-ps-green/15 text-ps-green">
+                {c.side}
+              </span>
+              <span className="text-[8px] text-ps-muted">{c.avg}</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {c.legs.map((l) => (
+                <span
+                  key={l}
+                  className="text-[7px] font-mono text-ps-muted px-1.5 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07]"
+                >
+                  {l}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-
-        <TradeCardItem trade={SIGNAL_TRADES[0]} />
+        ))}
       </div>
     </>
   )
@@ -712,6 +1096,9 @@ function AddWalletScreen() {
 const SCREENS: Record<PhoneScreen, () => JSX.Element> = {
   feed: FeedScreen,
   signals: SignalsScreen,
+  markets: MarketsScreen,
+  marketDetail: MarketDetailScreen,
+  positions: PositionsScreen,
   wallets: WalletsScreen,
   walletDetail: WalletDetailScreen,
   copyScore: CopyScoreScreen,
@@ -727,6 +1114,9 @@ const NAV_PARENT: Partial<Record<PhoneScreen, PhoneScreen>> = {
   copyScore: 'wallets',
   addWallet: 'wallets',
   clusters: 'signals',
+  markets: 'signals',
+  marketDetail: 'signals',
+  positions: 'signals',
   tradeDetail: 'feed',
 }
 
@@ -775,8 +1165,12 @@ export default function PhoneMockup({ screen = 'feed', className = '' }: PhoneMo
         </div>
         <div>
           <p className="text-[11px] font-bold tracking-wide text-ps-text leading-none">POLYSCOPE</p>
-          <p className="text-[9px] text-ps-muted leading-none mt-0.5">Premium</p>
+          <p className="text-[9px] text-ps-muted leading-none mt-0.5">Pro</p>
         </div>
+        <span className="ml-auto flex items-center gap-1 text-[8px] font-bold px-2 py-1 rounded-full text-ps-green border border-ps-green/40">
+          <Robot size={8} weight="fill" />
+          Bots hidden
+        </span>
       </div>
 
       {/* Screen content with animated transitions */}

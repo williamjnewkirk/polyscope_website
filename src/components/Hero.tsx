@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, AppleLogo, Funnel, UsersThree } from '@phosphor-icons/react'
+import { ArrowRight, AppleLogo, Gauge, Stack, UsersThree } from '@phosphor-icons/react'
 import PhoneMockup from './PhoneMockup'
 import Magnetic from './fx/Magnetic'
 import Tilt from './fx/Tilt'
@@ -29,25 +29,24 @@ const word = {
 }
 
 const HEADLINE: { text: string; accent?: boolean; break?: boolean }[] = [
-  { text: 'Find' },
+  { text: 'See' },
+  { text: 'where' },
   { text: 'the' },
-  { text: 'smartest', accent: true },
-  { text: 'money', break: true },
+  { text: 'smart', accent: true, break: true },
+  { text: 'money', accent: true },
+  { text: 'actually' },
+  { text: 'sits', break: true },
   { text: 'on' },
-  { text: 'Polymarket —' },
-  { text: 'and', break: true },
-  { text: 'know' },
-  { text: 'why' },
-  { text: "it's" },
-  { text: 'smart.' },
+  { text: 'Polymarket.' },
 ]
 
 // Real alerts the app sends, replayed as a live notification simulator
 const NOTIFICATIONS = [
-  { title: 'Whale Trade', body: '0xeebd...ba30 BUY Bitcoin Up or Down — $1.1k @ 99¢' },
+  { title: 'Market Signal', body: 'Karmine Corp reached 82/100 — $61k from 14 qualified wallets' },
+  { title: 'Smart Money Cluster', body: '4 proven wallets BUY Yes on Spain — $62k, avg score 84' },
   { title: 'High Conviction', body: '0x3dfb...abaf SELL Colorado Rockies — $158.9k @ 100¢' },
+  { title: 'Market Signal', body: 'Texas Rangers reached 66/100 — bought avg 51¢, now 53¢' },
   { title: 'Whale Trade', body: 'surfandturf BUY Iran-US Nuclear Deal — $3.2k @ 44¢' },
-  { title: 'High Conviction', body: '0xfaf9...f4c4 BUY Putin out by Dec 31, 2026 — $179.5k @ 91¢' },
 ]
 
 function NotificationToast() {
@@ -197,10 +196,10 @@ export default function Hero() {
               animate="visible"
               className="text-base sm:text-lg text-ps-muted leading-relaxed max-w-[52ch] mb-8"
             >
-              Every wallet gets a 0&ndash;100 Copy Score that measures real,
-              price-adjusted edge &mdash; skill, not luck. See who's actually
-              good, get alerted when several proven traders pile into the same
-              market, and track any wallet by name.
+              Every busy market is graded out of 100 on how much proven-trader money
+              backs one outcome &mdash; with the full evidence breakdown, the $1M+ books
+              whales are still holding, and a 0&ndash;100 Copy Score behind every wallet.
+              A measurement of on-chain buying, never a prediction.
             </motion.p>
 
             {/* CTAs */}
@@ -240,9 +239,9 @@ export default function Hero() {
               className="flex flex-wrap items-center gap-x-6 gap-y-2"
             >
               {[
-                { value: '0–100', label: 'Copy Score per wallet' },
+                { value: '0–100', label: 'signal strength per market' },
+                { value: '$1M+', label: 'open positions tracked' },
                 { value: '~5s', label: 'trade detection speed' },
-                { value: '$100k+', label: 'high conviction threshold' },
               ].map(({ value, label }, i) => (
                 <div key={label} className="flex items-center gap-2">
                   {i > 0 && <span className="w-px h-3 bg-white/[0.10] mr-1" />}
@@ -284,24 +283,24 @@ export default function Hero() {
 
               <div className="animate-float">
                 <Tilt max={8}>
-                  <PhoneMockup screen="copyScore" />
+                  <PhoneMockup screen="marketDetail" />
                 </Tilt>
               </div>
 
-              {/* Floating high-conviction chip (bottom-right) */}
+              {/* Floating big-open-position chip (bottom-right) — new in v1.4 */}
               <div
                 className="absolute hidden sm:block card-glass rounded-xl px-3 py-2.5 shadow-2xl animate-float-slow"
                 style={{ bottom: '20%', right: '-26%', animationDelay: '2.2s' }}
               >
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-ps-orange" />
-                  <p className="text-[10px] font-semibold text-ps-orange whitespace-nowrap">High Conviction</p>
-                  <span className="text-[10px] font-mono text-ps-text">$158.9K</span>
+                  <Stack size={12} weight="bold" className="text-blue-400" />
+                  <p className="text-[10px] font-semibold text-blue-400 whitespace-nowrap">Still holding</p>
+                  <span className="text-[10px] font-mono text-ps-text">$5.0M</span>
                 </div>
               </div>
 
               {/* Floating smart-money-cluster chip (left) — offset far enough left
-                  that it clears the Copy Score metric grid on the phone */}
+                  that it clears the signal-strength breakdown on the phone */}
               <div
                 className="absolute hidden sm:block card-glass rounded-xl px-3 py-2.5 shadow-2xl animate-float"
                 style={{ top: '34%', left: '-52%', animationDelay: '0.8s' }}
@@ -309,20 +308,20 @@ export default function Hero() {
                 <div className="flex items-center gap-2">
                   <UsersThree size={12} weight="fill" className="text-blue-400" />
                   <span className="text-[10px] font-semibold text-blue-400 whitespace-nowrap">
-                    3 smart wallets
+                    4 smart wallets
                   </span>
-                  <span className="text-[10px] font-mono text-ps-text">$20K</span>
+                  <span className="text-[10px] font-mono text-ps-text">$62K</span>
                 </div>
               </div>
 
-              {/* Floating bot-filter chip (bottom-left) — new in v1.1 */}
+              {/* Floating signal-strength chip (bottom-left) — new in v1.4 */}
               <div
                 className="absolute hidden sm:block card-glass rounded-xl px-3 py-2.5 shadow-2xl animate-float-slow"
                 style={{ bottom: '7%', left: '-24%', animationDelay: '1.4s' }}
               >
                 <div className="flex items-center gap-2">
-                  <Funnel size={12} weight="bold" className="text-ps-green" />
-                  <span className="text-[10px] font-semibold text-ps-text whitespace-nowrap">Bots filtered</span>
+                  <Gauge size={12} weight="bold" className="text-ps-green" />
+                  <span className="text-[10px] font-semibold text-ps-text whitespace-nowrap">82/100 strong</span>
                   <span className="text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 rounded bg-ps-green text-ps-black leading-none">Pro</span>
                 </div>
               </div>

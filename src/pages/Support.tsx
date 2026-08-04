@@ -34,12 +34,16 @@ function getRateLimitState(): { blocked: boolean; remainingMs: number; remaining
 
 const FAQS = [
   {
-    question: 'When will Polyscope launch?',
-    answer: "We're in active development and getting close. Join the waitlist on our homepage and you'll be the first to know — we'll send one email when it's live, nothing else.",
-  },
-  {
     question: 'What is a Polymarket "whale"?',
     answer: 'A whale is a wallet that trades large amounts on Polymarket prediction markets. Polyscope monitors the wallets with the highest historical P&L and alerts you the moment they place a new trade.',
+  },
+  {
+    question: 'What does a signal strength score actually mean?',
+    answer: 'It grades how much qualified evidence backs one outcome in a market over the last 24 hours — independent wallets, their Copy Scores, how much money is behind it, how one-sided the buying is, and how recent it is. It is not a probability, and it is not a prediction of how the market will resolve. Nothing in Polyscope predicts a resolution; everything shown is a measurement of public, on-chain trading activity.',
+  },
+  {
+    question: 'Why do so few markets show a signal?',
+    answer: 'By design. Markets where the whales are already underwater, or where the outcome is effectively decided, are filtered out rather than shown as fake signals — and clusters only fire when at least four proven wallets above a Copy Score floor independently take the same side above a minimum size. Typically only a small share of scanned markets qualify at any moment.',
   },
   {
     question: 'How do push notifications work?',

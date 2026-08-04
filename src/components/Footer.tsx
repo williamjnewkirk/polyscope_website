@@ -9,7 +9,7 @@ const footerLinks = {
     { label: 'Pricing', href: '#pricing' },
   ],
   Company: [
-    { label: 'Join Waitlist', href: '#download' },
+    { label: 'Download', href: '#download' },
     { label: 'Support', href: '/support', isRoute: true },
     { label: 'System Status', href: STATUS_URL, isExternal: true },
   ],
@@ -137,8 +137,9 @@ export default function Footer() {
           <div className="flex-shrink-0">
             <div className="rounded-xl border border-white/[0.07] bg-ps-card p-4 max-w-[200px]">
               <p className="text-[10px] text-ps-muted leading-relaxed">
-                Polyscope provides market data only. Nothing on this platform
-                constitutes financial advice. Do your own research.
+                Nothing in Polyscope predicts how a market will resolve. Everything
+                shown is a measurement of public, on-chain trading activity &mdash;
+                never financial advice. Do your own research.
               </p>
             </div>
           </div>

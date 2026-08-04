@@ -1,6 +1,6 @@
 import { Fragment, useRef } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
-import { UserPlus, BellRinging, Star } from '@phosphor-icons/react'
+import { UserPlus, BellRinging, Crosshair } from '@phosphor-icons/react'
 import CountUp from './fx/CountUp'
 import { isPrerendering } from '../lib/prerender'
 
@@ -8,30 +8,30 @@ const steps = [
   {
     number: '01',
     Icon: UserPlus,
-    title: 'Follow the whales.',
+    title: 'Set up your feed.',
     description:
-      'Choose from our up to date leaderboard of the top Polymarket wallets, or paste any wallet address directly. Track as many as your tier allows.',
+      'Onboarding builds your feed around the markets and categories you actually follow. Add whales from the leaderboard, search them by name, or paste any wallet address.',
   },
   {
     number: '02',
-    Icon: BellRinging,
-    title: 'Get instant alerts.',
+    Icon: Crosshair,
+    title: 'See where the money sits.',
     description:
-      'The moment a tracked wallet executes a qualifying trade, you get a push notification with the market, side, size, and implied probability — before the crowd catches up.',
+      'Markets grades every busy market out of 100 on how much proven-trader money backs one outcome — with the evidence breakdown, a 24h price chart, and the $1M+ books whales are still holding.',
   },
   {
     number: '03',
-    Icon: Star,
-    title: 'Act on AI signals.',
+    Icon: BellRinging,
+    title: 'Get alerted when it turns.',
     description:
-      'Premium users get a Claude-powered AI advisor — ask it anything about Polymarket activity, specific markets, or whale patterns and get instant, plain-English answers.',
+      'Push notifications the moment a market crosses your strength threshold, a cluster of four proven wallets forms, or a tracked whale places a qualifying trade. Mute any category you skip.',
   },
 ]
 
 const stats = [
   { prefix: '~', to: 5, suffix: 's', label: 'Trade detection speed' },
-  { prefix: 'Top ', to: 50, suffix: '', label: 'Suggested per category' },
-  { prefix: '$', to: 100, suffix: 'k+', label: 'High Conviction threshold' },
+  { prefix: '', to: 250, suffix: '', label: 'Markets scanned continuously' },
+  { prefix: '$', to: 1, suffix: 'M+', label: 'Open positions surfaced' },
   { prefix: '', to: 24, suffix: '/7', label: 'Always-on monitoring' },
 ]
 

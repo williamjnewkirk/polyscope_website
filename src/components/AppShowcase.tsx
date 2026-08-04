@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Rss, Lightning, Wallet, Robot, ChartLineUp, UsersThree } from '@phosphor-icons/react'
+import { Rss, Lightning, Wallet, Robot, ChartLineUp, UsersThree, Crosshair, Stack } from '@phosphor-icons/react'
 import PhoneMockup, { type PhoneScreen } from './PhoneMockup'
 import Tilt from './fx/Tilt'
 import { isPrerendering } from '../lib/prerender'
@@ -9,16 +9,34 @@ const ADVANCE_MS = 6000
 
 const TABS: { id: PhoneScreen; Icon: typeof Rss; label: string; desc: string }[] = [
   {
-    id: 'copyScore',
+    id: 'markets',
+    Icon: Crosshair,
+    label: 'Markets',
+    desc: 'For every busy market, which outcome proven traders bought over the last 24h, how much they staked, and how it lines up against the price. Sort by strength, volume, or smart money.',
+  },
+  {
+    id: 'marketDetail',
     Icon: ChartLineUp,
-    label: 'Copy Score & Trader Analytics',
-    desc: 'Every wallet rated 0–100 on price-adjusted edge, plus ROI, consistency, entry timing, position style, and category-by-category performance.',
+    label: 'Signal Strength Breakdown',
+    desc: 'Independent wallets, track record, money behind it, one-sidedness and recency — graded out of 100, with a scrubbing 24h price chart and the exact wallets behind the lean.',
+  },
+  {
+    id: 'positions',
+    Icon: Stack,
+    label: 'Big Open Positions',
+    desc: 'The $1M+ books whales are still holding across all of Polymarket, ranked by capital committed. Filter by size, category, or markets resolving today or this week.',
   },
   {
     id: 'clusters',
     Icon: UsersThree,
     label: 'Smart Money Clusters',
-    desc: 'The moment several high-scoring wallets independently buy the same market within minutes, Polyscope surfaces it — and pushes it to your phone.',
+    desc: 'Four or more proven wallets independently buying the same side within minutes, above a minimum size. Its own view now — and a much higher bar to fire.',
+  },
+  {
+    id: 'copyScore',
+    Icon: ChartLineUp,
+    label: 'Copy Score & Trader Analytics',
+    desc: 'Every wallet rated 0–100 on price-adjusted edge, plus ROI, consistency, entry timing, position style, and category-by-category performance.',
   },
   {
     id: 'wallets',
@@ -47,7 +65,7 @@ const TABS: { id: PhoneScreen; Icon: typeof Rss; label: string; desc: string }[]
 ]
 
 export default function AppShowcase() {
-  const [active, setActive] = useState<PhoneScreen>('copyScore')
+  const [active, setActive] = useState<PhoneScreen>('markets')
   // Bumped on every manual selection so the progress bar restarts cleanly
   const [cycle, setCycle] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -92,12 +110,12 @@ export default function AppShowcase() {
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ps-text max-w-xl leading-tight">
             Don&rsquo;t just see the trades.
             <br />
-            See who&rsquo;s actually good.
+            See where the money sits.
           </h2>
           <p className="mt-4 text-ps-muted text-base leading-relaxed max-w-[52ch]">
-            This is the actual app &mdash; Copy Score, trader analytics, smart money
-            clusters, leaderboards, and expected-value estimates, exactly as they run
-            on your phone.
+            This is the actual app &mdash; graded markets, signal strength breakdowns,
+            million-dollar open positions, clusters, Copy Score and trader analytics,
+            exactly as they run on your phone.
           </p>
         </motion.div>
 

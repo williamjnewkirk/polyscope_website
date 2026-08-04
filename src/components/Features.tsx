@@ -12,7 +12,12 @@ import {
   Trophy,
   Target,
   MagnifyingGlass,
+  Crosshair,
+  Gauge,
+  Stack,
+  BellRinging,
 } from '@phosphor-icons/react'
+import logoIcon from '../assets/logo-icon.png'
 import PhoneMockup from './PhoneMockup'
 import SpotlightCard from './fx/SpotlightCard'
 import { isPrerendering } from '../lib/prerender'
@@ -39,6 +44,194 @@ function ProPill() {
     <span className="inline-flex items-center text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-ps-green text-ps-black leading-none">
       Pro
     </span>
+  )
+}
+
+function MarketsCard() {
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+        <div className="flex flex-col justify-center p-8 lg:p-10">
+          <FeatureTag>
+            <Crosshair size={14} weight="bold" />
+            Markets
+            <ProPill />
+          </FeatureTag>
+          <h3 className="text-2xl font-bold tracking-tight text-ps-text mb-3">
+            Where the smart money actually sits.
+          </h3>
+          <p className="text-sm text-ps-muted leading-relaxed max-w-[40ch]">
+            For every busy Polymarket market, see which outcome proven traders bought
+            over the last 24 hours, how much they staked, and how that lines up against
+            the market&rsquo;s own price &mdash; &ldquo;$61K from 14 qualified wallets,
+            bought avg 85&cent;, now 95&cent;.&rdquo; Sort by strength, volume, or smart
+            money.
+          </p>
+          <p className="text-[11px] text-ps-muted/60 mt-4 italic">
+            A measurement of public on-chain buying &mdash; not a forecast. Markets where
+            the whales are already underwater, or where the outcome is effectively
+            decided, are filtered out rather than dressed up as signals.
+          </p>
+        </div>
+        <div className="hidden md:flex items-end justify-center overflow-hidden pt-6 pb-0 pr-6">
+          <PhoneMockup screen="markets" className="scale-[0.72] origin-bottom" />
+        </div>
+      </div>
+    </SpotlightCard>
+  )
+}
+
+function SignalStrengthCard() {
+  const factors = [
+    { label: 'Independent wallets', pct: 52 },
+    { label: 'Wallet track record', pct: 96 },
+    { label: 'Money behind it', pct: 33 },
+    { label: 'One-sidedness', pct: 85 },
+    { label: 'Recency', pct: 85 },
+  ]
+
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
+    >
+      <FeatureTag>
+        <Gauge size={14} weight="bold" />
+        Signal Strength
+        <ProPill />
+      </FeatureTag>
+      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
+        Every lean, graded out of 100.
+      </h3>
+      <p className="text-sm text-ps-muted leading-relaxed mb-6">
+        One score that says how much qualified evidence backs a lean &mdash; and a full
+        breakdown of what drove it. Open the detail screen for the scrubbing 24h price
+        chart and the exact wallets behind the number.
+      </p>
+      {/* Mini breakdown demo */}
+      <div className="rounded-xl border border-ps-green/25 bg-ps-green/[0.06] p-4">
+        <div className="flex items-baseline gap-2 mb-3">
+          <span className="text-2xl font-extrabold text-ps-green leading-none">
+            66<span className="text-[11px] font-bold text-ps-muted">/100</span>
+          </span>
+          <span className="text-[9px] font-bold uppercase tracking-wider text-ps-green border border-ps-green/40 rounded-full px-2 py-0.5 ml-auto">
+            Strong signal
+          </span>
+        </div>
+        <div className="space-y-2">
+          {factors.map((f) => (
+            <div key={f.label} className="flex items-center gap-2.5">
+              <span className="text-[10px] text-ps-muted w-[92px] flex-shrink-0 leading-tight">{f.label}</span>
+              <div className="h-1.5 flex-1 rounded-full bg-white/[0.07] overflow-hidden">
+                <div className="h-full rounded-full bg-ps-green" style={{ width: `${f.pct}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p className="text-[11px] text-ps-muted/60 mt-4 italic">
+        Not a probability, and not a prediction of how the market resolves.
+      </p>
+    </SpotlightCard>
+  )
+}
+
+function BigPositionsCard() {
+  const positions = [
+    { addr: '0x2c33...0563', market: '2026 Balance of Power: D Senate, D House', side: 'No', cost: '$5.0M', pnl: '+11%' },
+    { addr: '0xa2cd...2ba0', market: 'Will the US confirm that aliens exist before 2027?', side: 'No', cost: '$1.3M', pnl: '+8%' },
+  ]
+
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
+    >
+      <FeatureTag>
+        <Stack size={14} weight="bold" />
+        Big Open Positions
+        <ProPill />
+      </FeatureTag>
+      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
+        Not just who traded &mdash; who&rsquo;s still holding.
+      </h3>
+      <p className="text-sm text-ps-muted leading-relaxed mb-6">
+        The $1M+ books whales are still sitting on across all of Polymarket, ranked by
+        capital committed, with cost basis, value now, and open P&amp;L. Filter to trades,
+        positions or both, set a minimum size, pick a category, or narrow to markets
+        resolving today or this week.
+      </p>
+      {/* Mini positions demo */}
+      <div className="space-y-2">
+        {positions.map((p) => (
+          <div key={p.addr} className="relative rounded-xl p-3 border border-white/[0.07] bg-ps-surface overflow-hidden">
+            <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-blue-500" />
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                Position
+              </span>
+              <span className="text-[10px] font-mono text-ps-green truncate">{p.addr}</span>
+              <span className="text-[10px] font-mono font-bold text-ps-text ml-auto flex-shrink-0">{p.cost}</span>
+            </div>
+            <p className="text-[11px] font-medium text-ps-text line-clamp-1 mb-1.5">{p.market}</p>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-400">{p.side}</span>
+              <span className="text-[10px] font-mono text-ps-green">{p.pnl} open P&amp;L</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </SpotlightCard>
+  )
+}
+
+function MarketAlertsCard() {
+  return (
+    <SpotlightCard
+      variants={itemVariants}
+      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
+    >
+      <FeatureTag>
+        <BellRinging size={14} weight="bold" />
+        Market Signal Alerts
+        <ProPill />
+      </FeatureTag>
+      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
+        Know the moment a market turns.
+      </h3>
+      <p className="text-sm text-ps-muted leading-relaxed mb-6">
+        Get pushed the instant a market newly crosses into a strong signal. Set your own
+        strength threshold so only the evidence you care about buzzes, and mute any
+        category you don&rsquo;t follow.
+      </p>
+      {/* Mini alert demo */}
+      <div className="card-glass rounded-2xl px-3.5 py-3 shadow-xl mb-4">
+        <div className="flex items-start gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-ps-black border border-ps-green/30 flex items-center justify-center flex-shrink-0 overflow-hidden">
+            <img src={logoIcon} alt="" width={22} height={22} className="w-[22px] h-[22px] object-contain" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-baseline justify-between gap-2">
+              <p className="text-[11px] font-bold text-ps-text leading-tight">Market Signal</p>
+              <p className="text-[9px] text-ps-muted flex-shrink-0">now</p>
+            </div>
+            <p className="text-[10px] text-ps-muted leading-snug mt-0.5">
+              Karmine Corp reached 82/100 &mdash; $61K from 14 qualified wallets
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-[10px] text-ps-muted">Alert above</span>
+        <div className="h-1.5 flex-1 rounded-full bg-white/[0.07] overflow-hidden">
+          <div className="h-full w-[70%] rounded-full bg-ps-green" />
+        </div>
+        <span className="text-[10px] font-mono font-bold text-ps-green">70</span>
+      </div>
+    </SpotlightCard>
   )
 }
 
@@ -91,7 +284,7 @@ function SignalsCard() {
         Flag trades that move markets.
       </h3>
       <p className="text-sm text-ps-muted leading-relaxed mb-6">
-        Positions over $100k are surfaced as potential smart-money signals &mdash; instantly,
+        Trades over $100k are surfaced as potential smart-money signals &mdash; instantly,
         across all Polymarket markets. Prefer it quieter? &ldquo;Significant trades only&rdquo;
         pings you when a wallet bets unusually big for itself, and stays silent when it
         doesn&rsquo;t.
@@ -159,56 +352,46 @@ function CopyScoreCard() {
 }
 
 function ClustersCard() {
-  const legs = [
-    { addr: '0xe16d...5e30', size: '$1,000' },
-    { addr: '0xc44f...d49f', size: '$14K' },
-    { addr: '0xa187...7fd4', size: '$5K' },
+  const bar = [
+    { label: 'Wallets required', value: '4+', note: 'raised from 3' },
+    { label: 'Copy Score floor', value: 'Higher', note: 'proven wallets only' },
+    { label: 'Minimum size', value: 'Enforced', note: 'no dust clusters' },
   ]
 
   return (
     <SpotlightCard
       variants={itemVariants}
-      className="card-lift relative rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card p-8"
+      className="card-lift relative col-span-1 lg:col-span-2 rounded-2xl overflow-hidden border border-white/[0.07] bg-ps-card"
     >
-      <FeatureTag>
-        <UsersThree size={14} weight="bold" />
-        Smart Money Clusters
-        <ProPill />
-      </FeatureTag>
-      <h3 className="text-xl font-bold tracking-tight text-ps-text mb-2">
-        When proven traders move together.
-      </h3>
-      <p className="text-sm text-ps-muted leading-relaxed mb-6">
-        One big trade is a single opinion. Several high-scoring wallets independently
-        taking the same side within minutes is a far stronger signal &mdash; and it&rsquo;s
-        nearly impossible to spot by hand. Polyscope watches for it and pushes it the
-        instant it happens.
-      </p>
-      {/* Mini cluster demo */}
-      <div className="rounded-xl border border-blue-500/60 bg-blue-500/[0.07] p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <UsersThree size={13} weight="fill" className="text-blue-400" />
-          <span className="text-[11px] font-bold text-blue-400">3 smart wallets &middot; $20K</span>
-          <span className="text-[10px] text-ps-muted ml-auto">2m ago</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+        <div className="flex flex-col justify-center p-8 lg:p-10">
+          <FeatureTag>
+            <UsersThree size={14} weight="bold" />
+            Smart Money Clusters
+            <ProPill />
+          </FeatureTag>
+          <h3 className="text-2xl font-bold tracking-tight text-ps-text mb-3">
+            When proven traders move together.
+          </h3>
+          <p className="text-sm text-ps-muted leading-relaxed max-w-[40ch] mb-5">
+            One big trade is a single opinion. Several high-scoring wallets independently
+            taking the same side within minutes is far stronger &mdash; and nearly
+            impossible to spot by hand. Clusters now get their own view, and the bar to
+            fire one is much higher, so a cluster alert means something again.
+          </p>
+          {/* The tightened trigger */}
+          <div className="space-y-2">
+            {bar.map((b) => (
+              <div key={b.label} className="flex items-center gap-2">
+                <span className="text-[11px] text-ps-muted flex-1">{b.label}</span>
+                <span className="text-[11px] font-bold text-blue-400">{b.value}</span>
+                <span className="text-[10px] text-ps-muted/60 w-[110px] text-right">{b.note}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <p className="text-[12px] font-semibold text-ps-text leading-tight mb-2">
-          Will Spain win on 2026-07-19?
-        </p>
-        <div className="flex items-center gap-2 mb-2.5">
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ps-green/15 text-ps-green">
-            BUY Yes @ 43&cent;
-          </span>
-          <span className="text-[10px] text-ps-muted">avg score 84</span>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {legs.map((l) => (
-            <span
-              key={l.addr}
-              className="text-[9px] font-mono text-ps-muted px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07]"
-            >
-              {l.addr} &middot; {l.size}
-            </span>
-          ))}
+        <div className="hidden md:flex items-end justify-center overflow-hidden pt-6 pb-0 pr-6">
+          <PhoneMockup screen="clusters" className="scale-[0.72] origin-bottom" />
         </div>
       </div>
     </SpotlightCard>
@@ -535,10 +718,10 @@ export default function Features() {
             Built for traders who want proof.
           </h2>
           <p className="mt-4 text-ps-muted text-base leading-relaxed max-w-[52ch]">
-            Polyscope doesn&rsquo;t just tell you what happened &mdash; it tells you who&rsquo;s
-            worth watching. Every wallet is scored on price-adjusted edge and opened up
-            into a full performance profile, with cluster alerts, edge-ranked
-            leaderboards, a bot filter, and an AI advisor on top.
+            Polyscope answers a bigger question than &ldquo;who just traded?&rdquo; &mdash;
+            it shows you where the smart money actually sits. Markets graded out of 100 on
+            real evidence, the million-dollar books whales are still holding, cluster
+            alerts with teeth, and a 0&ndash;100 Copy Score behind every wallet.
           </p>
         </motion.div>
 
@@ -550,23 +733,31 @@ export default function Features() {
           viewport={{ once: true, margin: '-60px' }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-4"
         >
-          {/* Row 1: Copy Score (2/3) + Smart Money Clusters (1/3) */}
-          <CopyScoreCard />
-          <ClustersCard />
+          {/* Row 1: Markets (2/3) + Signal Strength (1/3) */}
+          <MarketsCard />
+          <SignalStrengthCard />
 
-          {/* Row 2: Leaderboards (1/3) + Trader Analytics (2/3) */}
+          {/* Row 2: Big Open Positions (1/3) + Copy Score (2/3) */}
+          <BigPositionsCard />
+          <CopyScoreCard />
+
+          {/* Row 3: Smart Money Clusters (2/3) + Market Signal Alerts (1/3) */}
+          <ClustersCard />
+          <MarketAlertsCard />
+
+          {/* Row 4: Leaderboards (1/3) + Trader Analytics (2/3) */}
           <LeaderboardsCard />
           <TraderAnalyticsCard />
 
-          {/* Row 3: Live Feed (2/3) + Expected Value (1/3) */}
+          {/* Row 5: Live Feed (2/3) + Expected Value (1/3) */}
           <LiveFeedCard />
           <EVCard />
 
-          {/* Row 4: Signals (1/3) + AI Advisor (2/3) */}
+          {/* Row 6: Signals (1/3) + AI Advisor (2/3) */}
           <SignalsCard />
           <AICard />
 
-          {/* Row 5: Bot Filter (2/3) + Search by Name (1/3) */}
+          {/* Row 7: Bot Filter (2/3) + Search by Name (1/3) */}
           <BotFilterCard />
           <AddByNameCard />
         </motion.div>

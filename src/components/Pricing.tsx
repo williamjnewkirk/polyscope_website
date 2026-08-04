@@ -18,6 +18,10 @@ const FEATURES: TierFeature[] = [
   { label: 'ROI leaderboard',              free: true,               pro: true },
   { label: 'Significant-trades-only alerts', free: true,             pro: true },
   { label: 'Suggested whale wallets',      free: 'Top 3 / category', pro: 'Top 50 / category' },
+  { label: 'Markets + signal strength',    free: false,              pro: true },
+  { label: 'Market signal alerts',         free: false,              pro: 'Custom threshold' },
+  { label: 'Big open positions ($1M+)',    free: false,              pro: true },
+  { label: 'Signal filters (size, category, resolving soon)', free: false, pro: true },
   { label: 'Copy Score + trader analytics', free: 'Preview only',    pro: 'Full access' },
   { label: 'Copy Score leaderboard',       free: false,              pro: true },
   { label: 'Smart Money Clusters + alerts', free: false,             pro: true },
@@ -152,8 +156,9 @@ export default function Pricing() {
                 <p className="text-xs text-ps-green font-medium mb-2">{pro.trial}</p>
               )}
               <p className="text-xs text-ps-muted leading-relaxed">
-                Copy Score and full trader analytics, smart money cluster alerts,
-                unlimited wallets, AI advisor, and no ads &mdash; everything in one plan.
+                Markets and signal strength, big open positions, market signal alerts,
+                clusters, Copy Score and full trader analytics, unlimited wallets, AI
+                advisor, and no ads &mdash; everything in one plan.
               </p>
             </div>
 
@@ -197,8 +202,9 @@ export default function Pricing() {
         </motion.div>
 
         <p className="mt-6 text-center text-xs text-ps-muted max-w-3xl mx-auto">
-          Monthly and yearly plans include a 7-day free trial; trials auto-convert unless cancelled.
-          Weekly plans are billed immediately with no trial period.
+          Pro unlocks immediately after purchase. Monthly and yearly plans include a 7-day free
+          trial; trials auto-convert unless cancelled. Weekly plans are billed immediately with
+          no trial period.
         </p>
       </div>
     </section>

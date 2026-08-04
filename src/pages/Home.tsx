@@ -11,11 +11,11 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Polyscope | Copy Score & Trader Analytics for Polymarket</title>
-        <meta name="description" content="Every Polymarket wallet rated 0–100 on price-adjusted edge. See trader analytics, get smart money cluster alerts, and rank traders by ROI and Copy Score on iOS and Android." />
+        <title>Polyscope | See Where the Smart Money Sits on Polymarket</title>
+        <meta name="description" content="Every busy Polymarket market graded out of 100 on how much proven-trader money backs one outcome — with the full evidence breakdown, $1M+ open whale positions, smart money cluster alerts, and a 0–100 Copy Score for every wallet." />
         <link rel="canonical" href="https://polyscopeapp.com/" />
-        <meta property="og:title" content="Polyscope | Copy Score & Trader Analytics for Polymarket" />
-        <meta property="og:description" content="Every Polymarket wallet rated 0–100 on price-adjusted edge. See trader analytics, get smart money cluster alerts, and rank traders by ROI and Copy Score on iOS and Android." />
+        <meta property="og:title" content="Polyscope | See Where the Smart Money Sits on Polymarket" />
+        <meta property="og:description" content="Every busy Polymarket market graded out of 100 on how much proven-trader money backs one outcome. Plus $1M+ open whale positions, cluster alerts, and a 0–100 Copy Score per wallet." />
         <meta property="og:url" content="https://polyscopeapp.com/" />
       </Helmet>
       <main>

@@ -43,15 +43,15 @@ export default function DownloadCTA() {
           {/* Badge */}
           <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-ps-green mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-ps-green animate-pulse-dot" />
-            Now on the App Store
+            Version 1.4 out now
           </span>
 
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ps-text leading-tight mb-4">
             Polyscope is live.
           </h2>
           <p className="text-ps-muted text-base leading-relaxed max-w-[42ch] mx-auto mb-10">
-            Start tracking the smart money on Polymarket today. Free to download —
-            follow your first whales in under a minute.
+            Graded markets, million-dollar open positions, and cluster alerts with teeth.
+            Free to download &mdash; onboarding sets up your feed in under a minute.
           </p>
 
           {/* App Store download */}
