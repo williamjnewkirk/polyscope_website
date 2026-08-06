@@ -9,14 +9,20 @@
   <!-- Smart redirect for polyscopeapp.com/download.
        Served directly by GitHub Pages (no React bundle), so the hop is instant.
 
-       Two behaviours, because in-app browsers (Instagram, TikTok, X…) suppress
-       the OS handoff that makes an apps.apple.com link open the App Store app:
-         - real browser  -> redirect straight to the store listing
-         - in-app browser -> render a tap target pointing at itms-apps://,
-                             because a *user-gesture* navigation to a non-http
-                             scheme escapes the webview. This is undocumented
-                             behaviour that Meta can change; re-test after
-                             Instagram updates.
+       Why this page is not a plain redirect: Instagram, TikTok and friends open
+       links in a WKWebView that does NOT perform Universal Link interception on
+       page load, so an automatic hop to apps.apple.com just renders the store's
+       *web page* inside the social app. Apple's own forums confirm there is no
+       supported fix; the only thing that reliably escapes is a user tap that
+       navigates to a different domain, and even that is "most of the time".
+
+       So in a webview we render a tap target and escalate through three routes
+       on that single tap:
+         1. x-safari-https://  hand off to Safari, where Universal Links work
+         2. itms-apps://       the store's own scheme, if the host allows it
+         3. https://           last resort, renders the listing in the webview
+       Each step is undocumented behaviour the social apps actively erode, hence
+       the visible "Open in Safari" instruction as the guaranteed floor.
 
        Keep APP_ID / APPLE_PROVIDER_TOKEN in sync with src/lib/links.ts. -->
   <link rel="canonical" href="https://apps.apple.com/us/app/polyscope/id6772628383">
@@ -31,9 +37,7 @@
       // matching `pt`, and the campaign URL shape is only worth using in pairs.
       var APPLE_PROVIDER_TOKEN = '';
 
-      var PLAIN_URL = 'https://apps.apple.com/us/app/polyscope/id' + APP_ID;
       var SITE_URL = 'https://polyscopeapp.com/';
-
       var ua = navigator.userAgent || '';
 
       // ?s=ig_bio -> ct=ig_bio. Apple caps ct at ~30 chars and rejects most
@@ -43,6 +47,7 @@
         return raw.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30);
       }
 
+      // `scheme` is the full prefix: https, itms-apps, or x-safari-https.
       // Campaign links use Apple's /app/apple-store/id form, not /us/app/name/id.
       function storeUrl(scheme) {
         var ct = campaign();
@@ -59,7 +64,7 @@
         // iPadOS 13+ reports as desktop Safari but is the only touch "Mac".
         (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 
-      // Webviews that are known to eat Universal Links on direct navigation.
+      // Webviews known to swallow Universal Links on direct navigation.
       var isInApp = /Instagram|FBAN|FBAV|FB_IAB|Threads|TikTok|BytedanceWebview|musical_ly|Twitter|LinkedInApp|Snapchat|Pinterest|Line\//i.test(ua);
 
       if (!isIOS) {
@@ -74,12 +79,49 @@
         return;
       }
 
-      // In-app browser: wait for a tap. Wire the hrefs before paint so the
-      // button is live the moment it appears.
+      // --- In-app browser path -------------------------------------------
+
+      // Once the OS switches to Safari or the App Store this page is hidden,
+      // which is our only signal that a route succeeded. Without it every
+      // fallback would fire and the user would land somewhere unintended.
+      var escaped = false;
+      function markEscaped() { escaped = true; }
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) markEscaped();
+      });
+      window.addEventListener('pagehide', markEscaped);
+      window.addEventListener('blur', markEscaped);
+
+      function attempt(url) {
+        if (escaped) return;
+        try { window.location.href = url; } catch (e) { /* scheme refused */ }
+      }
+
+      // Chain the three routes, bailing the moment one of them backgrounds us.
+      function run() {
+        // Clear the latch first: `blur` can fire spuriously on load, and a
+        // stale `escaped` would make the button silently do nothing.
+        escaped = false;
+        attempt(storeUrl('x-safari-https'));
+        setTimeout(function () { attempt(storeUrl('itms-apps')); }, 600);
+        setTimeout(function () { attempt(storeUrl('https')); }, 1600);
+      }
+
       document.documentElement.className = 'tap';
       document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('open').href = storeUrl('itms-apps');
+        var btn = document.getElementById('open');
+        // Real href so the tap is a genuine user-initiated cross-domain
+        // navigation even if the handler is never reached.
+        btn.href = storeUrl('https');
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          run();
+        });
         document.getElementById('fallback').href = storeUrl('https');
+
+        // Silent first try on load. Blocked hosts ignore it with no error
+        // dialog, so the worst case is the user simply sees the button.
+        attempt(storeUrl('x-safari-https'));
       });
     })();
   </script>
@@ -142,10 +184,10 @@
     <p class="tap-only">Whale intelligence for Polymarket.</p>
     <a class="tap-only btn" id="open" href="https://apps.apple.com/us/app/polyscope/id6772628383">Open in App Store</a>
     <p class="tap-only hint">
-      If nothing happens, tap the <strong>•••</strong> menu above and choose “Open in
-      Safari”, then try again.
+      Instagram blocks App Store links. If the button doesn’t work, tap
+      <strong>•••</strong> at the top right and choose <strong>Open in browser</strong>.
     </p>
-    <a class="tap-only" id="fallback" href="https://apps.apple.com/us/app/polyscope/id6772628383">View the listing in this browser</a>
+    <a class="tap-only" id="fallback" href="https://apps.apple.com/us/app/polyscope/id6772628383">Or view the listing here</a>
   </main>
 </body>
 </html>
