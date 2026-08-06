@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { APP_STORE_URL } from '../lib/links'
+import { APP_STORE_URL, storeUrl } from '../lib/links'
 
 /**
  * SPA fallback for /download.
@@ -8,12 +8,14 @@ import { APP_STORE_URL } from '../lib/links'
  * In production GitHub Pages serves public/download/index.html directly, so the
  * redirect happens before any JS bundle loads and this component never mounts.
  * It exists for the paths that stay inside the router: client-side navigation
- * and the 404.html `?p=` restore.
+ * and the 404.html `?p=` restore. The in-app-browser handling lives only in the
+ * static page, since a webview hitting /download always lands there first.
  */
 export default function Download() {
   useEffect(() => {
+    const source = new URLSearchParams(window.location.search).get('s') ?? undefined
     // `replace` so Back returns to the previous page rather than bouncing here.
-    window.location.replace(APP_STORE_URL)
+    window.location.replace(storeUrl(source))
   }, [])
 
   return (

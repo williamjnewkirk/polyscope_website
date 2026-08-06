@@ -4,17 +4,84 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, follow">
-  <title>Downloading Polyscope…</title>
+  <title>Get Polyscope</title>
 
-  <!-- Static redirect for polyscopeapp.com/download → the App Store listing.
+  <!-- Smart redirect for polyscopeapp.com/download.
        Served directly by GitHub Pages (no React bundle), so the hop is instant.
-       Keep this URL in sync with APP_STORE_URL in src/lib/links.ts. -->
+
+       Two behaviours, because in-app browsers (Instagram, TikTok, X…) suppress
+       the OS handoff that makes an apps.apple.com link open the App Store app:
+         - real browser  -> redirect straight to the store listing
+         - in-app browser -> render a tap target pointing at itms-apps://,
+                             because a *user-gesture* navigation to a non-http
+                             scheme escapes the webview. This is undocumented
+                             behaviour that Meta can change; re-test after
+                             Instagram updates.
+
+       Keep APP_ID / APPLE_PROVIDER_TOKEN in sync with src/lib/links.ts. -->
   <link rel="canonical" href="https://apps.apple.com/us/app/polyscope/id6772628383">
-  <meta http-equiv="refresh" content="0; url=https://apps.apple.com/us/app/polyscope/id6772628383">
+  <noscript><meta http-equiv="refresh" content="0; url=https://apps.apple.com/us/app/polyscope/id6772628383"></noscript>
+
   <script>
-    // Fires before the meta refresh in every modern browser. `replace` keeps
-    // /download out of history so Back returns to where the user came from.
-    window.location.replace('https://apps.apple.com/us/app/polyscope/id6772628383');
+    (function () {
+      var APP_ID = '6772628383';
+
+      // Provider token from App Store Connect -> Analytics -> Acquisition ->
+      // Campaigns. Leave empty until you have it: Apple ignores `ct` without a
+      // matching `pt`, and the campaign URL shape is only worth using in pairs.
+      var APPLE_PROVIDER_TOKEN = '';
+
+      var PLAIN_URL = 'https://apps.apple.com/us/app/polyscope/id' + APP_ID;
+      var SITE_URL = 'https://polyscopeapp.com/';
+
+      var ua = navigator.userAgent || '';
+
+      // ?s=ig_bio -> ct=ig_bio. Apple caps ct at ~30 chars and rejects most
+      // punctuation, so squash to [a-z0-9_-] and truncate.
+      function campaign() {
+        var raw = new URLSearchParams(location.search).get('s') || '';
+        return raw.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30);
+      }
+
+      // Campaign links use Apple's /app/apple-store/id form, not /us/app/name/id.
+      function storeUrl(scheme) {
+        var ct = campaign();
+        if (!APPLE_PROVIDER_TOKEN || !ct) {
+          return scheme + '://apps.apple.com/us/app/polyscope/id' + APP_ID;
+        }
+        return scheme + '://apps.apple.com/app/apple-store/id' + APP_ID +
+          '?pt=' + encodeURIComponent(APPLE_PROVIDER_TOKEN) +
+          '&ct=' + encodeURIComponent(ct) +
+          '&mt=8';
+      }
+
+      var isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+        // iPadOS 13+ reports as desktop Safari but is the only touch "Mac".
+        (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+
+      // Webviews that are known to eat Universal Links on direct navigation.
+      var isInApp = /Instagram|FBAN|FBAV|FB_IAB|Threads|TikTok|BytedanceWebview|musical_ly|Twitter|LinkedInApp|Snapchat|Pinterest|Line\//i.test(ua);
+
+      if (!isIOS) {
+        // No Android build yet -> send everyone else to the landing page.
+        window.location.replace(SITE_URL);
+        return;
+      }
+
+      if (!isInApp) {
+        // Safari/Chrome honour the Universal Link and open the App Store app.
+        window.location.replace(storeUrl('https'));
+        return;
+      }
+
+      // In-app browser: wait for a tap. Wire the hrefs before paint so the
+      // button is live the moment it appears.
+      document.documentElement.className = 'tap';
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('open').href = storeUrl('itms-apps');
+        document.getElementById('fallback').href = storeUrl('https');
+      });
+    })();
   </script>
 
   <style>
@@ -24,26 +91,61 @@
       background: #0A0A0C;
       color: #6B7280;
       font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
     main {
-      height: 100%;
+      min-height: 100%;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 14px;
       text-align: center;
-      padding: 24px;
+      padding: 32px 24px;
     }
     p { font-size: 14px; margin: 0; }
     a { color: #22C55E; font-size: 14px; text-decoration: none; }
     a:hover { text-decoration: underline; }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #F5F5F7;
+      margin: 0;
+    }
+    .btn {
+      display: block;
+      background: #22C55E;
+      color: #0A0A0C;
+      font-size: 17px;
+      font-weight: 600;
+      padding: 16px 40px;
+      border-radius: 999px;
+      margin-top: 4px;
+    }
+    .btn:hover { text-decoration: none; }
+    .hint { font-size: 12px; color: #4B5563; max-width: 300px; line-height: 1.5; }
+
+    /* Auto-redirect is the default; the tap UI only shows when JS asked for it. */
+    .tap-only { display: none; }
+    .tap .tap-only { display: block; }
+    .tap .auto-only { display: none; }
   </style>
 </head>
 <body>
   <main>
-    <p>Taking you to the App Store…</p>
-    <a href="https://apps.apple.com/us/app/polyscope/id6772628383">Open Polyscope on the App Store</a>
+    <p class="auto-only">Taking you to the App Store…</p>
+    <a class="auto-only" href="https://apps.apple.com/us/app/polyscope/id6772628383">Open Polyscope on the App Store</a>
+
+    <h1 class="tap-only">Polyscope</h1>
+    <p class="tap-only">Whale intelligence for Polymarket.</p>
+    <a class="tap-only btn" id="open" href="https://apps.apple.com/us/app/polyscope/id6772628383">Open in App Store</a>
+    <p class="tap-only hint">
+      If nothing happens, tap the <strong>•••</strong> menu above and choose “Open in
+      Safari”, then try again.
+    </p>
+    <a class="tap-only" id="fallback" href="https://apps.apple.com/us/app/polyscope/id6772628383">View the listing in this browser</a>
   </main>
 </body>
 </html>
