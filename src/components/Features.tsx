@@ -628,7 +628,7 @@ function AICard() {
             signals into plain-English insights. Ask any question about current market
             activity and get an actionable answer.
           </p>
-          <p className="text-[11px] text-ps-muted/60 mt-4 italic">Premium tier only</p>
+          <p className="text-[11px] text-ps-muted/60 mt-4 italic">Pro tier only</p>
         </div>
         {/* Chat demo */}
         <div className="order-1 md:order-2 p-6 flex flex-col justify-center">

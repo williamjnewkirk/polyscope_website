@@ -51,7 +51,7 @@ const FAQS = [
   },
   {
     question: 'How do I cancel or manage my subscription?',
-    answer: 'Subscriptions are managed entirely through the App Store (iOS) or Google Play (Android). You can cancel, pause, or switch plans at any time from your device subscription settings.',
+    answer: 'Subscriptions are managed entirely through the App Store. You can cancel, pause, or switch plans at any time from your device subscription settings.',
   },
   {
     question: 'Is my personal data sold or shared?',
