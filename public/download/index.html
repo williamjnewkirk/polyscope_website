@@ -79,6 +79,15 @@
       // Webviews known to swallow Universal Links on direct navigation.
       var isInApp = /Instagram|FBAN|FBAV|FB_IAB|Threads|TikTok|BytedanceWebview|musical_ly|Twitter|LinkedInApp|Snapchat|Pinterest|Line\//i.test(ua);
 
+      // Meta's webviews block every escape route we have: itms-apps:// and
+      // x-safari-https:// are both refused, and plain https:// dead-ends too
+      // because Apple redirects apps.apple.com to itms-apps:// server-side,
+      // which the webview then cannot hand off either. Tested on a real device
+      // Aug 2026 — all three did nothing. So Meta gets instructions, not
+      // buttons. Other webviews still get the routes; they are not all as
+      // aggressive, and a route that works is better than an instruction.
+      var isMeta = /Instagram|FBAN|FBAV|FB_IAB|Threads/i.test(ua);
+
       if (!isIOS) {
         // No Android build yet -> send everyone else to the landing page.
         window.location.replace(SITE_URL);
@@ -91,13 +100,15 @@
         return;
       }
 
-      // In-app browser: render the tap targets and let the user's own tap do
-      // the navigating. No listeners, no preventDefault, no timers.
-      document.documentElement.className = 'tap';
+      // In-app browser: render tap targets and let the user's own tap navigate.
+      // No listeners, no preventDefault, no timers — a script-driven
+      // `location.href` is not a user gesture and these hosts ignore it.
+      document.documentElement.className = isMeta ? 'meta' : 'tap';
       document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('open').href = storeUrl('itms-apps');
         document.getElementById('safari').href = storeUrl('x-safari-https');
         document.getElementById('fallback').href = storeUrl('https');
+        document.getElementById('direct').href = storeUrl('itms-apps');
       });
     })();
   </script>
@@ -224,12 +235,90 @@
 
     .status { font-size: 14px; margin: 24px 0 0; }
 
-    /* Auto-redirect is the default; the tap UI only shows when JS asked for it. */
-    .tap-only { display: none; }
-    .tap .tap-only { display: flex; flex-direction: column; align-items: center; }
-    /* The hint is prose — flex would turn each <strong> into its own line. */
-    .tap p.tap-only { display: block; }
-    .tap .auto-only { display: none; }
+    /* Numbered escape instructions, used for Meta's webviews. */
+    .steps {
+      width: 100%;
+      max-width: 340px;
+      margin-top: 28px;
+      padding: 20px 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--card);
+      text-align: left;
+    }
+    .steps-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 14px;
+      text-align: center;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin-bottom: 12px;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .step-n {
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 19px;
+      text-align: center;
+    }
+    .step-t {
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: var(--muted);
+      margin: 0;
+      padding-top: 1px;
+    }
+    .step-t strong { color: var(--text); font-weight: 600; }
+    .dots {
+      display: inline-block;
+      padding: 1px 7px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.3;
+    }
+
+    .aside {
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #4B5563;
+      max-width: 320px;
+      margin: 20px 0 0;
+    }
+    .tertiary {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 13px;
+      color: #4B5563;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 1px;
+    }
+
+    /* One block per mode; the head script picks exactly one. */
+    .only-auto, .only-tap, .only-meta { display: none; }
+    .tap .only-tap,
+    .meta .only-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    /* Mode classes live only on wrapper divs, never on prose elements, so
+       children keep their own display values. */
   </style>
 </head>
 <body>
@@ -239,21 +328,40 @@
     <h1>Polyscope</h1>
     <p class="tagline">Whale intelligence for Polymarket.</p>
 
-    <div class="auto-only">
+    <div class="only-auto">
       <p class="status">Taking you to the App Store…</p>
     </div>
 
-    <div class="tap-only stack">
+    <!-- Non-Meta webviews: the schemes still stand a chance here. -->
+    <div class="only-tap stack">
       <a class="btn" id="open" href="https://apps.apple.com/us/app/polyscope/id6772628383">Open in App Store</a>
       <div class="rule"></div>
       <a class="sub" id="safari" href="https://apps.apple.com/us/app/polyscope/id6772628383">Not opening? Try Safari</a>
       <a class="sub quiet" id="fallback" href="https://apps.apple.com/us/app/polyscope/id6772628383">Or view the listing here</a>
     </div>
 
-    <p class="tap-only hint">
-      Instagram restricts App Store links. If none of these work, tap
-      <strong>•••</strong> at the top right and choose <strong>Open in browser</strong>.
-    </p>
+    <!-- Meta webviews: every scheme is blocked, so lead with the menu escape. -->
+    <div class="only-meta">
+      <div class="steps">
+        <p class="steps-title">Instagram blocks App Store links. Two taps to fix:</p>
+        <div class="step">
+          <span class="step-n">1</span>
+          <p class="step-t">Tap <span class="dots">•••</span> at the top right of this screen</p>
+        </div>
+        <div class="step">
+          <span class="step-n">2</span>
+          <p class="step-t">Choose <strong>Open in external browser</strong></p>
+        </div>
+        <div class="step">
+          <span class="step-n">3</span>
+          <p class="step-t">The App Store opens on its own — this page redirects once it is out of Instagram</p>
+        </div>
+      </div>
+
+      <p class="aside">No menu? Search <strong>Polyscope</strong> in the App Store — it works from anywhere.</p>
+
+      <a class="tertiary" id="direct" href="https://apps.apple.com/us/app/polyscope/id6772628383">Try opening directly anyway</a>
+    </div>
   </main>
 </body>
 </html>
