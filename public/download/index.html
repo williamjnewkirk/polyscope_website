@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0A0A0C">
   <title>Get Polyscope</title>
 
   <!-- Smart redirect for polyscopeapp.com/download.
@@ -26,9 +27,18 @@
          x-safari-https:// hand off to Safari, where Universal Links work
          https://          always renders the listing, worst case in the webview
 
+       The logo is served from public/logo-appicon.png rather than src/assets/
+       because Vite content-hashes anything it bundles and this page is static.
+
        Keep APP_ID / APPLE_PROVIDER_TOKEN in sync with src/lib/links.ts. -->
   <link rel="canonical" href="https://apps.apple.com/us/app/polyscope/id6772628383">
+  <link rel="icon" href="/logo-appicon.png">
+  <link rel="apple-touch-icon" href="/logo-appicon.png">
   <noscript><meta http-equiv="refresh" content="0; url=https://apps.apple.com/us/app/polyscope/id6772628383"></noscript>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <script>
     (function () {
@@ -93,66 +103,152 @@
   </script>
 
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      background: #0A0A0C;
-      color: #6B7280;
+    :root {
+      --black: #0A0A0C;
+      --card: #121216;
+      --green: #22C55E;
+      --text: #F5F5F7;
+      --muted: #6B7280;
+      --border: rgba(255, 255, 255, 0.07);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; margin: 0; }
+
+    body {
+      background: var(--black);
+      color: var(--muted);
       font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       -webkit-font-smoothing: antialiased;
+      /* Green bloom behind the icon, echoing the app's sonar visuals. */
+      background-image:
+        radial-gradient(60% 45% at 50% 22%, rgba(34, 197, 94, 0.16), transparent 70%),
+        radial-gradient(40% 30% at 50% 8%, rgba(34, 197, 94, 0.10), transparent 70%);
+      background-repeat: no-repeat;
     }
+
     main {
       min-height: 100%;
-      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
       text-align: center;
-      padding: 32px 24px;
+      padding: 40px 24px calc(40px + env(safe-area-inset-bottom));
     }
-    p { font-size: 14px; margin: 0; }
-    a { color: #22C55E; font-size: 14px; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+
+    .logo {
+      width: 92px;
+      height: 92px;
+      border-radius: 22px;
+      display: block;
+      border: 1px solid var(--border);
+      /* Layered glow: tight ring, then a soft halo. */
+      box-shadow:
+        0 0 0 1px rgba(34, 197, 94, 0.14),
+        0 8px 40px rgba(34, 197, 94, 0.28),
+        0 2px 12px rgba(0, 0, 0, 0.6);
+    }
 
     h1 {
-      font-size: 22px;
-      font-weight: 600;
-      color: #F5F5F7;
-      margin: 0;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: 22px 0 0;
     }
+
+    .tagline {
+      font-size: 15px;
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      max-width: 320px;
+      margin-top: 30px;
+    }
+
+    a { text-decoration: none; }
+
     .btn {
       display: block;
-      background: #22C55E;
-      color: #0A0A0C;
+      width: 100%;
+      background: var(--green);
+      color: var(--black);
       font-size: 17px;
-      font-weight: 600;
-      padding: 16px 40px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      padding: 17px 24px;
       border-radius: 999px;
-      margin-top: 6px;
+      box-shadow: 0 6px 24px rgba(34, 197, 94, 0.32);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .btn:hover { text-decoration: none; }
-    .hint { font-size: 12px; color: #4B5563; max-width: 320px; line-height: 1.5; }
-    .sub { font-size: 13px; }
+    .btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 3px 14px rgba(34, 197, 94, 0.26);
+    }
+
+    .sub {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--green);
+    }
+    .sub.quiet { color: var(--muted); }
+
+    .rule {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+
+    .hint {
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #4B5563;
+      max-width: 320px;
+      margin: 26px 0 0;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--card);
+    }
+    .hint strong { color: var(--muted); font-weight: 600; }
+
+    .status { font-size: 14px; margin: 24px 0 0; }
 
     /* Auto-redirect is the default; the tap UI only shows when JS asked for it. */
     .tap-only { display: none; }
-    .tap .tap-only { display: block; }
+    .tap .tap-only { display: flex; flex-direction: column; align-items: center; }
+    /* The hint is prose — flex would turn each <strong> into its own line. */
+    .tap p.tap-only { display: block; }
     .tap .auto-only { display: none; }
   </style>
 </head>
 <body>
   <main>
-    <p class="auto-only">Taking you to the App Store…</p>
-    <a class="auto-only" href="https://apps.apple.com/us/app/polyscope/id6772628383">Open Polyscope on the App Store</a>
+    <img class="logo" src="/logo-appicon.png" width="92" height="92"
+         alt="Polyscope app icon: a green whale tail inside a sonar crosshair">
+    <h1>Polyscope</h1>
+    <p class="tagline">Whale intelligence for Polymarket.</p>
 
-    <h1 class="tap-only">Polyscope</h1>
-    <p class="tap-only">Whale intelligence for Polymarket.</p>
+    <div class="auto-only">
+      <p class="status">Taking you to the App Store…</p>
+    </div>
 
-    <a class="tap-only btn" id="open" href="https://apps.apple.com/us/app/polyscope/id6772628383">Open in App Store</a>
-    <a class="tap-only sub" id="safari" href="https://apps.apple.com/us/app/polyscope/id6772628383">Not opening? Try Safari</a>
-    <a class="tap-only sub" id="fallback" href="https://apps.apple.com/us/app/polyscope/id6772628383">Or view the listing here</a>
+    <div class="tap-only stack">
+      <a class="btn" id="open" href="https://apps.apple.com/us/app/polyscope/id6772628383">Open in App Store</a>
+      <div class="rule"></div>
+      <a class="sub" id="safari" href="https://apps.apple.com/us/app/polyscope/id6772628383">Not opening? Try Safari</a>
+      <a class="sub quiet" id="fallback" href="https://apps.apple.com/us/app/polyscope/id6772628383">Or view the listing here</a>
+    </div>
 
     <p class="tap-only hint">
       Instagram restricts App Store links. If none of these work, tap
