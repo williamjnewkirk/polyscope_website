@@ -12,17 +12,19 @@
        Why this page is not a plain redirect: Instagram, TikTok and friends open
        links in a WKWebView that does NOT perform Universal Link interception on
        page load, so an automatic hop to apps.apple.com just renders the store's
-       *web page* inside the social app. Apple's own forums confirm there is no
-       supported fix; the only thing that reliably escapes is a user tap that
-       navigates to a different domain, and even that is "most of the time".
+       *web page* inside the social app.
 
-       So in a webview we render a tap target and escalate through three routes
-       on that single tap:
-         1. x-safari-https://  hand off to Safari, where Universal Links work
-         2. itms-apps://       the store's own scheme, if the host allows it
-         3. https://           last resort, renders the listing in the webview
-       Each step is undocumented behaviour the social apps actively erode, hence
-       the visible "Open in Safari" instruction as the guaranteed floor.
+       Why there is no JavaScript redirect chain either: the only thing these
+       webviews honour is a genuine user-initiated navigation. A `location.href`
+       assignment from script does not count, which is why an earlier version of
+       this page did nothing at all when tapped. So every route below is a plain
+       anchor with a real href — the tap itself is the mechanism, and JS only
+       fills in the URLs. Nothing here can silently no-op.
+
+       Routes, in descending order of directness:
+         itms-apps://      the store's own scheme, if the host allows handoff
+         x-safari-https:// hand off to Safari, where Universal Links work
+         https://          always renders the listing, worst case in the webview
 
        Keep APP_ID / APPLE_PROVIDER_TOKEN in sync with src/lib/links.ts. -->
   <link rel="canonical" href="https://apps.apple.com/us/app/polyscope/id6772628383">
@@ -79,49 +81,13 @@
         return;
       }
 
-      // --- In-app browser path -------------------------------------------
-
-      // Once the OS switches to Safari or the App Store this page is hidden,
-      // which is our only signal that a route succeeded. Without it every
-      // fallback would fire and the user would land somewhere unintended.
-      var escaped = false;
-      function markEscaped() { escaped = true; }
-      document.addEventListener('visibilitychange', function () {
-        if (document.hidden) markEscaped();
-      });
-      window.addEventListener('pagehide', markEscaped);
-      window.addEventListener('blur', markEscaped);
-
-      function attempt(url) {
-        if (escaped) return;
-        try { window.location.href = url; } catch (e) { /* scheme refused */ }
-      }
-
-      // Chain the three routes, bailing the moment one of them backgrounds us.
-      function run() {
-        // Clear the latch first: `blur` can fire spuriously on load, and a
-        // stale `escaped` would make the button silently do nothing.
-        escaped = false;
-        attempt(storeUrl('x-safari-https'));
-        setTimeout(function () { attempt(storeUrl('itms-apps')); }, 600);
-        setTimeout(function () { attempt(storeUrl('https')); }, 1600);
-      }
-
+      // In-app browser: render the tap targets and let the user's own tap do
+      // the navigating. No listeners, no preventDefault, no timers.
       document.documentElement.className = 'tap';
       document.addEventListener('DOMContentLoaded', function () {
-        var btn = document.getElementById('open');
-        // Real href so the tap is a genuine user-initiated cross-domain
-        // navigation even if the handler is never reached.
-        btn.href = storeUrl('https');
-        btn.addEventListener('click', function (e) {
-          e.preventDefault();
-          run();
-        });
+        document.getElementById('open').href = storeUrl('itms-apps');
+        document.getElementById('safari').href = storeUrl('x-safari-https');
         document.getElementById('fallback').href = storeUrl('https');
-
-        // Silent first try on load. Blocked hosts ignore it with no error
-        // dialog, so the worst case is the user simply sees the button.
-        attempt(storeUrl('x-safari-https'));
       });
     })();
   </script>
@@ -142,7 +108,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: 12px;
       text-align: center;
       padding: 32px 24px;
     }
@@ -164,10 +130,11 @@
       font-weight: 600;
       padding: 16px 40px;
       border-radius: 999px;
-      margin-top: 4px;
+      margin-top: 6px;
     }
     .btn:hover { text-decoration: none; }
-    .hint { font-size: 12px; color: #4B5563; max-width: 300px; line-height: 1.5; }
+    .hint { font-size: 12px; color: #4B5563; max-width: 320px; line-height: 1.5; }
+    .sub { font-size: 13px; }
 
     /* Auto-redirect is the default; the tap UI only shows when JS asked for it. */
     .tap-only { display: none; }
@@ -182,12 +149,15 @@
 
     <h1 class="tap-only">Polyscope</h1>
     <p class="tap-only">Whale intelligence for Polymarket.</p>
+
     <a class="tap-only btn" id="open" href="https://apps.apple.com/us/app/polyscope/id6772628383">Open in App Store</a>
+    <a class="tap-only sub" id="safari" href="https://apps.apple.com/us/app/polyscope/id6772628383">Not opening? Try Safari</a>
+    <a class="tap-only sub" id="fallback" href="https://apps.apple.com/us/app/polyscope/id6772628383">Or view the listing here</a>
+
     <p class="tap-only hint">
-      Instagram blocks App Store links. If the button doesn’t work, tap
+      Instagram restricts App Store links. If none of these work, tap
       <strong>•••</strong> at the top right and choose <strong>Open in browser</strong>.
     </p>
-    <a class="tap-only" id="fallback" href="https://apps.apple.com/us/app/polyscope/id6772628383">Or view the listing here</a>
   </main>
 </body>
 </html>
